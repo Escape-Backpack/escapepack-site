@@ -1,4 +1,7 @@
-# Cloudflare Pages redirects. Printed QR codes point at escapepack.ca paths, so these must never be removed.
+# Cloudflare Pages redirects. Printed QR codes point at escapepack.ca/help/<game>/ paths,
+# so these must never be removed once printed.
 # 302 (temporary) so the target can change later without browsers caching the old one.
-/space/hints   https://space-design.escapepack.ca/hints/   302
-/space/hints/  https://space-design.escapepack.ca/hints/   302
+/help/space          https://space-design.escapepack.ca/hints/   302
+/help/space/         https://space-design.escapepack.ca/hints/   302
+/help/space/hints    https://space-design.escapepack.ca/hints/   302
+/help/space/hints/   https://space-design.escapepack.ca/hints/   302
