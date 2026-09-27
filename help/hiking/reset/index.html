@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Reset the Hiking Backpack &middot; Escape Backpack</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../legacy.css">
+  <style>
+    /* ── PAGE-SPECIFIC ─────────────────────────────── */
+    .page-hero {
+      padding: clamp(60px, 9vw, 100px) 0 clamp(40px, 6vw, 70px);
+      text-align: center;
+    }
+    .page-hero .eyebrow { margin-bottom: 16px; display: block; }
+    .page-hero h1 { margin-bottom: 20px; }
+    .page-hero .lead { max-width: 560px; margin: 0 auto; }
+
+    /* PROGRESS */
+    .progress-wrap {
+      max-width: 680px; margin: 0 auto clamp(32px,5vw,56px);
+      padding: 0 clamp(20px,4vw,40px);
+    }
+    .progress-header {
+      display: flex; justify-content: space-between;
+      margin-bottom: 8px;
+      font-family: var(--mono); font-size: 0.72rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    .progress-count { color: var(--brass); font-weight: 500; }
+    .progress-bar-bg {
+      height: 6px; background: rgba(244,237,224,0.1);
+      border-radius: 99px; overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--brass-dim), var(--brass));
+      border-radius: 99px; width: 0%;
+      transition: width 0.4s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* CHECKLIST */
+    .checklist-wrap {
+      max-width: 680px; margin: 0 auto;
+      padding: 0 clamp(20px,4vw,40px) clamp(60px,9vw,120px);
+    }
+    .section-label {
+      font-family: var(--mono); font-size: 0.65rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--rust-2); margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    /* ITEM CARD */
+    .item {
+      background: var(--forest-2);
+      border: 1px solid var(--line);
+      border-radius: 2px;
+      padding: 18px 20px 20px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, opacity 0.2s;
+      user-select: none;
+    }
+    .item:hover { border-color: var(--brass-dim); }
+    .item.done {
+      opacity: 0.5;
+      border-color: var(--line);
+    }
+    .item-top {
+      display: grid; grid-template-columns: auto 1fr;
+      gap: 14px; align-items: start;
+    }
+
+    /* CHECKBOX */
+    .item-check {
+      width: 22px; height: 22px;
+      border-radius: 2px;
+      border: 1.5px solid var(--line-strong);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+      transition: background 0.2s, border-color 0.2s;
+      background: transparent;
+    }
+    .item.done .item-check {
+      background: var(--brass-dim); border-color: var(--brass-dim);
+    }
+    .item-check svg {
+      width: 11px; height: 11px;
+      stroke: var(--forest-deep); stroke-width: 2.5;
+      fill: none; opacity: 0; transition: opacity 0.15s;
+    }
+    .item.done .item-check svg { opacity: 1; }
+
+    /* TITLE */
+    .lock-title {
+      font-family: var(--sans); font-size: 0.98rem;
+      font-weight: 600; color: var(--cream);
+      line-height: 1.35;
+    }
+    .lock-code { color: var(--brass); letter-spacing: 0.06em; }
+    .item.done .lock-title { color: var(--muted); text-decoration: line-through; }
+
+    /* BODY */
+    .item-body {
+      margin-top: 12px; padding-top: 12px;
+      border-top: 1px solid var(--line);
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .body-text {
+      font-size: 0.88rem; color: var(--cream-3);
+      line-height: 1.6; opacity: 0.85;
+    }
+    .lock-line {
+      font-family: var(--mono); font-size: 0.78rem;
+      color: var(--brass-dim); letter-spacing: 0.06em;
+    }
+
+    /* PHOTO GRIDS */
+    .pg-full { margin-top: 14px; }
+    .pg-full .pg-item { width: 100%; border-radius: 2px; cursor: zoom-in; }
+
+    .pg-row { margin-top: 14px; display: flex; gap: 4px; }
+    .pg-row .pg-item {
+      flex: 1; min-width: 0; display: block;
+      border-radius: 2px; object-fit: cover;
+      height: 200px; cursor: zoom-in;
+    }
+
+    .pg-row3 { margin-top: 14px; display: flex; gap: 4px; }
+    .pg-row3 .pg-item {
+      flex: 1; min-width: 0; display: block;
+      border-radius: 2px; object-fit: cover;
+      height: 180px; cursor: zoom-in;
+    }
+
+    .pg-grid {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 4px;
+    }
+    .pg-grid .pg-item {
+      width: 100%; display: block;
+      border-radius: 2px; object-fit: cover;
+      height: 160px; cursor: zoom-in;
+    }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.92); z-index: 1000;
+      align-items: center; justify-content: center;
+      padding: 1.5rem; cursor: zoom-out;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 100%; max-height: 100%;
+      object-fit: contain; border-radius: 2px;
+      display: block; cursor: default;
+    }
+    .lb-close {
+      position: fixed; top: 1.2rem; right: 1.5rem;
+      color: var(--cream); font-size: 2rem;
+      cursor: pointer; line-height: 1;
+      font-family: var(--sans); opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+    .lb-close:hover { opacity: 1; }
+
+    /* COMPLETION */
+    .completion {
+      max-width: 680px; margin: 0 auto;
+      padding: 0 clamp(20px,4vw,40px) clamp(60px,9vw,100px);
+      display: none;
+    }
+    .completion.visible { display: block; }
+    .completion-card {
+      background: var(--forest-2);
+      border: 1px solid var(--brass-dim);
+      border-radius: 2px; padding: 2.5rem;
+      text-align: center;
+    }
+    .completion-card .emoji { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+    .completion-card h2 { color: var(--brass); margin-bottom: 0.5rem; font-size: 1.8rem; }
+    .completion-card p { color: var(--cream-3); font-size: 0.92rem; opacity: 0.85; }
+    .completion-card .btn { margin-top: 1.5rem; }
+  </style>
+</head>
+<body>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="lb-close">&times;</span>
+  <img id="lb-img" src="" alt="" onclick="event.stopPropagation()">
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../../../index.html" class="brand">
+      <span class="brand-name">Escape Backpack</span>
+    </a>
+    <div class="nav-links">
+      <a href="../../../index.html">Home</a>
+      <div class="nav-drop" id="hintsNav">
+        <button class="nav-drop-toggle" onclick="toggleDrop()">Hints</button>
+        <div class="nav-drop-menu">
+          <div class="nav-drop-head">Backpacks</div>
+          <a href="../hints/">Hiking Backpack <span class="badge">Live</span></a>
+          <span class="disabled">More coming soon <span class="badge">Soon</span></span>
+        </div>
+      </div>
+      <a href="../../../borrow.html">Borrow one</a>
+      <a href="../../../feedback.html">Feedback</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="wrap-narrow" style="text-align:center;">
+    <span class="eyebrow">The Hiking Backpack &middot; Reset Guide</span>
+    <h1>Pack it back.<br><em style="color:var(--rust-2);font-style:italic;">Leave it ready.</em></h1>
+    <p class="lead" style="margin-top:16px;">Congratulations on completing the backpack! If you don&rsquo;t mind putting it back together, below are the instructions to do so.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap" style="margin-top: clamp(32px,5vw,56px);">
+  <div class="progress-header">
+    <span>Re-assembly progress</span>
+    <span class="progress-count" id="countDisplay">0 / 12 done</span>
+  </div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressBar"></div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="checklist-wrap">
+  <div class="section-label">Start here &mdash; work top to bottom</div>
+  <div class="item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggleItem(event,this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleItem(event,this)}">
+  <div class="item-top">
+    <div class="item-check"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+    <div class="lock-title">Backpack overview</div>
+  </div>
+  <div class="item-body">
+    <div class="body-text">Here are all the items that you used throughout the game.</div>
+    
+  </div>
+  <div class="pg-full"><img loading="lazy" decoding="async" src="../media/ea1bcff27d77124a.jpg" alt="" class="pg-item" onclick="openLightbox(this)"></div>
+</div>
+<div class="item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggleItem(event,this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleItem(event,this)}">
+  <div class="item-top">
+    <div class="item-check"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+    <div class="lock-title">Lock 10 &ndash; <span class="lock-code">4 1 3 0</span> &ndash; Treasure Bag</div>
+  </div>
+  <div class="item-body">
+    <div class="body-text">Please include the remaining plushies and the congratulations card in the treasure bag. You need to pinch the top of the bag to thread the lock.</div>
+    <div class="lock-line">Lock code: 4 1 3 0 – code to be displayed: 0 0 0 0</div>
+  </div>
+  <div class="pg-row"><img loading="lazy" decoding="async" src="../media/8b578ef357382af3.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/7e326065bb047265.jpg" alt="" class="pg-item" onclick="openLightbox(this)"></div>
+</div>
+<div class="item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggleItem(event,this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleItem(event,this)}">
+  <div class="item-top">
+    <div class="item-check"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+    <div class="lock-title">Lock 9 &ndash; <span class="lock-code">6 3 2</span> &ndash; Pouch inside pocket</div>
+  </div>
+  <div class="item-body">
+    <div class="body-text">The inside pocket of the pouch contains the red 3 made of Legos. Lock to be looped inside the zip tie.</div>
+    <div class="lock-line">Lock code: 6 3 2 – code to be displayed: 0 0 0</div>
+  </div>
+  <div class="pg-row3"><img loading="lazy" decoding="async" src="../media/b5e3be555b4cebdc.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/d0f3cf56b6874346.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/e378a3ec5ef7364c.jpg" alt="" class="pg-item" onclick="openLightbox(this)"></div>
+</div>
+<div class="item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggleItem(event,this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleItem(event,this)}">
+  <div class="item-top">
+    <div class="item-check"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+    <div class="lock-title">Lock 8 &ndash; <span class="lock-code">D I C K</span> &ndash; Pouch back pocket</div>
+  </div>
+  <div class="item-body">
+    <div class="body-text">The pouch back pocket contains the birthday agenda and the map pieces. Lock to be looped inside the zip tie. <br>For this lock, you need to set the combination (D I C K) and press down on the top bar to ensure the lock closes properly</div>
+    <div class="lock-line">Lock code: D I C K – code to be displayed: L O S T</div>
+  </div>
+  <div class="pg-row3"><img loading="lazy" decoding="async" src="../media/053dc4dd5068515a.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/ca56092e8f8c3a95.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/3793b603b017231b.jpg" alt="" class="pg-item" onclick="openLightbox(this)"></div>
+</div>
+<div class="item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggleItem(event,this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleItem(event,this)}">
+  <div class="item-top">
+    <div class="item-check"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+    <div class="lock-title">Lock 7 &ndash; <span class="lock-code">5 1 8</span> &ndash; Pouch main pocket</div>
+  </div>
+  <div class="item-body">
+    <div class="body-text">The pouch main pocket contains the notepad with the riddle, the brown 1 made of Lego and the “names” pieces. Place the lock inside both zipper pull tab loops.</div>
+    <div class="lock-line">Lock code: 5 1 8 – code to be displayed: 0 0 0</div>
+  </div>
+  <div class="pg-row3"><img loading="lazy" decoding="async" src="../media/55916109b130ce9d.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/682071db3ef7ddbe.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/9970d8554ada6b4e.jpg" alt="" class="pg-item" onclick="openLightbox(this)"></div>
+</div>
+<div class="item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggleItem(event,this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleItem(event,this)}">
+  <div class="item-top">
+    <div class="item-check"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+    <div class="lock-title">Lock 6 &ndash; <span class="lock-code">1 0 2</span> &ndash; Pouch front pocket</div>
+  </div>
+  <div class="item-body">
+    <div class="body-text">The pouch front pocket contains the blue squared Lego puzzle and the “Hair” pieces. Please reset the Lego puzzle. Lock to be looped inside the zip tie.</div>
+    <div class="lock-line">Lock code: 1 0 2 – code to be displayed: 0 0 0</div>
+  </div>
+  <div class="pg-row3"><img loading="lazy" decoding="async" src="../media/ab38b0cda286815b.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/c982420cd77dace6.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/ba1075161cad5c12.jpg" alt="" class="pg-item" onclick="openLightbox(this)"></div>
+</div>
+<div class="item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggleItem(event,this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleItem(event,this)}">
+  <div class="item-top">
+    <div class="item-check"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+    <div class="lock-title">Lock 5 &ndash; <span class="lock-code">4 1 4</span> &ndash; Backpack inside pocket</div>
+  </div>
+  <div class="item-body">
+    <div class="body-text">The inside pocket of the backpack contains the otter puzzles pieces, the PWHL hockey cards and the “faces” pieces. Please put the hockey cards and the puzzles pieces inside the cardboard box. Lock to be looped inside the zip tie.</div>
+    <div class="lock-line">Lock code: 4 1 4 – code to be displayed: 0 0 0</div>
+  </div>
+  <div class="pg-grid"><img loading="lazy" decoding="async" src="../media/d18f809701a6330c.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/c863eff403fea97e.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/cfd3fb9d1090d9d5.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/20b19f2181c3c8e6.jpg" alt="" class="pg-item" onclick="openLightbox(this)"></div>
+</div>
+<div class="item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggleItem(event,this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleItem(event,this)}">
+  <div class="item-top">
+    <div class="item-check"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+    <div class="lock-title">Lock 4 &ndash; <span class="lock-code">3 2 6</span> &ndash; Backpack top pocket</div>
+  </div>
+  <div class="item-body">
+    <div class="body-text">The top pocket of the backpack contains the Lego satellite pieces, the “Pets” pieces and the orange 4 made of Legos. Lock to be looped inside the zip tie.</div>
+    <div class="lock-line">Lock code: 3 2 6 – code to be displayed: 0 0 0</div>
+  </div>
+  <div class="pg-row3"><img loading="lazy" decoding="async" src="../media/b34e982d2b632b77.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/53e5eb50edf21993.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/9236342571fbd4fe.jpg" alt="" class="pg-item" onclick="openLightbox(this)"></div>
+</div>
+<div class="item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggleItem(event,this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleItem(event,this)}">
+  <div class="item-top">
+    <div class="item-check"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+    <div class="lock-title">Lock 3 &ndash; <span class="lock-code">M O O N</span> &ndash; Backpack main compartment</div>
+  </div>
+  <div class="item-body">
+    <div class="body-text">The main compartment of the backpack contains most of the items:<br>– In the back pocket: the Lego satellite instructions and the card with the equation<br>– In the middle pocket: the periodic table and the yellow card<br>– Loose in the main compartment: the treasure bag, the locked pouch, the calculator, the Lego cube pieces and the “Jobs” pieces.<br>Place the lock inside both zipper pull tab loops.</div>
+    <div class="lock-line">Lock code: M O O N – code to be displayed: L O C K</div>
+  </div>
+  <div class="pg-grid"><img loading="lazy" decoding="async" src="../media/df6d4b264fc2faa3.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/b0fcc876b2fa6def.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/b30383da3e2d3ecd.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/8a3e0a57c9919222.jpg" alt="" class="pg-item" onclick="openLightbox(this)"></div>
+</div>
+<div class="item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggleItem(event,this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleItem(event,this)}">
+  <div class="item-top">
+    <div class="item-check"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+    <div class="lock-title">Lock 2 &ndash; <span class="lock-code">7 3 4</span> &ndash; Backpack front pocket</div>
+  </div>
+  <div class="item-body">
+    <div class="body-text">The backpack front pocket contains the grandparents’ card with the news clipping and the brown flat Lego puzzle. Please reset the Lego puzzle (instructions below) with the red tile in it.<br>Lock to be looped inside the zip tie.</div>
+    <div class="lock-line">Lock code: 7 3 4 – code to de displayed: 0 0 0</div>
+  </div>
+  <div class="pg-grid"><img loading="lazy" decoding="async" src="../media/2c9ccf22822110c3.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/30e06b32366dd11f.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/5ad75fc606512c28.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/6c9f1ff16bed309f.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/1120033b0f872a37.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/14b628fc3d7b01d3.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/7c4e0e632fcab434.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/fa455640ab9e0bd6.jpg" alt="" class="pg-item" onclick="openLightbox(this)"></div>
+</div>
+<div class="item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggleItem(event,this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleItem(event,this)}">
+  <div class="item-top">
+    <div class="item-check"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+    <div class="lock-title">Lock 1 &ndash; <span class="lock-code">7 4 9</span> &ndash; Backpack front compartment</div>
+  </div>
+  <div class="item-body">
+    <div class="body-text">The front compartment of the backpack contains the word search/sudoku page, the note about the backpack, the blue 0 made from Legos, the “Hobbies” pieces and a marker.<br>Please place the marker, hobbies pieces and blue 0 in the net.<br>Please erase the word search/sudoku if you used the marker.<br>Place the lock inside both zipper pull tab loops.</div>
+    <div class="lock-line">Lock code 7 4 9 – code to be displayed: 0 0 0</div>
+  </div>
+  <div class="pg-row3"><img loading="lazy" decoding="async" src="../media/bcbd1d8bf0aae312.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/53cc4c7c8c2b5d85.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/68e4026f522a1c55.jpg" alt="" class="pg-item" onclick="openLightbox(this)"></div>
+</div>
+<div class="item" role="checkbox" tabindex="0" aria-checked="false" onclick="toggleItem(event,this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleItem(event,this)}">
+  <div class="item-top">
+    <div class="item-check"><svg viewBox="0 0 12 10"><polyline points="1,5 4,9 11,1"/></svg></div>
+    <div class="lock-title">The backpack</div>
+  </div>
+  <div class="item-body">
+    <div class="body-text">The last step is to put the water bottle back in the pocket for it and you’re done!</div>
+    
+  </div>
+  <div class="pg-row3"><img loading="lazy" decoding="async" src="../media/268dba5f050d58ed.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/345c9ad2fd8240aa.jpg" alt="" class="pg-item" onclick="openLightbox(this)"><img loading="lazy" decoding="async" src="../media/65472686acc9c7ee.jpg" alt="" class="pg-item" onclick="openLightbox(this)"></div>
+</div>
+
+</div>
+
+<!-- COMPLETION -->
+<div class="completion" id="completionMsg">
+  <div class="completion-card">
+    <span class="emoji">&#127890;</span>
+    <h2>All packed. You&rsquo;re a legend.</h2>
+    <p>Hand it off to the next curious friend &mdash; or return it so someone else can borrow it.</p>
+    <a href="../../../feedback.html" class="btn btn-ghost btn-arrow" style="margin-top:1.5rem;display:inline-flex;">Leave feedback</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="foot-brand">Escape Backpack</div>
+      <p>A self-borrowing escape room you can take anywhere.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="../../../index.html">Home</a></li>
+        <li><a href="../../../borrow.html">Borrow one</a></li>
+        <li><a href="../../../feedback.html">Feedback</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Playing right now?</h4>
+      <ul>
+        <li><a href="../hints/">Hiking &mdash; hint companion</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="foot-credit">
+      <span>&copy; 2026 Escape Backpack &middot; Made with care in Ottawa</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const TOTAL = document.querySelectorAll('.item').length;
+document.getElementById('countDisplay').textContent = '0 / ' + TOTAL + ' done';
+
+function toggleItem(e, el) {
+  if (e.target.tagName === 'IMG') return;
+  el.classList.toggle('done');
+  el.setAttribute('aria-checked', String(el.classList.contains('done')));
+  const done = document.querySelectorAll('.item.done').length;
+  document.getElementById('progressBar').style.width = Math.round((done/TOTAL)*100)+'%';
+  document.getElementById('countDisplay').textContent = done+' / '+TOTAL+' done';
+  document.getElementById('completionMsg').classList.toggle('visible', done===TOTAL);
+  if(done===TOTAL && !window.__resetTracked){window.__resetTracked=true;EscapeAnalytics.track('reset_completed',{game:'hiking'});}
+}
+
+function openLightbox(img) {
+  document.getElementById('lb-img').src = img.src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+function toggleDrop() {
+  document.getElementById('hintsNav').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  const drop = document.getElementById('hintsNav');
+  if (!drop.contains(e.target)) drop.classList.remove('open');
+});
+
+function resetAll() {
+  document.querySelectorAll('.item').forEach(el => {el.classList.remove('done');el.setAttribute('aria-checked','false')});
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('countDisplay').textContent = '0 / ' + TOTAL + ' done';
+  document.getElementById('completionMsg').classList.remove('visible');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+<script src="../../../analytics.js"></script>
+<script>EscapeAnalytics.track("reset_opened",{game:"hiking"});</script>
+</body>
+</html>
