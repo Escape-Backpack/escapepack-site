@@ -5,6 +5,12 @@ them (no build step, output directory `/`). The design is Codex's site draft,
 promoted from `escape-backpack-games/draft/` on 2026-09-27.
 
 ## Pages
+
+Local designer-resource draft: `designer/clues/` contains the migrated Clue Library,
+search/filters, visual examples and a browser-local shortlist. **Access is not
+configured: do not publish this draft before resolving protection and source
+visibility.** See `designer/clues/README.md`.
+
 | Path | What |
 |---|---|
 | `index.html` | Home: all adventures, how it works, player help |

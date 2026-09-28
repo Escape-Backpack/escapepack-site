@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#17372d">
+  <title>Clue Library · Escape Backpack Studio</title>
+  <link rel="icon" href="../../assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../site.css">
+  <link rel="stylesheet" href="library.css">
+  <script src="library-data.js" defer></script>
+  <script src="library-expansion.js" defer></script>
+  <script src="library-guidance.js" defer></script>
+  <script src="library.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to library</a>
+  <header class="site-header">
+    <div class="studio-width studio-header">
+      <a class="brand" href="../../index.html"><span class="brand-mark" aria-hidden="true">✳</span><span>Escape<br><strong>Backpack</strong></span></a>
+      <span class="studio-label">Designer studio <span>/</span> Clue library</span>
+      <span class="preview-label">Local preview · login not configured</span>
+    </div>
+  </header>
+  <main id="main" class="studio-width">
+    <section class="library-intro" aria-labelledby="page-title">
+      <div><p class="eyebrow">The designer’s shelf</p><h1 id="page-title">The Clue Library.<br><em>Find your next idea.</em></h1></div>
+      <div class="intro-note"><p>Start with a prop, an action, or a spark of an idea. Find a technique, then make it belong to your story.</p><p class="intro-meta"><span id="library-count"></span> techniques · one shared library</p></div>
+    </section>
+    <nav class="mode-nav" aria-label="Library views">
+      <button type="button" data-mode="find" aria-pressed="true">Find a technique</button>
+      <button type="button" data-mode="inspire" aria-pressed="false">Visual inspiration</button>
+      <button type="button" data-mode="guide" aria-pressed="false">Design notes</button>
+      <button type="button" data-mode="coverage" aria-pressed="false">Coverage</button>
+      <button type="button" data-mode="saved" aria-pressed="false" class="saved-tab">Shortlist <span id="saved-count">0</span></button>
+    </nav>
+    <section id="browse" aria-label="Technique finder">
+      <div class="finder-layout">
+        <aside class="filters" aria-label="Filters">
+          <div class="filter-heading"><h2>Find your starting point</h2><button type="button" id="clear" class="quiet">Clear</button></div>
+          <label for="search">Search the library</label><input type="search" id="search" placeholder="Try comb, stars, postcards…">
+          <label for="category">Category</label><select id="category"><option value="">All categories</option></select>
+          <label for="action">Player action</label><select id="action"><option value="">Any action</option></select>
+          <label for="material">Build material</label><select id="material"><option value="">Any material</option></select>
+          <label for="output">Possible output</label><select id="output"><option value="">Any output</option></select>
+          <label for="depth">Detail level</label><select id="depth"><option value="">All entries</option><option value="specific">Specific design brief</option><option value="family">Family checklist</option></select>
+          <p class="filter-note">Tags suggest starting points. Materials and outputs depend on your version of the puzzle.</p>
+          <div class="filter-tip"><span class="eyebrow">Change the action</span><p>Three puzzles of decoding? Try arranging, measuring, or revealing something next.</p></div>
+        </aside>
+        <div class="results-area">
+          <div class="results-heading"><div><h2 id="results-title">The full collection</h2><p id="result-count" role="status" aria-live="polite"></p></div><button type="button" id="export" class="secondary" hidden>Copy shortlist</button></div>
+          <div id="results" class="techniques"></div>
+          <div id="empty" class="empty-state" hidden><h3>No techniques here yet.</h3><p id="empty-message">Try fewer filters or a different search.</p><button type="button" id="empty-clear" class="secondary">Clear filters</button></div>
+        </div>
+      </div>
+    </section>
+    <section id="inspiration" aria-labelledby="inspiration-title" hidden>
+      <div class="section-lead"><div><p class="eyebrow">See the move</p><h2 id="inspiration-title">A few ways into a puzzle.</h2></div><p>Simple diagrams to spark a version of your own. These are illustrative examples, not tested game props.</p></div>
+      <div id="gallery" class="gallery"></div>
+    </section>
+    <section id="guide" aria-labelledby="guide-title" hidden>
+      <div class="section-lead"><div><p class="eyebrow">From technique to puzzle</p><h2 id="guide-title">Give the idea a job.</h2></div><p>Use these prompts when an idea becomes a candidate. Leave unknowns open while you brainstorm.</p></div>
+      <div class="design-path"><div><span>01 / NOTICE</span><h3>What catches their eye?</h3><p>A phrase, an odd mark, a missing piece. Subtle is fine; the connection must be inferable.</p></div><div><span>02 / DO</span><h3>What do they do?</h3><p>Read, align, sort, measure, compare. Include the information or key they need inside the game.</p></div><div><span>03 / OBTAIN</span><h3>What changes?</h3><p>A word, a code, a location, or an opened compartment. Make the reading order and destination clear.</p></div></div>
+      <div class="notes-grid">
+        <article><h3>Make it belong</h3><p>Why would this character own this object? Why would its information appear in this form?</p></article>
+        <article><h3>Check the hardware</h3><p>Does the answer fit the real lock’s length and available letters? Can the container be opened and relocked as planned?</p></article>
+        <article><h3>Write the hints early</h3><p>Point toward the material, explain the connection, then show the solving steps. Keep the final answer separate.</p></article>
+        <article><h3>Test the actual object</h3><p>Print at final size. Check legibility, alignment and lighting. A browser preview cannot establish physical reliability.</p></article>
+        <article><h3>Plan the reset</h3><p>What goes where? What needs replacing? Can the next group start without evidence left by the previous players?</p></article>
+        <article><h3>Record what happened</h3><p>Keep observations separate from interpretation: what players tried, where they stalled, which hint helped, and what to change.</p></article>
+      </div>
+      <details class="method-note"><summary>About the library, tags and evidence</summary><p>Existing game examples are retained as design notes; their current implementation and playtest status have not been verified. New examples are illustrative proposals. Difficulty ratings on older entries are inherited estimates; new entries remain unrated.</p><p>Each technique has either a specific design brief or a clearly labelled family checklist. These are design guidance, not proof of a successful build. Action, material and output tags are editorial suggestions.</p><p>Selected primary references were reviewed on September 28, 2026 and are labelled on the relevant cards. Other links remain unverified. A checked mechanism reference does not validate our adaptation.</p><p>Create a puzzle with the kit's new command, then paste the copied brief into its body. The library holds reusable mechanisms; each backpack's records hold actual decisions and evidence. The Coverage view shows where further detail is still needed.</p></details>
+      <details class="method-note"><summary>Sources &amp; further reading</summary><div id="reading"></div></details>
+    </section>
+    <section id="coverage" aria-labelledby="coverage-title" hidden>
+      <div class="section-lead"><div><p class="eyebrow">Breadth and depth</p><h2 id="coverage-title">What’s covered. What still needs work.</h2></div><p>No catalogue is exhaustive. Counts show coverage, not the number of proven or production-ready puzzles.</p></div>
+      <div id="coverage-summary" class="coverage-summary"></div>
+      <div id="coverage-grid" class="notes-grid"></div>
+      <div class="method-note"><h3>Next depth priorities</h3><p>Build and test physical samples; replace imported game examples with links to current records; add specific briefs where only family guidance exists; then add production files and measured tolerances only when tested.</p><p>Electronic sensors, scent/taste, phone-dependent tasks and effects needing precise optics require more context than this general catalogue provides. Treat them as specialist prototypes. No entry currently claims a verified physical playtest.</p></div>
+    </section>
+  </main>
+  <footer class="studio-width library-footer"><span>Escape Backpack · Designer resources</span><span>Ideas are candidates until you choose and test them.</span></footer>
+  <dialog id="detail" aria-labelledby="detail-title"><div class="dialog-top"><span class="eyebrow">Technique notes</span><button type="button" id="close-detail" class="secondary">Close ×</button></div><div id="detail-body"></div></dialog>
+  <p id="toast" class="toast" role="status" hidden></p>
+  <noscript><p class="studio-width">Enable JavaScript to search the library and browse its examples.</p></noscript>
+</body>
+</html>
