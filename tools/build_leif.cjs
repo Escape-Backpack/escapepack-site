@@ -19,6 +19,7 @@ for (const asset of assetPaths) {
 fs.mkdirSync(path.join(target, 'assets'), { recursive: true });
 for (const [name, asset] of names) fs.copyFileSync(path.resolve(source, asset), path.join(target, 'assets', name));
 const rebase = text => text
+  .replaceAll('../Web/Postcards/', './assets/')
   .replaceAll('../Postcards/', './assets/')
   .replaceAll('../Props/_Renders/', './assets/')
   .replaceAll('../Props/RouenTicket/', './assets/')
