@@ -14,6 +14,7 @@ visibility.** See `designer/clues/README.md`.
 | Path | What |
 |---|---|
 | `index.html` | Home: all adventures, how it works, player help |
+| `play/norse/leif/` | Solo Norse opening-chapter playtest: three locks, original prop artwork, hints and local saves |
 | `hiking.html` | The Hiking Backpack: story, facts, borrowing, hints and reset links |
 | `borrow.html`, `feedback.html` | Forms (Formspree). `forms.js` shows success only after Formspree confirms. |
 | `help/` | Player help. `help/<game>/` is the **stable QR destination** for each game. |
@@ -21,6 +22,21 @@ visibility.** See `designer/clues/README.md`.
 | `styles.css` | The older stylesheet, still used by the legacy pages below |
 | `norse-hints.html`, `hiking-hints.html`, `hiking-reset.html`, `hiking-old.html`, `Harold.html` | Legacy pages, kept so existing links keep working |
 | `_redirects` | Cloudflare redirects. QR paths under `/help/` must never be removed once printed. |
+
+## Norse online playtest
+
+`/play/norse/leif/` is packaged from the design repository's
+`NorseBackpack/Digital/Leif.html`, `leif.css`, `leif.js`, and `leif-data.js`.
+Edit those source files, then run `node tools/build_leif.cjs` from this repository.
+An optional argument supplies a different absolute path to the source `Digital`
+directory. The default assumes the current sibling checkout arrangement.
+
+The packaging script copies referenced player artwork and the font, rewrites paths
+into a self-contained `assets/` directory, and checks references. It does not
+publish the brainstorm page, tests, or solution PDFs. The pilot is labelled as a
+playtest and remains `noindex`; this is not access control. Lock answers are checked
+locally and are inspectable in JavaScript. Saves belong to the browser/origin;
+players can move progress using the save-copy controls. The homepage links to it.
 
 ## Hiking help pages
 `help/hiking/hints/` and `help/hiking/reset/` are generated. Don't edit them by hand:
