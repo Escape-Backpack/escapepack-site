@@ -35,9 +35,10 @@ How it will work:
 Migration checklist:
 - [x] `build.sh` + `backpacks.txt`, tested locally (Claude)
 - [ ] Move public pages to `/adventures/<game>/` and add redirects (Claude)
-- [ ] Cloudflare: build command, `GITHUB_TOKEN` variable, deploy hook (designer, in the dashboard)
+- [x] Cloudflare: build command `bash build.sh`, deploy hook (designer). `GITHUB_TOKEN` only needed once a backpack repo is private.
 - [ ] (deferred) Cloudflare Access on `/design/*` with both designers' emails (designer)
-- [ ] Deploy-hook Action in `Space-Exploration`; then make it private and turn off its GitHub Pages
+- [x] Deploy-hook Action in `Space-Exploration` (`rebuild-site.yml`, org secret `SITE_DEPLOY_HOOK`)
+- [ ] Turn off Space's old GitHub Pages copy (`pages.yml`)
 - [ ] Update `backpack-kit` README and project templates to match (drop `<backpack>-design` subdomains)
 
 ## Pages
