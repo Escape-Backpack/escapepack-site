@@ -39,21 +39,20 @@ while read -r slug repo _; do
   mkdir -p design "help/$slug"
   mv "$WORK/$slug/site/hints" "help/$slug/hints"
   mv "$WORK/$slug/site" "design/$slug"
-  boards="$boards<li><a href=\"$slug/\">$name</a></li>"
+  boards="$boards$slug	$name
+"
 done < backpacks.txt
 
-cat > design/index.html <<EOF
-<!doctype html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex">
-<title>Design boards</title>
-<body style="font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem">
-<h1>Design boards</h1>
-<ul>$boards</ul>
-<h2>Tools</h2>
-<ul><li><a href="clues/">Clue Library</a></li></ul>
-EOF
+# design/index.html: the committed template with one card per backpack.
+printf '%s' "$boards" | "$PY" -c '
+import html, sys
+cards = "".join(
+    f"<a href=\"{html.escape(slug)}/\"><span class=\"eyebrow\">Design board</span>"
+    f"<strong>{html.escape(name)} ↗</strong><span>Brainstorm board and play-test.</span></a>"
+    for slug, name in (line.split("\t", 1) for line in sys.stdin.read().splitlines() if line))
+page = open("design/index.template.html", encoding="utf-8").read()
+open("design/index.html", "w", encoding="utf-8").write(page.replace("<!-- BOARDS -->", cards))
+'
 
 rm -rf "$WORK"
 echo "Done."

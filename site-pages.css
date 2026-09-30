@@ -37,6 +37,8 @@
 .help-pair a{background:#fffaf1;border:1px solid var(--line);padding:28px;text-decoration:none;display:flex;flex-direction:column;min-height:220px}
 .help-pair a:hover{border-color:#a54c32}.help-pair .eyebrow{margin-bottom:18px}.help-pair strong{font:400 29px var(--serif);margin-bottom:12px}.help-pair span:last-child{font-size:14px;color:#566d5c}
 .help-later{margin-top:32px;color:#677b69;font-size:14px}
+.design-warning{max-width:950px;background:#fbe9df;border:1px solid var(--rust);border-left-width:5px;padding:16px 20px;margin:0 0 28px;font-size:15px}
+.design-warning strong{color:#8f3d25}.design-list{margin-top:14px}.design-section{margin-top:40px}
 [hidden],.honeypot{display:none!important}
 @media(max-width:800px){.sub-grid,.detail-grid,.form-layout{grid-template-columns:1fr}.sub-visual img{height:auto;max-height:470px}.form-intro>p:last-child{margin-bottom:22px}}
 @media(max-width:600px){.container{width:min(100% - 32px,520px)}.form-row,.support-links,.help-pair{grid-template-columns:1fr}.fact-list li{grid-template-columns:110px 1fr}.sub-hero h1{font-size:clamp(39px,9vw,55px)}.form-card{padding:20px}.help-pair a{min-height:170px}}
