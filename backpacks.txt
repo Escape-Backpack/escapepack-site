@@ -2,3 +2,5 @@
 # <slug>  <GitHub owner/repo>
 space  Escape-Backpack/Space-Exploration
 aurora  Escape-Backpack/Space-Station-Aurora
+canada  Escape-Backpack/Canada-Exploration
+hockey  Escape-Backpack/Hockey-Expedition
