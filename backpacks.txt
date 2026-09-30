@@ -1,0 +1,3 @@
+# Backpacks whose design boards build.sh puts under /design/<slug>/ and /help/<slug>/hints/.
+# <slug>  <GitHub owner/repo>
+space  Escape-Backpack/Space-Exploration

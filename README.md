@@ -16,7 +16,7 @@ One domain, one Cloudflare Pages project (this repo). No per-backpack subdomains
 | `/help/<game>/` | Hint pages, the printed QR destination | everyone | hand-made or copied from the backpack build |
 
 How it will work:
-1. **Build:** a script here (`build.sh`) clones `backpack-kit` and each backpack repo listed in
+1. **Build:** `build.sh` clones `backpack-kit` and each backpack repo listed in
    `backpacks.txt`, runs `kit.py build` for each, and puts the result in `design/<game>/`.
    Each game's generated hint page goes to `help/<game>/`. Pages settings change from
    "no build step" to build command `bash build.sh`.
@@ -31,7 +31,7 @@ How it will work:
    (that subdomain was never set up) and serves the built hint page directly.
 
 Migration checklist:
-- [ ] `build.sh` + `backpacks.txt`, tested locally (Claude)
+- [x] `build.sh` + `backpacks.txt`, tested locally (Claude)
 - [ ] Move public pages to `/adventures/<game>/` and add redirects (Claude)
 - [ ] Cloudflare: build command, `GITHUB_TOKEN` variable, deploy hook (designer, in the dashboard)
 - [ ] Cloudflare Access on `/design/*` with both designers' emails (designer)
