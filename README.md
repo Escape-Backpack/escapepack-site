@@ -12,7 +12,7 @@ One domain, one Cloudflare Pages project (this repo). No per-backpack subdomains
 |---|---|---|---|
 | `/adventures/<game>/` | Public page for each adventure (story, borrowing, reset) | everyone | hand-made, in this repo |
 | `/play/<game>/` | Digital versions of the games | everyone | packaged into this repo (as `play/norse/leif/` today) |
-| `/design/<game>/` | Brainstorm boards (Space, Hockey, Canada...) and designer tools (`design/clues/`) | only people allowed by Cloudflare Access | built from each backpack repo by `backpack-kit` |
+| `/design/<game>/` | Brainstorm boards (Space, Hockey, Canada...) and designer tools (`design/clues/`) | anyone with the link (`noindex`); Access login deferred | built from each backpack repo by `backpack-kit` |
 | `/help/<game>/` | Hint pages, the printed QR destination | everyone | hand-made or copied from the backpack build |
 
 How it will work:
@@ -20,8 +20,10 @@ How it will work:
    `backpacks.txt`, runs `kit.py build` for each, and puts the result in `design/<game>/`.
    Each game's generated hint page goes to `help/<game>/`. Pages settings change from
    "no build step" to build command `bash build.sh`.
-2. **Protection:** one Cloudflare Access application on `escapepack.ca/design/*`, login by
-   one-time email code, allowing the designers' emails. It covers every future design board.
+2. **Protection:** none for now (decided 2026-09-30: low traffic). Pages are `noindex`, so
+   search engines skip them, but anyone with the link can open them. If needed later: one
+   Cloudflare Access application on `escapepack.ca/design/*`, login by one-time email code,
+   allowing the designers' emails. It covers every design board and the Clue Library.
 3. **Private backpack repos:** the build reads them with a read-only GitHub token stored as a
    Cloudflare environment variable. `backpack-kit` stays public.
 4. **Rebuild on backpack push:** each backpack repo has a small GitHub Action that calls this
@@ -34,15 +36,15 @@ Migration checklist:
 - [x] `build.sh` + `backpacks.txt`, tested locally (Claude)
 - [ ] Move public pages to `/adventures/<game>/` and add redirects (Claude)
 - [ ] Cloudflare: build command, `GITHUB_TOKEN` variable, deploy hook (designer, in the dashboard)
-- [ ] Cloudflare Access on `/design/*` with both designers' emails (designer)
+- [ ] (deferred) Cloudflare Access on `/design/*` with both designers' emails (designer)
 - [ ] Deploy-hook Action in `Space-Exploration`; then make it private and turn off its GitHub Pages
 - [ ] Update `backpack-kit` README and project templates to match (drop `<backpack>-design` subdomains)
 
 ## Pages
 
 Designer resource: `design/clues/` contains the Clue Library (search/filters, visual
-examples and a browser-local shortlist). It sits under `/design/`, so the planned Access
-rule protects it; until that rule exists it is public. It moved from `designer/clues/`
+examples and a browser-local shortlist). It sits under `/design/`, which is public but
+`noindex` (an Access login can be added later). It moved from `designer/clues/`
 (redirected). See `design/clues/README.md`.
 
 | Path | What |
