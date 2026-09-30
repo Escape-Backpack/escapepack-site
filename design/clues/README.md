@@ -1,9 +1,11 @@
 # Designer Clue Library
 
-Local implementation for review at `/designer/clues/`. Uses the public site's
+Local implementation for review at `/design/clues/` (moved from `/designer/clues/`). Uses the public site's
 `site.css` colour and typography tokens. No framework or build step.
 
 ## Access: not configured
+
+Planned: the Cloudflare Access rule on `escapepack.ca/design/*` (see the site README).
 
 This folder contains game examples and spoilers. It has no authentication yet.
 Do not push/publish it until the intended access policy and repository visibility

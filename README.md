@@ -40,10 +40,10 @@ Migration checklist:
 
 ## Pages
 
-Local designer-resource draft: `designer/clues/` contains the migrated Clue Library,
-search/filters, visual examples and a browser-local shortlist. **Access is not
-configured: do not publish this draft before resolving protection and source
-visibility.** See `designer/clues/README.md`.
+Designer resource: `design/clues/` contains the Clue Library (search/filters, visual
+examples and a browser-local shortlist). It sits under `/design/`, so the planned Access
+rule protects it; until that rule exists it is public. It moved from `designer/clues/`
+(redirected). See `design/clues/README.md`.
 
 | Path | What |
 |---|---|

@@ -26,7 +26,7 @@ repo_url() {
 
 git clone --depth 1 --quiet https://github.com/Escape-Backpack/backpack-kit "$WORK/backpack-kit"
 
-boards=""
+boards=""   # design/clues/ is committed here, not built: never use "clues" as a slug
 while read -r slug repo _; do
   case "$slug" in ''|\#*) continue ;; esac
   echo "== $slug ($repo)"
@@ -51,6 +51,8 @@ cat > design/index.html <<EOF
 <body style="font-family: system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem">
 <h1>Design boards</h1>
 <ul>$boards</ul>
+<h2>Tools</h2>
+<ul><li><a href="clues/">Clue Library</a></li></ul>
 EOF
 
 rm -rf "$WORK"
