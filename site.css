@@ -45,3 +45,4 @@ h1,h2,h3,p{margin-top:0}h1,h2,h3{font-family:var(--serif);font-weight:400}h1{fon
 .faq-list details p{color:#5c7061;font-size:14px;line-height:1.65;max-width:62ch;padding:0 25px 20px 0;margin:0}
 .faq-list details a{color:#963f29;font-weight:700;text-underline-offset:3px}
 @media(max-width:680px){.faq-layout{grid-template-columns:1fr}.future-note{display:block}.future-note a{display:inline-block;margin-top:14px}.hero-facts{margin-bottom:24px}}
+.theme-toggle{font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:9px 12px;border:1px solid var(--line);background:transparent;color:inherit;cursor:pointer}.theme-toggle:hover{border-color:var(--rust)}

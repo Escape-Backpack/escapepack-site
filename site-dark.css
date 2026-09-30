@@ -1,0 +1,49 @@
+/* Dark mode: forest-green pages. Follows the OS unless the visitor picked a side with the toggle (theme.js). */
+:root[data-theme="dark"]{--ink:#f7f1e6;--muted:#9db0a2;--line:rgba(247,241,230,.16);--paper:#17372d;--paper-deep:#10291f;color-scheme:dark}
+:root[data-theme="dark"] .brand-mark{background:var(--brass)}
+:root[data-theme="dark"] .site-header,:root[data-theme="dark"] .hero,:root[data-theme="dark"] .sub-hero{background:#133027}
+:root[data-theme="dark"] .quick-help,:root[data-theme="dark"] .detail-support,:root[data-theme="dark"] .site-footer{background:#0f271e}
+:root[data-theme="dark"] .closing{background:#a64f35}
+:root[data-theme="dark"] .adventures,:root[data-theme="dark"] .form-page,:root[data-theme="dark"] .help-page,:root[data-theme="dark"] .faq-section{background:#17372d}
+:root[data-theme="dark"] .how-section{background:#1b4033}
+:root[data-theme="dark"] .help-card,:root[data-theme="dark"] .support-links a,:root[data-theme="dark"] .adventure-card,:root[data-theme="dark"] .form-card,:root[data-theme="dark"] .help-pair a,:root[data-theme="dark"] .future-note{background:#1f4639;color:#f7f1e6}
+:root[data-theme="dark"] .help-card:hover,:root[data-theme="dark"] .support-links a:hover{background:#2a5a49}
+:root[data-theme="dark"] .help-pair a:hover{border-color:#e58f6e}
+:root[data-theme="dark"] .card-image{background:#214b3d}
+:root[data-theme="dark"] .hero-visual,:root[data-theme="dark"] .sub-visual{background:#214b3d;box-shadow:22px 24px 0 #0f271e}
+:root[data-theme="dark"] .button-primary{background:#f7f1e6;color:#17372d}
+:root[data-theme="dark"] .nav-help,:root[data-theme="dark"] .eyebrow,:root[data-theme="dark"] .help-number,:root[data-theme="dark"] .steps li>span,:root[data-theme="dark"] .card-link,:root[data-theme="dark"] .player-shortcuts a,:root[data-theme="dark"] .future-note a,:root[data-theme="dark"] .faq-list details a,:root[data-theme="dark"] .aside-card a,:root[data-theme="dark"] .design-warning strong{color:#e58f6e}
+:root[data-theme="dark"] .hero-lead,:root[data-theme="dark"] .hero-facts,:root[data-theme="dark"] .help-detail,:root[data-theme="dark"] .section-heading>p,:root[data-theme="dark"] .adventure-card p,:root[data-theme="dark"] .how-heading>p:last-child,:root[data-theme="dark"] .steps p,:root[data-theme="dark"] .future-note span,:root[data-theme="dark"] .faq-heading>p:last-child,:root[data-theme="dark"] .faq-list details p,:root[data-theme="dark"] .sub-lead,:root[data-theme="dark"] .detail-intro p:last-child,:root[data-theme="dark"] .fact-list span,:root[data-theme="dark"] .form-intro>p:last-child,:root[data-theme="dark"] .form-card>p,:root[data-theme="dark"] .field small,:root[data-theme="dark"] .form-note,:root[data-theme="dark"] .aside-card p,:root[data-theme="dark"] .aside-card li,:root[data-theme="dark"] .help-lead,:root[data-theme="dark"] .help-pair span:last-child,:root[data-theme="dark"] .help-later,:root[data-theme="dark"] .breadcrumb,:root[data-theme="dark"] .help-intro p:last-child,:root[data-theme="dark"] .detail-support p{color:#c5d3c8}
+:root[data-theme="dark"] .hero-location,:root[data-theme="dark"] .card-index,:root[data-theme="dark"] .card-note{color:#9db0a2}
+:root[data-theme="dark"] .tag{border-color:#4d6f5e;color:#c5d3c8}
+:root[data-theme="dark"] .tag-live{background:#254f3a;border-color:#4f7f5f;color:#b9e0b0}
+:root[data-theme="dark"] .field input,:root[data-theme="dark"] .field textarea,:root[data-theme="dark"] .field select{background:#10291f;border-color:#4d6f5e;color:#f7f1e6}
+:root[data-theme="dark"] .form-error{background:#4a2a22;color:#f5c9bb;border-left-color:#e58f6e}
+:root[data-theme="dark"] .form-success{background:#1f4a35;border-color:#4f7f5f}.form-success p{color:#cfe8cc}
+:root[data-theme="dark"] .design-warning{background:#3a2a22}
+@media(max-width:680px){:root[data-theme="dark"] .hero-visual,:root[data-theme="dark"] .sub-visual{box-shadow:12px 14px 0 #0f271e}}
+@media(prefers-color-scheme:dark){
+:root:not([data-theme="light"]){--ink:#f7f1e6;--muted:#9db0a2;--line:rgba(247,241,230,.16);--paper:#17372d;--paper-deep:#10291f;color-scheme:dark}
+:root:not([data-theme="light"]) .brand-mark{background:var(--brass)}
+:root:not([data-theme="light"]) .site-header,:root:not([data-theme="light"]) .hero,:root:not([data-theme="light"]) .sub-hero{background:#133027}
+:root:not([data-theme="light"]) .quick-help,:root:not([data-theme="light"]) .detail-support,:root:not([data-theme="light"]) .site-footer{background:#0f271e}
+:root:not([data-theme="light"]) .closing{background:#a64f35}
+:root:not([data-theme="light"]) .adventures,:root:not([data-theme="light"]) .form-page,:root:not([data-theme="light"]) .help-page,:root:not([data-theme="light"]) .faq-section{background:#17372d}
+:root:not([data-theme="light"]) .how-section{background:#1b4033}
+:root:not([data-theme="light"]) .help-card,:root:not([data-theme="light"]) .support-links a,:root:not([data-theme="light"]) .adventure-card,:root:not([data-theme="light"]) .form-card,:root:not([data-theme="light"]) .help-pair a,:root:not([data-theme="light"]) .future-note{background:#1f4639;color:#f7f1e6}
+:root:not([data-theme="light"]) .help-card:hover,:root:not([data-theme="light"]) .support-links a:hover{background:#2a5a49}
+:root:not([data-theme="light"]) .help-pair a:hover{border-color:#e58f6e}
+:root:not([data-theme="light"]) .card-image{background:#214b3d}
+:root:not([data-theme="light"]) .hero-visual,:root:not([data-theme="light"]) .sub-visual{background:#214b3d;box-shadow:22px 24px 0 #0f271e}
+:root:not([data-theme="light"]) .button-primary{background:#f7f1e6;color:#17372d}
+:root:not([data-theme="light"]) .nav-help,:root:not([data-theme="light"]) .eyebrow,:root:not([data-theme="light"]) .help-number,:root:not([data-theme="light"]) .steps li>span,:root:not([data-theme="light"]) .card-link,:root:not([data-theme="light"]) .player-shortcuts a,:root:not([data-theme="light"]) .future-note a,:root:not([data-theme="light"]) .faq-list details a,:root:not([data-theme="light"]) .aside-card a,:root:not([data-theme="light"]) .design-warning strong{color:#e58f6e}
+:root:not([data-theme="light"]) .hero-lead,:root:not([data-theme="light"]) .hero-facts,:root:not([data-theme="light"]) .help-detail,:root:not([data-theme="light"]) .section-heading>p,:root:not([data-theme="light"]) .adventure-card p,:root:not([data-theme="light"]) .how-heading>p:last-child,:root:not([data-theme="light"]) .steps p,:root:not([data-theme="light"]) .future-note span,:root:not([data-theme="light"]) .faq-heading>p:last-child,:root:not([data-theme="light"]) .faq-list details p,:root:not([data-theme="light"]) .sub-lead,:root:not([data-theme="light"]) .detail-intro p:last-child,:root:not([data-theme="light"]) .fact-list span,:root:not([data-theme="light"]) .form-intro>p:last-child,:root:not([data-theme="light"]) .form-card>p,:root:not([data-theme="light"]) .field small,:root:not([data-theme="light"]) .form-note,:root:not([data-theme="light"]) .aside-card p,:root:not([data-theme="light"]) .aside-card li,:root:not([data-theme="light"]) .help-lead,:root:not([data-theme="light"]) .help-pair span:last-child,:root:not([data-theme="light"]) .help-later,:root:not([data-theme="light"]) .breadcrumb,:root:not([data-theme="light"]) .help-intro p:last-child,:root:not([data-theme="light"]) .detail-support p{color:#c5d3c8}
+:root:not([data-theme="light"]) .hero-location,:root:not([data-theme="light"]) .card-index,:root:not([data-theme="light"]) .card-note{color:#9db0a2}
+:root:not([data-theme="light"]) .tag{border-color:#4d6f5e;color:#c5d3c8}
+:root:not([data-theme="light"]) .tag-live{background:#254f3a;border-color:#4f7f5f;color:#b9e0b0}
+:root:not([data-theme="light"]) .field input,:root:not([data-theme="light"]) .field textarea,:root:not([data-theme="light"]) .field select{background:#10291f;border-color:#4d6f5e;color:#f7f1e6}
+:root:not([data-theme="light"]) .form-error{background:#4a2a22;color:#f5c9bb;border-left-color:#e58f6e}
+:root:not([data-theme="light"]) .form-success{background:#1f4a35;border-color:#4f7f5f}.form-success p{color:#cfe8cc}
+:root:not([data-theme="light"]) .design-warning{background:#3a2a22}
+@media(max-width:680px){:root:not([data-theme="light"]) .hero-visual,:root:not([data-theme="light"]) .sub-visual{box-shadow:12px 14px 0 #0f271e}}
+}
