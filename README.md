@@ -4,6 +4,40 @@ The public Escape Backpack site. Files live here on GitHub; Cloudflare Pages ser
 them (no build step, output directory `/`). The design is Codex's site draft,
 promoted from `escape-backpack-games/draft/` on 2026-09-27.
 
+## Planned structure (agreed 2026-09-30, not built yet)
+
+One domain, one Cloudflare Pages project (this repo). No per-backpack subdomains.
+
+| Path | What | Who sees it | Source |
+|---|---|---|---|
+| `/adventures/<game>/` | Public page for each adventure (story, borrowing, reset) | everyone | hand-made, in this repo |
+| `/play/<game>/` | Digital versions of the games | everyone | packaged into this repo (as `play/norse/leif/` today) |
+| `/design/<game>/` | Brainstorm boards (Space, Hockey, Canada...) and designer tools (`design/clues/`) | only people allowed by Cloudflare Access | built from each backpack repo by `backpack-kit` |
+| `/help/<game>/` | Hint pages, the printed QR destination | everyone | hand-made or copied from the backpack build |
+
+How it will work:
+1. **Build:** a script here (`build.sh`) clones `backpack-kit` and each backpack repo listed in
+   `backpacks.txt`, runs `kit.py build` for each, and puts the result in `design/<game>/`.
+   Each game's generated hint page goes to `help/<game>/`. Pages settings change from
+   "no build step" to build command `bash build.sh`.
+2. **Protection:** one Cloudflare Access application on `escapepack.ca/design/*`, login by
+   one-time email code, allowing the designers' emails. It covers every future design board.
+3. **Private backpack repos:** the build reads them with a read-only GitHub token stored as a
+   Cloudflare environment variable. `backpack-kit` stays public.
+4. **Rebuild on backpack push:** each backpack repo has a small GitHub Action that calls this
+   project's Cloudflare deploy hook (URL stored as a repo secret).
+5. **Old links:** `hiking.html` etc. redirect to `/adventures/...` in `_redirects`.
+   `/help/` paths never move. `/help/space/` stops redirecting to `space-design.escapepack.ca`
+   (that subdomain was never set up) and serves the built hint page directly.
+
+Migration checklist:
+- [ ] `build.sh` + `backpacks.txt`, tested locally (Claude)
+- [ ] Move public pages to `/adventures/<game>/` and add redirects (Claude)
+- [ ] Cloudflare: build command, `GITHUB_TOKEN` variable, deploy hook (designer, in the dashboard)
+- [ ] Cloudflare Access on `/design/*` with both designers' emails (designer)
+- [ ] Deploy-hook Action in `Space-Exploration`; then make it private and turn off its GitHub Pages
+- [ ] Update `backpack-kit` README and project templates to match (drop `<backpack>-design` subdomains)
+
 ## Pages
 
 Local designer-resource draft: `designer/clues/` contains the migrated Clue Library,
