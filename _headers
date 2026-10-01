@@ -1,0 +1,7 @@
+# Cloudflare Pages headers.
+# Design boards and hint pages load data.js/common.js, which Pages caches for 4 hours by
+# default. Make browsers revalidate each time so a push shows up on a normal refresh.
+/design/*
+  Cache-Control: public, max-age=0, must-revalidate
+/help/*/hints/*
+  Cache-Control: public, max-age=0, must-revalidate
