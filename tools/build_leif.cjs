@@ -24,7 +24,7 @@ const rebase = text => text
   .replaceAll('../Props/_Renders/', './assets/')
   .replaceAll('../Props/RouenTicket/', './assets/')
   .replaceAll('../../Fonts/Cinzel/', './assets/');
-for (const filename of ['Leif.html', 'leif.css', 'leif.js', 'leif-data.js']) {
+for (const filename of ['Leif.html', 'leif.css', 'leif.js', 'leif-data.js', 'table-layout.js']) {
   let text = rebase(fs.readFileSync(path.join(source, filename), 'utf8'));
   if (filename === 'Leif.html') {
     text = text.replace('<div class="brand">ESCAPE BACKPACK', '<div class="brand"><a href="/" style="color:inherit;text-decoration:none">ESCAPE BACKPACK</a>');
