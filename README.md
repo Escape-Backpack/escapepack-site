@@ -59,6 +59,7 @@ examples and a browser-local shortlist). It sits under `/design/`, which is publ
 | `styles.css` | The older stylesheet, still used by the legacy pages below |
 | `norse-hints.html`, `hiking-hints.html`, `hiking-reset.html`, `hiking-old.html`, `Harold.html` | Legacy pages, kept so existing links keep working |
 | `_redirects` | Cloudflare redirects. QR paths under `/help/` must never be removed once printed. |
+| `404.html` | Shown for any unknown address. Cloudflare serves it at that address, so its links are root-relative (`/site.css`). |
 
 ## Norse online playtest
 
