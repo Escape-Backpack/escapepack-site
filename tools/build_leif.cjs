@@ -23,6 +23,7 @@ const rebase = text => text
   .replaceAll('../Postcards/', './assets/')
   .replaceAll('../Props/_Renders/', './assets/')
   .replaceAll('../Props/RouenTicket/', './assets/')
+  .replaceAll('../Props/RavenFlights/', './assets/')
   .replaceAll('../../Fonts/Cinzel/', './assets/');
 for (const filename of ['Leif.html', 'leif.css', 'leif.js', 'leif-data.js', 'table-layout.js']) {
   let text = rebase(fs.readFileSync(path.join(source, filename), 'utf8'));

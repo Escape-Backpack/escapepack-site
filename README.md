@@ -51,7 +51,7 @@ examples and a browser-local shortlist). It sits under `/design/`, which is publ
 | Path | What |
 |---|---|
 | `index.html` | Home: all adventures, how it works, player help |
-| `play/norse/leif/` | Solo Norse online playtest: Leif’s leg and Rollo’s first two locks (five locks), original prop artwork, hints and local saves |
+| `play/norse/leif/` | Solo Norse online playtest: the whole game, 13 locks across four trails and the final route, with original prop artwork, hints and local saves. Lock 6 shows as “still being built” until its code (PZ-14) is set. |
 | `hiking.html` | The Hiking Backpack: story, facts, borrowing, hints and reset links |
 | `borrow.html`, `feedback.html` | Forms (Formspree). `forms.js` shows success only after Formspree confirms. |
 | `help/` | Player help. `help/<game>/` is the **stable QR destination** for each game. |
