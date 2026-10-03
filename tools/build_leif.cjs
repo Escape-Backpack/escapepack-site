@@ -8,6 +8,8 @@ const game = require(path.join(source, 'leif-data.js'));
 const assetPaths = new Set(Object.values(game.items).flatMap(item => item.faces || []));
 assetPaths.add('../Props/_Renders/Luggage_Tag_Inserts_Sheet.png');
 assetPaths.add('../../Fonts/Cinzel/Cinzel-VariableFont_wght.ttf');
+assetPaths.add('./assets/Caveat-Medium.woff2'); // Liv's handwriting font (SIL OFL); its licence is shipped with it
+assetPaths.add('./assets/Caveat-OFL.txt');
 const names = new Map();
 for (const asset of assetPaths) {
   const name = path.basename(asset);
@@ -25,10 +27,12 @@ const rebase = text => text
   .replaceAll('../Props/RouenTicket/', './assets/')
   .replaceAll('../Props/RavenFlights/', './assets/')
   .replaceAll('../../Fonts/Cinzel/', './assets/');
-for (const filename of ['Leif.html', 'leif.css', 'leif.js', 'leif-data.js', 'table-layout.js']) {
+for (const filename of ['Leif.html', 'leif.css', 'leif.js', 'leif-data.js', 'leif-sound.js', 'leif-room.js', 'table-layout.js']) {
   let text = rebase(fs.readFileSync(path.join(source, filename), 'utf8'));
   if (filename === 'Leif.html') {
-    text = text.replace('<div class="brand">ESCAPE BACKPACK', '<div class="brand"><a href="/" style="color:inherit;text-decoration:none">ESCAPE BACKPACK</a>');
+    const home = '<span class="brand-kicker">Escape Backpack</span>';
+    if (!text.includes(home)) throw new Error('Leif.html: brand line not found; update the home link in build_leif.cjs');
+    text = text.replace(home, '<a class="brand-kicker" href="/">Escape Backpack</a>');
   }
   fs.writeFileSync(path.join(target, filename === 'Leif.html' ? 'index.html' : filename), text);
 }

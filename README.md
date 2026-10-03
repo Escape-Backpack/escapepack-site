@@ -51,7 +51,7 @@ examples and a browser-local shortlist). It sits under `/design/`, which is publ
 | Path | What |
 |---|---|
 | `index.html` | Home: all adventures, how it works, player help |
-| `play/norse/leif/` | Solo Norse online playtest: the whole game, 13 locks across four trails and the final route, with original prop artwork, hints and local saves. Lock 6 shows as “still being built” until its code (PZ-14) is set. |
+| `play/norse/leif/` | Norse online playtest (The Raven Inheritance): the whole game, 13 locks across four trails and the final route, with original prop artwork, hints, local saves, tablet support, optional shared rooms (“Play together”), sound, an ending with a shareable result and printable certificate, and built-in feedback. |
 | `hiking.html` | The Hiking Backpack: story, facts, borrowing, hints and reset links |
 | `borrow.html`, `feedback.html` | Forms (Formspree). `forms.js` shows success only after Formspree confirms. |
 | `help/` | Player help. `help/<game>/` is the **stable QR destination** for each game. |
@@ -75,6 +75,23 @@ publish the brainstorm page, tests, or solution PDFs. The pilot is labelled as a
 playtest and remains `noindex`; this is not access control. Lock answers are checked
 locally and are inspectable in JavaScript. Saves belong to the browser/origin;
 players can move progress using the save-copy controls. The homepage links to it.
+
+### Online-edition extras (October 2026)
+
+- **Source files** now also include `leif-sound.js` (synthesised sound, no audio files),
+  `leif-room.js` (Play together client) and `assets/Caveat-Medium.woff2` (Liv's handwriting,
+  SIL OFL, licence in `assets/Caveat-OFL.txt`). `tools/build_leif.cjs` packages them.
+- **Play together** needs the `escapepack-rooms` Worker (folder next to this repository):
+  `npx wrangler deploy` there, then put its `wss://` address in `Leif.html`'s
+  `<meta name="rooms-server">` and rebuild. While that is empty the button stays hidden.
+  To test on this computer: `npx wrangler dev` in that folder, then open
+  `Leif.html?rooms=ws://localhost:8787` from a local server.
+- **Feedback** from the game posts to the same Formspree form as `feedback.html`, with
+  `game: norse-online` and optional per-lock stats (time, hints, wrong tries, ratings).
+- **Analytics**: the game calls `zaraz.track` only if Zaraz is present (`lock_opened`,
+  `puzzle_rated`, `game_completed`, `room_joined`, `certificate_printed`, `feedback_submitted`).
+- Liv's opening note (quoted from postcard L1) and closing letter live in `STORY` in `leif-data.js`.
+  The screen never groups keepsakes by trail: which cards belong together is part of the final riddle.
 
 ## Hiking help pages
 `help/hiking/hints/` and `help/hiking/reset/` are generated. Don't edit them by hand:
