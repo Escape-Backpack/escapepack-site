@@ -10,6 +10,7 @@ assetPaths.add('../Props/_Renders/Luggage_Tag_Inserts_Sheet.png');
 assetPaths.add('../../Fonts/Cinzel/Cinzel-VariableFont_wght.ttf');
 assetPaths.add('./assets/Caveat-Medium.woff2'); // Liv's handwriting font (SIL OFL); its licence is shipped with it
 assetPaths.add('./assets/Caveat-OFL.txt');
+assetPaths.add('./assets/Raven_Postmark.png'); // the opening letter's postmark
 const names = new Map();
 for (const asset of assetPaths) {
   const name = path.basename(asset);
