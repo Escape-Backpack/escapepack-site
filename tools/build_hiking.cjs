@@ -4,7 +4,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const source = path.resolve(process.argv[2] || path.join(__dirname, '../../EscapeBackpack/Hiking_Trip/Digital'));
 const target = path.resolve(__dirname, '../play/hiking');
-const files = ['index.html', 'styles.css', 'clues.css', 'later.css', 'game-data.js', 'clues.js', 'later.js', 'game.js'];
+const files = ['index.html', 'styles.css', 'clues.css', 'later.css', 'game-data.js', 'clues.js', 'later.js', 'game.js',
+  // Lock 7's 3D Lego puzzles, loaded on first use (Three.js itself comes from jsdelivr via the page's import map).
+  'lego-flat.js', 'lego-square.js', 'lego-puzzle.js', 'lego-sim.js', 'lego3d.js'];
 fs.rmSync(target, { recursive: true, force: true });
 fs.mkdirSync(path.join(target, 'assets'), { recursive: true });
 for (const name of fs.readdirSync(path.join(source, 'assets'))) {
@@ -31,4 +33,8 @@ const referenced = new Set();
 for (const filename of files) for (const [, name] of fs.readFileSync(path.join(target, filename), 'utf8').matchAll(/assets\/([\w.-]+\.(?:jpg|png|svg))/g)) referenced.add(name);
 for (let page = 1; page <= 11; page++) referenced.add(`sat-${String(page).padStart(2, '0')}.jpg`);
 for (const name of referenced) if (!fs.existsSync(path.join(target, 'assets', name))) throw new Error(`Missing packaged asset: ${name}`);
+// Every module a packaged script imports (import('./x.js') or from './x.js') must be packaged too.
+for (const filename of files.filter(f => f.endsWith('.js'))) for (const [, name] of fs.readFileSync(path.join(target, filename), 'utf8').matchAll(/(?:import\(|from )'\.\/([\w.-]+\.js)'/g)) {
+  if (!files.includes(name)) throw new Error(`${filename} imports ${name}; add it to the file list in build_hiking.cjs`);
+}
 console.log(`Packaged Hiking online with ${fs.readdirSync(path.join(target, 'assets')).length} assets at ${target}`);

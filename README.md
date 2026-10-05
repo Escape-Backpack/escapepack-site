@@ -65,11 +65,13 @@ examples and a browser-local shortlist). It sits under `/design/`, which is publ
 ## Hiking online playtest
 
 `/play/hiking/` is packaged from the design repository's `Hiking_Trip/Digital/`
-(`index.html`, the three stylesheets, `game-data.js`, `clues.js`, `later.js`, `game.js`
-and `assets/`). Edit those, then run `node tools/build_hiking.cjs` from this repository
+(`index.html`, the three stylesheets, `game-data.js`, `clues.js`, `later.js`, `game.js`,
+the 3D Lego puzzle modules `lego-*.js` / `lego3d.js` and `assets/`, which holds their
+Stud.io `.ldr` exports). Edit those, then run `node tools/build_hiking.cjs` from this repository
 (optional argument: another absolute path to that `Digital` folder). The script strips the
 design record from `index.html` (it lists every code), links the brand to the homepage,
-and checks that every referenced asset was copied. Answers are checked locally and are
+and checks that every referenced asset and imported module was copied. The 3D puzzles
+load Three.js from jsdelivr through the page's import map, so lock 7 needs a connection. Answers are checked locally and are
 inspectable in JavaScript. The design record is the source page opened with `?design=1`.
 
 ## Norse online playtest

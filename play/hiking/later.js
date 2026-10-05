@@ -189,46 +189,20 @@
     scroll.append(pic); view.append(tools, scroll); show(); return view;
   }
 
-  /* ---------- Push puzzles (lock 7) ---------- */
-  const pushShapes = {
-    square: { base: '#f4f3ee', rim: '#3d62a8', sides: [
-      { tool: { x: 52, y: 196, w: 120, h: 28, fill: '#c22d27', dx: 0, dy: 46 }, tab: { x: 252, y: 118, w: 30, h: 58, fill: '#e07a2c', dx: 34, dy: 0 }, stud: { cx: 196, cy: 92, r: 20, fill: '#ecebe4' } },
-      { green: { x: 120, y: 252, w: 62, h: 30, fill: '#3f9a4a', dx: 0, dy: -42 }, red2: { x: 18, y: 140, w: 30, h: 52, fill: '#c22d27', dx: 0, dy: 0 } }
-    ] },
-    flat: { base: '#7a4a32', rim: '#4d2c1c', sides: [
-      { plate: { x: 46, y: 44, w: 208, h: 104, fill: '#8f5d41', dx: 0, dy: -32 }, side: { x: 46, y: 156, w: 208, h: 98, fill: '#8a573b', dx: 30, dy: 0 }, stud: { cx: 232, cy: 232, r: 16, fill: '#6a3f29' } },
-      { tool: { x: -8, y: 122, w: 96, h: 28, fill: '#3f9a4a', dx: 64, dy: 0 }, edge: { x: 40, y: 252, w: 220, h: 12, fill: '#e07a2c', dx: 0, dy: 0 } }
-    ] }
-  };
-  function pushArt(which, state, interactive, onPart) {
-    const look = pushShapes[which], s = state.push[which], side = interactive ? s.side : 0, puzzle = G.pushPuzzles[which];
-    const pic = svg('svg', { viewBox: '-20 -20 340 340', class: 'push-puzzle', role: interactive ? 'group' : 'img', 'aria-label': `${G.items[which].name}, ${side ? 'back' : 'front'}` });
-    pic.append(svg('rect', { x: 20, y: 20, width: 260, height: 260, rx: 10, fill: look.base, stroke: look.rim, 'stroke-width': 10 }));
-    pic.append(svg('path', { d: 'M150 30v240M30 150h240', stroke: '#0000001c', 'stroke-width': 3 }));
-    for (const part of puzzle.parts.filter(p => p.side === side)) {
-      const shape = look.sides[side][part.id], moved = part.order && s.moves >= part.order;
-      const node = shape.r ? svg('circle', { cx: shape.cx, cy: shape.cy, r: shape.r, fill: shape.fill, stroke: '#0003', 'stroke-width': 3 }) : svg('rect', { x: shape.x + (moved ? shape.dx : 0), y: shape.y + (moved ? shape.dy : 0), width: shape.w, height: shape.h, rx: 4, fill: shape.fill, stroke: '#0003', 'stroke-width': 3 });
-      if (interactive) {
-        node.classList.add('push-part'); node.setAttribute('tabindex', '0'); node.setAttribute('role', 'button'); node.setAttribute('aria-label', `Push the ${part.label.toLowerCase()}`);
-        node.addEventListener('click', () => onPart(part)); node.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPart(part); } });
-      }
-      pic.append(node);
-    }
-    if (which === 'square' && s.moves >= 3 && side === 1) pic.append(svg('rect', { x: 176, y: 56, width: 74, height: 82, rx: 4, fill: '#1d2a3a' }), svg('text', { x: 213, y: 122, 'text-anchor': 'middle', fill: '#fff', 'font-size': 66, 'font-family': 'Georgia, serif' }, puzzle.reveal));
-    return pic;
+  /* ---------- Square and flat Lego puzzles (lock 7): 3D, loaded on first use (lego-square.js, lego-flat.js) ---------- */
+  const lego = { square: () => import('./lego-square.js'), flat: () => import('./lego-flat.js') };
+  function legoThumb(id, state) {
+    const wrap = el('div', 'lego-thumb'), img = document.createElement('img');
+    img.alt = ''; wrap.append(img);
+    lego[id]().then(m => m.picture(state.push[id].actions)).then(url => { img.src = url; })
+      .catch(() => { wrap.classList.add('failed'); wrap.textContent = G.items[id].name; });
+    return wrap;
   }
-  function pushView(which, state, ctx) {
-    const s = state.push[which], view = el('div', 'push-view'), status = el('p', 'push-status'); status.setAttribute('role', 'status');
-    const holder = el('div', 'push-holder');
-    const draw = () => { holder.replaceChildren(pushArt(which, state, true, onPart)); if (which === 'flat' && s.moves >= 3) { const tile = el('div', 'round-tile'); tile.append(el('span', '', G.pushPuzzles.flat.reveal)); holder.append(tile); } sideLabel.textContent = s.side ? 'Back' : 'Front'; };
-    function onPart(part) {
-      const result = G.push(state, which, part.id);
-      status.textContent = result === 'moved' ? part.move : result === 'done' ? `The ${part.label.toLowerCase()} has already moved.` : `The ${part.label.toLowerCase()} won’t budge.`;
-      if (result === 'moved') { ctx.save(); draw(); }
-    }
-    const sideLabel = el('span', 'side-label'), tools = el('div', 'document-tools');
-    tools.append(sideLabel, button('Turn it over ↻', () => { s.side = 1 - s.side; status.textContent = ''; ctx.save(); draw(); }), el('span', 'zoom-instruction', 'Click a part to push it'));
-    view.append(tools, holder, status); draw(); return view;
+  function legoView(id, state, ctx) {
+    const view = el('div', 'lego-flat-view');
+    lego[id]().then(m => m.mount(view, { actions: state.push[id].actions, onChange: actions => { state.push[id].actions = actions; ctx.save(); } }))
+      .catch(err => { console.error(err); view.replaceChildren(el('p', 'lego-error', 'The 3D puzzle could not load. Check the internet connection, then close and reopen it.')); });
+    return view;
   }
 
   /* ---------- Cube pieces (lock 7) ---------- */
@@ -399,7 +373,7 @@
   function art(id, face, state) {
     if (legoIds.includes(id)) { const wrap = el('div', 'lego-number'); wrap.append(legoDigit(id)); return wrap; }
     if (G.items[id].bag) return bag(id);
-    if (id === 'flat' || id === 'square') { const wrap = el('div', 'push-thumb'); wrap.append(pushArt(id, state, false)); return wrap; }
+    if (id === 'flat' || id === 'square') return legoThumb(id, state);
     if (id === 'instructions') { const b = el('div', 'booklet'); b.append(image('sat-01.jpg', 'Cover of the satellite instructions')); return b; }
     if (id === 'equation') { if (!face) return equationFront(); const wrap = el('div', 'equation-paper back'); wrap.append(scribbleCard(state, false)); return wrap; }
     if (id === 'cube') return cubePile();
@@ -415,7 +389,7 @@
   function inspect(id, face, state, ctx) {
     if (legoIds.includes(id)) { const view = el('div', 'lego-view'); view.append(legoDigit(id)); return view; }
     if (G.items[id].bag) return workbench(state, ctx);
-    if (id === 'flat' || id === 'square') return pushView(id, state, ctx);
+    if (id === 'flat' || id === 'square') return legoView(id, state, ctx);
     if (id === 'instructions') return instructionsView();
     if (id === 'equation') return face ? equationBack(state, ctx) : documentView(equationFront(), { w: 560, h: 520 });
     if (id === 'cube') return cubeView(state, ctx);

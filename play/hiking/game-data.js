@@ -150,23 +150,9 @@
     'With my ADHD, I forgot some of the details about my neighbours. I remember a few things about their jobs, hobbies, pets and physical features. Hopefully I can piece everything together, as I really need to go see the doctor that lives close by before going on this trip.',
     'Rich is the only one with a visible birth mark on their face.', 'The engineer is the only one who has a scar on their left eyebrow.', 'The person with orange hair keeps a rat as a pet.', 'The park ranger is the only one who enjoys painting.', 'Mady does not have grey, black, or blonde hair.', 'Whoever loves photography has blonde hair.', 'Bart is the one who has the scar.', 'The astronaut is the one who owns the dog.', 'The chef is the one who has a starry face tattoo.', 'The person with the birth mark loves photography.', 'Bart does not have grey, black, or blonde hair.', 'Whoever enjoys music has a beard.', 'June is the one wearing a headband.', 'The doctor is the one who keeps the frog as a pet.', 'The person with grey hair is the one who enjoys music.', 'The astronaut has blonde hair.', 'The engineer’s favourite sport is hockey.', 'The park ranger is the one who keeps the bird.', 'Whoever enjoys painting is the one wearing the headband.', 'Mady is the only one with a face tattoo.', 'The person with the headband has black hair.', 'Whoever plays hockey is the one who owns the cat.', 'Dick has grey hair.'
   ];
-  // Lock 7: two push puzzles (moves must happen in order; move 3 is on the other side) and a four-piece cube.
-  const pushPuzzles = {
-    square: { reveal: '5', parts: [
-      { id: 'tool', side: 0, order: 1, label: 'Red tile', move: 'The red tile slides into the slot and pushes a white tile out.' },
-      { id: 'tab', side: 0, order: 2, label: 'Orange tab', move: 'The orange tab slides to the right.' },
-      { id: 'stud', side: 0, order: 0, label: 'Round stud' },
-      { id: 'green', side: 1, order: 3, label: 'Green tab', move: 'The green tab slides in. A window opens in the top.' },
-      { id: 'red2', side: 1, order: 0, label: 'Red tab' }
-    ] },
-    flat: { reveal: '1', parts: [
-      { id: 'plate', side: 0, order: 1, label: 'Brown top plate', move: 'The top plate slides up.' },
-      { id: 'side', side: 0, order: 2, label: 'Brown side plate', move: 'The side plate slides over.' },
-      { id: 'stud', side: 0, order: 0, label: 'Brown stud' },
-      { id: 'tool', side: 1, order: 3, label: 'Green tile', move: 'The green tile pushes the orange tiles in. A round red tile drops out.' },
-      { id: 'edge', side: 1, order: 0, label: 'Orange stripe' }
-    ] }
-  };
+  // Lock 7: the square and flat Lego puzzles are 3D (lego-square.js, lego-flat.js; DG-H21, DG-H23). Each save is the
+  // list of moves made (lego-sim.js `act`), replayed when the puzzle is shown. The cube is a four-piece frame.
+  const legoAction = /^(in:(left|right|front|back):-?\d{1,3}:-?\d{1,3}|deeper|out|shift:[+-]1|hand:\d{1,2}:-?[01],-?[01])$/;
   // Cube: a 4 × 4 frame filled by four L-shaped pieces. Cells are [row, column] in the solved frame.
   const cubePieces = {
     a: [[0, 0], [0, 1], [0, 2], [1, 2]],
@@ -186,7 +172,7 @@
   // Retain the original key/version so earlier opening saves continue.
   const fresh = () => ({ game: 'hiking-opening', version: 1, stage: 0, pieces: {}, lines: [], sudoku: [...givens], hints: locks.map(() => 0), notes: '', calculator: { expression: '', result: '' },
     found: [], satellite: { built: 0, on: false, x: 40, y: 60, rot: 35 }, otter: [...boards.otter.start], map: [...boards.map.start], mapLines: [],
-    push: { square: { moves: 0, side: 0 }, flat: { moves: 0, side: 0 } }, cube: {}, figures: Array.from({ length: 5 }, () => ({})) });
+    push: { square: { actions: [] }, flat: { actions: [] } }, cube: {}, figures: Array.from({ length: 5 }, () => ({})) });
   const normalizeAnswer = (stage, answer) => String(answer).trim().toUpperCase().replace(locks[stage]?.letters ? /[^A-Z]/g : /[^0-9]/g, '').slice(0, locks[stage]?.answer.length || 0);
 
   // Footprint on the table, including the caption under each prop.
@@ -267,14 +253,6 @@
     if (cells.some(([r, c]) => used.some(([ur, uc]) => ur === r && uc === c))) return 'Another piece is already there.';
     state.cube[id] = [row, col, rot]; return '';
   }
-  // Push puzzles: only the next part in the sequence moves, and only from the side it is on.
-  function push(state, which, partId) {
-    const puzzle = pushPuzzles[which], s = state.push[which], part = puzzle.parts.find(p => p.id === partId);
-    if (!part || part.side !== s.side) return 'stuck';
-    if (part.order && part.order <= s.moves) return 'done';
-    if (part.order !== s.moves + 1) return 'stuck';
-    s.moves++; return 'moved';
-  }
   function unlock(state, answer) {
     if (state.stage >= locks.length || String(answer).trim().toUpperCase() !== locks[state.stage].answer) return false;
     state.stage++;
@@ -331,9 +309,10 @@
     if (state.stage >= 5 && isPerm(raw.otter, 12)) state.otter = [...raw.otter];
     if (state.stage >= 8 && isPerm(raw.map, 9)) state.map = [...raw.map];
     if (state.stage >= 8 && Array.isArray(raw.mapLines)) state.mapLines = raw.mapLines.slice(0, 200).filter(l => Array.isArray(l) && l.length === 4 && l.every(n => integer(n, 0, 1000))).map(l => [...l]);
+    // Lego puzzles: the flat one arrives at lock 2, the square at lock 6. Saves from the 2D versions start them afresh.
     for (const [which, min] of [['flat', 2], ['square', 6]]) {
-      const s = raw.push?.[which];
-      if (state.stage >= min && s && integer(s.moves, 0, 3) && integer(s.side, 0, 1)) state.push[which] = { moves: s.moves, side: s.side };
+      const list = raw.push?.[which]?.actions;
+      if (state.stage >= min && Array.isArray(list)) state.push[which] = { actions: list.slice(0, 200).filter(a => typeof a === 'string' && legoAction.test(a)) };
     }
     if (state.stage >= 3 && raw.cube && typeof raw.cube === 'object') for (const id of Object.keys(cubePieces)) {
       const p = raw.cube[id];
@@ -347,8 +326,8 @@
     });
     return state;
   }
-  const api = { grid, givens, items, stickers, locks, values, hockey, parts, partOrder, riddle, pushPuzzles, cubePieces, boards, satellitePages,
-    available, tableSize, fresh, restore, validLine, sameLine, markLine, unlock, discover, place, layout, box, overlaps, pieceCells, placeCube, push, normalizeAnswer, calculate };
+  const api = { grid, givens, items, stickers, locks, values, hockey, parts, partOrder, riddle, cubePieces, boards, satellitePages,
+    available, tableSize, fresh, restore, validLine, sameLine, markLine, unlock, discover, place, layout, box, overlaps, pieceCells, placeCube, normalizeAnswer, calculate };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.HikingGame = api;
 })(typeof window !== 'undefined' ? window : globalThis);
