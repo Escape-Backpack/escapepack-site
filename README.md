@@ -52,6 +52,7 @@ examples and a browser-local shortlist). It sits under `/design/`, which is publ
 |---|---|
 | `index.html` | Home: all adventures, how it works, player help |
 | `play/norse/leif/` | Norse online playtest (The Raven Inheritance): the whole game, 13 locks across four trails and the final route, with original prop artwork, hints, local saves, tablet support, optional shared rooms (“Play together”), sound, an ending with a shareable result and printable certificate, and built-in feedback. |
+| `play/hiking/` | Hiking online playtest: all ten locks, laptop first, local saves. **Unlisted**: no homepage link while the physical backpack is lent out (it would give away every answer); `noindex`. |
 | `hiking.html` | The Hiking Backpack: story, facts, borrowing, hints and reset links |
 | `borrow.html`, `feedback.html` | Forms (Formspree). `forms.js` shows success only after Formspree confirms. |
 | `help/` | Player help. `help/<game>/` is the **stable QR destination** for each game. |
@@ -60,6 +61,16 @@ examples and a browser-local shortlist). It sits under `/design/`, which is publ
 | `norse-hints.html`, `hiking-hints.html`, `hiking-reset.html`, `hiking-old.html`, `Harold.html` | Legacy pages, kept so existing links keep working |
 | `_redirects` | Cloudflare redirects. QR paths under `/help/` must never be removed once printed. |
 | `404.html` | Shown for any unknown address. Cloudflare serves it at that address, so its links are root-relative (`/site.css`). |
+
+## Hiking online playtest
+
+`/play/hiking/` is packaged from the design repository's `Hiking_Trip/Digital/`
+(`index.html`, the three stylesheets, `game-data.js`, `clues.js`, `later.js`, `game.js`
+and `assets/`). Edit those, then run `node tools/build_hiking.cjs` from this repository
+(optional argument: another absolute path to that `Digital` folder). The script strips the
+design record from `index.html` (it lists every code), links the brand to the homepage,
+and checks that every referenced asset was copied. Answers are checked locally and are
+inspectable in JavaScript. The design record is the source page opened with `?design=1`.
 
 ## Norse online playtest
 

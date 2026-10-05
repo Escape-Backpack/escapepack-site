@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex"><meta name="theme-color" content="#183b35">
+  <title>The Hiking Backpack · Playtest</title>
+  <link rel="icon" href="assets/hiking.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=5"><link rel="stylesheet" href="clues.css?v=5"><link rel="stylesheet" href="later.css?v=5">
+  <script src="game-data.js?v=5" defer></script><script src="clues.js?v=5" defer></script><script src="later.js?v=5" defer></script><script src="game.js?v=5" defer></script>
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="/" style="color:inherit;text-decoration:none"><img src="assets/hiking.svg" alt=""><span>ESCAPE BACKPACK<small>THE HIKING ADVENTURE</small></span></a>
+    <div class="edition"><span class="status-dot"></span> PLAYTEST <span class="divider">/</span> 10 LOCKS</div>
+    <button id="how-to" class="header-button">How to play <span aria-hidden="true">↗</span></button>
+  </header>
+  <main>
+    <section class="workspace" aria-label="Camp table">
+      <div class="page-title"><div><p class="eyebrow">A family trip. One locked-away plushy.</p><h1>The Hiking Backpack</h1></div><span class="trail-mark" aria-hidden="true">⌁</span></div>
+      <div class="table-toolbar">
+        <div class="selection"><strong id="selected-name">Water bottle</strong><span id="selected-kind">Three sides to explore</span></div>
+        <div class="object-actions"><button id="inspect">Inspect <kbd>↵</kbd></button><button id="flip">Turn <kbd>F</kbd></button><button id="rotate" title="Rotate the selected item">Rotate <kbd>R</kbd></button><button id="stow" title="Keep this item in the collected items tray">Put away</button></div>
+        <button id="tidy" class="tidy" title="Arrange items without erasing your puzzle work">Tidy table</button>
+      </div>
+      <div id="table-frame"><div id="table-fit"><div id="table">
+        <span class="table-label" aria-hidden="true">CAMP TABLE <span>01</span></span>
+        <div class="table-grain" aria-hidden="true"></div>
+        <div id="pieces"></div>
+      </div></div><span class="table-caption">Drag to arrange · Double-click to inspect</span></div>
+      <section class="inventory" aria-label="Collected items"><div class="inventory-title"><span>YOUR FINDS <b id="item-count">01</b></span><small id="save-status" role="status">Saved on this browser</small></div><div id="shelf"></div></section>
+    </section>
+    <aside class="backpack" aria-label="Backpack and progress">
+      <div class="bag-heading"><p class="eyebrow">YOUR BACKPACK</p><span id="progress-count">0 / 10</span></div>
+      <div class="bag-illustration" aria-hidden="true"><div class="bag-loop"></div><div class="bag-body"><div class="bag-seam"></div><div class="bag-flap"></div><div class="bag-strap left"></div><div class="bag-strap right"></div><div class="bag-pocket"><svg viewBox="0 0 60 40"><path d="M4 34 24 7l14 20 8-12 12 19M17 17l8 4 4-6"/></svg></div><div class="bag-zip"></div></div><span class="bag-tag">OUTSIDE<br>IS CALLING</span></div>
+      <ol id="progress" aria-label="The ten locks"></ol>
+      <section id="lock-panel">
+        <p class="eyebrow" id="lock-number">LOCK 01</p><h2 id="lock-name">Front compartment</h2><p class="muted" id="lock-prompt">The bottle came out of the side pocket. Take a closer look.</p>
+        <form id="lock-form"><label id="combination-label" for="combination">THREE-DIGIT COMBINATION</label><div class="code-row"><input id="combination" autocomplete="off" inputmode="numeric" pattern="[0-9]{3}" maxlength="3" placeholder="···" aria-describedby="lock-message" required><button class="primary" type="submit">Unlock <span aria-hidden="true">→</span></button></div></form>
+        <p id="lock-message" role="status"></p><button id="hint-next" class="text-button">Need a hint?</button><div id="hints" aria-live="polite"></div>
+      </section>
+      <section id="complete" hidden><p class="eyebrow">ALL TEN LOCKS OPEN</p><h2>Juno’s plushy is free!</h2><p>The treasure bag held Juno’s plushy and a card: “Congratulations! You completed the game! Feel free to keep the plushy!”</p><p class="muted">Thank you for playtesting. Tell us what you thought: which locks were fun, and where you got stuck.</p></section>
+      <details class="notebook"><summary>Your notebook <span aria-hidden="true">＋</span></summary><label class="sr-only" for="notes">Your notes</label><textarea id="notes" maxlength="6000" placeholder="Clues, observations, possible codes…"></textarea></details>
+      <div class="session-controls"><button id="save-copy">Save / load</button><button id="restart">Start again</button></div>
+    </aside>
+  </main>
+  <dialog id="intro" aria-labelledby="intro-title"><div class="intro-scene"><img src="assets/hiking.svg" alt=""><span>THE HIKING ADVENTURE</span></div><div class="intro-body"><p class="eyebrow">TEN LOCKS · ONE PLUSHY</p><h2 id="intro-title">A camping trip.<br>A very special backpack.</h2><p>Juno’s favourite plushy is locked inside the backpack. Someone left clues to help get it out.</p><p>Start with the water bottle. Look closely, turn it around, and see where the clues lead.</p><div class="how-grid"><span><b>Explore</b>Drag items on the table. Double-click for a closer look.</span><span><b>Work it out</b>Mark grids, build Lego, turn things over. Some finds are for later.</span><span><b>Take your time</b>Hints are optional. Your progress saves in this browser.</span></div><button id="begin" class="primary">Explore the backpack <span aria-hidden="true">→</span></button><small>Laptop / desktop playtest · All ten locks · About 75 to 90 minutes</small></div></dialog>
+  <dialog id="inspector" aria-labelledby="inspector-title"><header class="inspector-header"><div><p class="eyebrow" id="inspector-kind"></p><h2 id="inspector-title"></h2></div><div class="inspector-actions"><button id="inspect-flip">Turn over</button><button id="close-inspector" class="close-button">Back to table <span aria-hidden="true">×</span></button></div></header><div id="inspector-content"></div></dialog>
+  <dialog id="restart-dialog" aria-labelledby="restart-title"><div class="simple-dialog"><p class="eyebrow">FRESH START</p><h2 id="restart-title">Pack it all away?</h2><p>This resets all ten locks, your puzzle work and the notebook in this browser. A saved copy stays separate.</p><div class="dialog-buttons"><button data-close>Keep playing</button><button id="restart-confirm" class="primary">Start again</button></div></div></dialog>
+  <dialog id="save-dialog" aria-labelledby="save-title"><div class="simple-dialog"><p class="eyebrow">YOUR PROGRESS</p><h2 id="save-title">Save or load a copy</h2><p>Download a copy, or select and copy the text to keep it somewhere safe. To resume, choose a saved file or paste its text below.</p><label for="save-text">Saved game text</label><textarea id="save-text" spellcheck="false"></textarea><input id="save-file" type="file" accept="application/json,.json" hidden><p id="save-result" role="status"></p><div class="dialog-buttons"><button id="download-save" class="primary">Download copy</button><button id="select-save">Select text</button><button id="choose-save">Choose file</button><button id="load-text">Load pasted text</button><button data-close>Close</button></div></div></dialog>
+  <dialog id="arrival" aria-labelledby="arrival-title"><div class="simple-dialog"><p class="eyebrow" id="arrival-label"></p><h2 id="arrival-title"></h2><p id="arrival-text"></p><button id="arrival-close" class="primary">Explore the table →</button></div></dialog>
+  <div id="toast" role="status"></div><noscript>This game needs JavaScript enabled.</noscript>
+</body>
+</html>
