@@ -6,7 +6,11 @@ const source = path.resolve(process.argv[2] || path.join(__dirname, '../../Escap
 const target = path.resolve(__dirname, '../play/hiking');
 const files = ['index.html', 'styles.css', 'clues.css', 'later.css', 'game-data.js', 'clues.js', 'later.js', 'game.js',
   // Lock 7's 3D Lego puzzles, loaded on first use (Three.js itself comes from jsdelivr via the page's import map).
-  'lego-flat.js', 'lego-square.js', 'lego-puzzle.js', 'lego-sim.js', 'lego3d.js'];
+  'lego-flat.js', 'lego-square.js', 'lego-puzzle.js', 'lego-sim.js', 'lego3d.js',
+  // The 3D satellite (locks 4–5): real part shapes from a pack made by tools/pack-lego.mjs.
+  'lego-model.js', 'lego-satellite.js',
+  // The 3D minifigs on lock 8's workbench (same packs).
+  'lego-minifigs.js', 'lego-minifigs-data.js'];
 fs.rmSync(target, { recursive: true, force: true });
 fs.mkdirSync(path.join(target, 'assets'), { recursive: true });
 for (const name of fs.readdirSync(path.join(source, 'assets'))) {
