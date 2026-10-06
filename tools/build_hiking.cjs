@@ -21,7 +21,7 @@ for (const filename of files) {
     const notes = /\s*<!-- Durable design record[\s\S]*?<\/div><\/dialog>/;
     if (!notes.test(text)) throw new Error('index.html: design record not found; update build_hiking.cjs');
     text = text.replace(notes, '');
-    const brand = '<div class="brand"><img src="assets/hiking.svg" alt=""><span>ESCAPE BACKPACK<small>THE HIKING ADVENTURE</small></span></div>';
+    const brand = '<div class="brand"><img src="assets/hiking.svg" alt=""><span class="brand-kicker">Escape Backpack</span><span class="brand-title">The Hiking Backpack</span></div>';
     if (!text.includes(brand)) throw new Error('index.html: brand line not found; update the home link in build_hiking.cjs');
     text = text.replace(brand, brand.replace('<div class="brand">', '<a class="brand" href="/" style="color:inherit;text-decoration:none">').replace(/<\/div>$/, '</a>'));
     if (!text.includes('name="robots" content="noindex"')) throw new Error('index.html: noindex missing');
