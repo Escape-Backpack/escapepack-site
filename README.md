@@ -71,7 +71,8 @@ Stud.io `.ldr` exports). Edit those, then run `node tools/build_hiking.cjs` from
 (optional argument: another absolute path to that `Digital` folder). The script strips the
 design record from `index.html` (it lists every code), links the brand to the homepage,
 and checks that every referenced asset and imported module was copied. The 3D puzzles
-load Three.js from jsdelivr through the page's import map, so lock 7 needs a connection. Answers are checked locally and are
+load Three.js from jsdelivr through the page's import map, so lock 7 needs a connection; the page
+fonts (Young Serif, Inter Tight) come from Google Fonts. The look follows the Norse playtest (DG-H24). Answers are checked locally and are
 inspectable in JavaScript. The design record is the source page opened with `?design=1`.
 
 ## Norse online playtest
