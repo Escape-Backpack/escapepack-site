@@ -11,8 +11,8 @@ const files = ['index.html', 'styles.css', 'clues.css', 'later.css', 'game-data.
   'lego-model.js', 'lego-satellite.js',
   // The 3D minifigs on lock 8's workbench (same packs).
   'lego-minifigs.js', 'lego-minifigs-data.js',
-  // The four Lego numbers in 3D.
-  'lego-numbers.js'];
+  // The four Lego numbers and the lock 7 cube in 3D.
+  'lego-numbers.js', 'lego-cube.js'];
 fs.rmSync(target, { recursive: true, force: true });
 fs.mkdirSync(path.join(target, 'assets'), { recursive: true });
 for (const name of fs.readdirSync(path.join(source, 'assets'))) {
