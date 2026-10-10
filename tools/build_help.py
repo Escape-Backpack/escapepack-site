@@ -13,6 +13,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+# The hint page's run logging and game codes (served as /sync.js) come from backpack-kit.
+KIT_SYNC = ROOT.parent / "backpack-kit" / "viewer" / "sync.js"
 HELP = ROOT / "help"
 MEDIA = HELP / "hiking" / "media"
 DATA_IMAGE = re.compile(r"data:image/(?:png|jpe?g|webp);base64,([A-Za-z0-9+/=]+)")
@@ -73,9 +75,8 @@ def build(source: str, destination: Path, kind: str) -> tuple[int, int, int]:
         html = html.replace("document.querySelectorAll('.item').forEach(el => el.classList.remove('done'));", "document.querySelectorAll('.item').forEach(el => {el.classList.remove('done');el.setAttribute('aria-checked','false')});", 1)
         event = "reset_opened"
     else:
-        html, logger_count = re.subn(r"const LOGGER_URL\s*=\s*'[^']*';", "const LOGGER_URL = '';", html, count=1)
-        if logger_count != 1:
-            raise ValueError("Expected one legacy logger URL")
+        if "/sync.js" not in html:
+            raise ValueError("Hint page no longer loads /sync.js (run logging and game codes)")
         needle = "st.hintLog[i].push(hi);"
         replacement = needle + "\n          EscapeAnalytics.track('hint_revealed',{game:'hiking',lock:String(i+1),level:String(hi+1)});"
         if needle not in html:
@@ -95,6 +96,7 @@ def build(source: str, destination: Path, kind: str) -> tuple[int, int, int]:
 
 def main() -> None:
     MEDIA.mkdir(parents=True, exist_ok=True)
+    (ROOT / "sync.js").write_bytes(KIT_SYNC.read_bytes())
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
     css = css.replace("url('assets/logo.png')", "url('../assets/logo.png')")
     (HELP / "legacy.css").write_text(css, encoding="utf-8")

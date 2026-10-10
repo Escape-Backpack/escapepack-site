@@ -117,6 +117,24 @@ python tools/build_help.py
 It reads `hiking-hints.html` and `hiking-reset.html`, extracts their embedded images
 into `help/hiking/media/`, and writes lighter copies (1.4 MB → 42 KB, 4.1 MB → 26 KB).
 
+## Hint-page stats and game codes
+The hint pages log each run to Cloudflare D1 (`escapepack-stats`, one database for every backpack)
+through the `escapepack-stats` Worker on `escapepack.ca/api/*` (`workers/stats/`, schema in
+`db/schema.sql`). Teammates join a run on another phone with its 5-letter game code and share the
+timer and hints; the end screen compares the team with earlier teams once 10 runs count. Which runs
+count (no tests, every lock solved, 30 min to 4 h, lock 1 not marked in the first minute; a single
+lock under 3 min drops only that lock's time) is decided when stats are read, in
+`workers/stats/src/rules.js`, so it can change without losing data.
+
+- Page side: `sync.js` (copied from `backpack-kit/viewer/sync.js` by `tools/build_help.py`) for the
+  Hiking page; kit-built pages inline it when `backpack.json` has `stats`.
+- Deploy the Worker: `cd workers/stats && npx wrangler deploy`. Tests: `node --test` there.
+- Look at the data: Cloudflare dashboard → D1 → escapepack-stats → Console, or
+  `npx wrangler d1 execute escapepack-stats --remote --command "SELECT * FROM runs"`.
+- The old Google Sheet runs were imported with `tools/import_sheet_logs.py` (`source = 'sheet-import'`).
+- Local test: `npx wrangler dev` in `workers/stats`, then open a hint page with
+  `?api=http://127.0.0.1:8787/api` (Hiking) from a local server on port 8742.
+
 ## Norse help page
 `help/norse/hints/` is the kit-built hint page from the design repository (`NorseBackpack/`,
 `python ../backpack-kit/kit.py build`, then copy `site/hints/index.html` here). Norse is not in

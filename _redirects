@@ -17,6 +17,9 @@
 # The old 5-station Norse hint page now points at the 13-lock one.
 /norse-hints.html    /help/norse/hints/   302
 /norse-hints         /help/norse/hints/   302
+# The old Hiking hint page now points at the QR page, which logs runs and has game codes.
+/hiking-hints.html   /help/hiking/hints/  302
+/hiking-hints        /help/hiking/hints/  302
 # Norse online edition: one chapter so far. 302 so /play/norse/ can become a chapter list later.
 /play/norse          /play/norse/leif/    302
 /play/norse/         /play/norse/leif/    302

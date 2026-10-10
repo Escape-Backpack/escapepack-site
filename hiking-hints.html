@@ -211,6 +211,16 @@ body.narrow .tbtn span{display:none}
 .bench-bar{height:100%;background:var(--brass);border-radius:2px;transition:width .6s ease;position:absolute;left:0}
 .bench-bar.your{background:var(--rust)}
 .bench-note{font-size:.64rem;color:var(--muted);text-align:center;margin-top:10px;font-style:italic}
+.bench-cmp{font-size:.82rem;line-height:1.6;color:var(--cream);text-align:center}
+.bench-cmp p{margin:6px 0}
+
+/* GAME CODE + JOIN */
+.joinrow{display:flex;gap:8px}
+.joinrow input{text-transform:uppercase;letter-spacing:.2em;font-family:var(--mono)}
+.join-msg{font-size:.72rem;color:var(--muted);min-height:1em}
+.game-code{margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:clamp(.6rem,1.8vw,.7rem);letter-spacing:.06em;color:var(--muted);line-height:1.5}
+.game-code:empty{display:none}
+.game-code strong{color:var(--brass);font-family:var(--mono);letter-spacing:.2em;font-size:1.15em}
 </style>
 </head>
 <body>
@@ -274,6 +284,18 @@ body.narrow .tbtn span{display:none}
     <button class="btn btn-ghost btn-full" id="btn-resume" style="display:none" onclick="resumeGame()">
       ↩ Resume Previous Session
     </button>
+    <div class="card">
+      <div class="lbl">Joining a teammate's game?</div>
+      <div class="field">
+        <label class="fl" for="inp-code">Game code from their screen</label>
+        <div class="joinrow">
+          <input type="text" id="inp-code" placeholder="CODE" maxlength="6" autocomplete="off" autocapitalize="characters"
+                 spellcheck="false" onkeydown="if(event.key==='Enter')joinGame()">
+          <button class="btn btn-ghost" onclick="joinGame()">Join</button>
+        </div>
+        <div class="join-msg" id="join-msg"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -306,6 +328,7 @@ body.narrow .tbtn span{display:none}
         <div class="game-prog-txt" id="g-prog-txt"><strong>0</strong>/10 locks</div>
       </div>
       <div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
+      <div class="game-code" id="g-code"></div>
     </div>
 
     <!-- Lock grid (no title) -->
@@ -339,24 +362,7 @@ body.narrow .tbtn span{display:none}
       <!-- BENCHMARK COMPARISON -->
       <div class="benchmark">
         <div class="bench-title">How You Did</div>
-        <div class="bench-row">
-          <div class="bench-label">Your Time</div>
-          <div class="bench-time" id="bench-your">00:00:00</div>
-        </div>
-        <div class="bench-row">
-          <div class="bench-label">Best Time</div>
-          <div class="bench-time" id="bench-best">00:00:00</div>
-        </div>
-        <div class="bench-row">
-          <div class="bench-label">Average Time</div>
-          <div class="bench-time" id="bench-avg">00:00:00</div>
-        </div>
-        <div class="bench-bar-wrap">
-          <div class="bench-bar" id="bench-bar-best" style="width:0%"></div>
-          <div class="bench-bar your" id="bench-bar-your" style="width:0%"></div>
-          <div class="bench-bar" id="bench-bar-avg" style="width:0%"></div>
-        </div>
-        <div class="bench-note" id="bench-note">Benchmarks based on estimated times</div>
+        <div class="bench-cmp" id="bench-cmp"></div>
       </div>
       
     </div>
@@ -364,17 +370,14 @@ body.narrow .tbtn span{display:none}
   </div>
 </div>
 
+<script src="/sync.js"></script>
 <script>
-// ── GOOGLE APPS SCRIPT LOGGING ─────────────────────────────────
-const LOGGER_URL    = 'https://script.google.com/macros/s/AKfycbxn9ipLPhv16_vM_Ss77kVFTiTGjGWqrSxpv4XT4bjBIFzBq0njX1VmkvUn23vU0afJcQ/exec';
+// ── RUN LOGGING + GAME CODES ───────────────────────────────────
+// Runs go to escapepack.ca's stats API (escapepack-site/workers/stats) through /sync.js, a copy of
+// backpack-kit's viewer/sync.js. Teammates join a run with its game code. Off the live site, add
+// ?api=http://127.0.0.1:8787/api to the address to test against `wrangler dev`.
 const BACKPACK_NAME = 'Hiking Backpack';
-
-// ── BENCHMARK TIMES ────────────────────────────────────────────
-// EDIT THESE: Change the estimated times (in minutes) for each lock
-// These are used to calculate benchmarks before you have real completion data
-const ESTIMATED_TIMES = [5, 5, 5, 10, 15, 5, 15, 10, 10, 5]; // Lock 1-10 in minutes
-const BENCHMARK_BEST_TIME = 75 * 60; // Best time in seconds (75 minutes = 1h15m)
-// To change benchmark: Update the number before * 60 (that's the minutes)
+const STATS_API = location.hostname === 'escapepack.ca' ? '/api' : (new URLSearchParams(location.search).get('api') || '');
 const LOCK_THEMES   = ['blue','blue','blue','blue','blue','orange','orange','orange','orange','purple'];
 const HINT_LEVELS   = [
   {label:'💡 Hint #1',cls:'c1'},{label:'💡 Hint #2',cls:'c2'},
@@ -476,6 +479,8 @@ function askPlayAgain(){showModal('Play Again','Start a new game? This will clea
 
 // ── STATE ──────────────────────────────────────────────────
 const LS_KEY='escbp_'+BACKPACK_NAME.replace(/\s+/g,'_');
+// Change the version whenever a lock changes enough that older times no longer compare.
+const SYNC = window.EBSync ? EBSync.create({api:STATS_API, backpack:'hiking', version:'hiking-v1', locks:10, key:LS_KEY}) : null;
 let st={team:'',sessionId:'',startMs:0,elapsed:0,paused:false,pausedAt:0,active:false,
         completed:new Array(10).fill(false),hintLog:{},lockTs:{}};
 let ticker=null, activeHint=-1;
@@ -527,10 +532,10 @@ function updateGrid(){
 function toggleDone(i){
   if(!st.completed[i]){
     for(let j=0;j<=i;j++) if(!st.completed[j]){st.completed[j]=true;st.lockTs[j]=st.elapsed;}
-    logAsync({event:'lock_solved',teamName:st.team,backpackName:BACKPACK_NAME,
-              lockIndex:i+1,lockName:LOCKS[i].name,elapsedSeconds:st.elapsed,sessionId:st.sessionId});
+    if(SYNC) SYNC.op({t:'solve',lock:i,upto:true});
   } else {
     for(let j=i;j<10;j++){st.completed[j]=false;delete st.lockTs[j];}
+    if(SYNC) SYNC.op({t:'unsolve',lock:i,after:true});
     if(activeHint>=i) closeHint();
   }
   updateGrid(); saveSt();
@@ -563,9 +568,7 @@ function openHint(i){
         if(!st.hintLog[i]) st.hintLog[i]=[];
         if(!st.hintLog[i].includes(hi)){
           st.hintLog[i].push(hi);
-          logAsync({event:'hint_opened',teamName:st.team,backpackName:BACKPACK_NAME,
-                    lockIndex:i+1,lockName:LOCKS[i].name,hintLevel:HINT_LEVELS[hi].label,
-                    elapsedSeconds:st.elapsed,sessionId:st.sessionId});
+          if(SYNC) SYNC.op({t:'hint',lock:i,level:hi});
         }
       }
     };
@@ -601,14 +604,14 @@ function togglePause(){
     document.getElementById('pause-icon').setAttribute('d','M6 19h4V5H6v14zm8-14v14h4V5h-4z');
     document.getElementById('pause-lbl').textContent='Pause';
     btn.classList.remove('paused');
-    logAsync({event:'resume',elapsedSeconds:st.elapsed,sessionId:st.sessionId});
+    if(SYNC) SYNC.op({t:'resume'});
   } else {
     st.pausedAt=Date.now(); st.paused=true;
     document.getElementById('g-timer').classList.add('paused');
     document.getElementById('pause-icon').setAttribute('d','M8 5v14l11-7z');
     document.getElementById('pause-lbl').textContent='Resume';
     btn.classList.add('paused');
-    logAsync({event:'pause',elapsedSeconds:st.elapsed,sessionId:st.sessionId});
+    if(SYNC) SYNC.op({t:'pause'});
   }
   saveSt();
 }
@@ -620,8 +623,9 @@ function startGame(){
       startMs:Date.now(),elapsed:0,paused:false,pausedAt:0,active:true,
       completed:new Array(10).fill(false),hintLog:{},lockTs:{}};
   activeHint=-1;
-  logAsync({event:'start',teamName:st.team,backpackName:BACKPACK_NAME,sessionId:st.sessionId});
   applyGame();
+  if(SYNC) SYNC.start({team, session:st.sessionId}).then(updateCode);
+  updateCode();
 }
 
 function resumeGame(){
@@ -638,8 +642,51 @@ function applyGame(){
   document.getElementById('pause-icon').setAttribute('d',st.paused?'M8 5v14l11-7z':'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
   document.getElementById('pause-lbl').textContent=st.paused?'Resume':'Pause';
   document.getElementById('tbtn-pause').classList.toggle('paused',st.paused);
-  closeHint(); updateGrid(); saveSt(); startTick(); show('game');
+  closeHint(); updateGrid(); updateCode(); saveSt(); startTick(); show('game');
 }
+
+// ── TEAMMATES ──────────────────────────────────────────────
+function updateCode(){
+  const el=document.getElementById('g-code');
+  el.innerHTML=!SYNC?'':SYNC.code
+    ?`Game code <strong>${SYNC.code}</strong> · teammates can join on their phone to share this timer and hints`
+    :SYNC.pending?'Connecting… the game code appears once this phone is online. Your progress is kept.':'';
+}
+
+async function joinGame(){
+  const msg=document.getElementById('join-msg');
+  if(!SYNC){msg.textContent='Joining needs a connection to escapepack.ca.';return;}
+  msg.textContent='Joining…';
+  try{ const s=await SYNC.join(document.getElementById('inp-code').value); activeHint=-1; msg.textContent=''; fromServer(s); }
+  catch(e){ msg.textContent=e.status===404?"No game with that code. Check the code on your teammate's screen.":"Couldn't connect. Check your connection and try again."; }
+}
+
+// The run as the server has it: this phone's actions plus any teammate's.
+function fromServer(s){
+  const before=JSON.stringify([st.team,st.completed,st.hintLog,st.paused]);
+  const base=SYNC.toLocal(s.started_ms)+s.paused_total_ms, paused=s.paused_since_ms!=null;
+  st.team=s.team||st.team; st.sessionId=s.session_id; st.active=true;
+  st.startMs=base; st.paused=paused; st.pausedAt=paused?SYNC.toLocal(s.paused_since_ms):0;
+  st.elapsed=s.finished_ms!=null?s.elapsed_s:Math.max(0,Math.floor(((paused?st.pausedAt:Date.now())-base)/1000));
+  st.completed=s.lock_times.map(t=>t!=null);
+  st.lockTs={}; s.lock_times.forEach((t,i)=>{if(t!=null)st.lockTs[i]=t;});
+  st.hintLog={}; s.hints.forEach((lv,i)=>{if(lv.length)st.hintLog[i]=lv.slice();});
+  if(s.finished_ms!=null){
+    if(!document.getElementById('s-complete').classList.contains('on')) endGame(true);
+    return;
+  }
+  saveSt();
+  if(!document.getElementById('s-game').classList.contains('on')){applyGame();return;}
+  if(JSON.stringify([st.team,st.completed,st.hintLog,st.paused])===before) return;
+  document.getElementById('g-team').textContent=st.team;
+  document.getElementById('g-timer').textContent=fmt(st.elapsed);
+  document.getElementById('g-timer').className='timer-val'+(st.paused?' paused':'');
+  document.getElementById('pause-icon').setAttribute('d',st.paused?'M8 5v14l11-7z':'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
+  document.getElementById('pause-lbl').textContent=st.paused?'Resume':'Pause';
+  document.getElementById('tbtn-pause').classList.toggle('paused',st.paused);
+  updateGrid(); updateCode();
+}
+if(SYNC) SYNC.onState(fromServer);
 
 function resetAll(){
   clearInterval(ticker); ticker=null; clearSt(); activeHint=-1;
@@ -654,64 +701,22 @@ function resetAll(){
   document.getElementById('pause-icon').setAttribute('d','M6 19h4V5H6v14zm8-14v14h4V5h-4z');
   document.getElementById('pause-lbl').textContent='Pause';
   document.getElementById('tbtn-pause').classList.remove('paused');
-  closeHint(); updateGrid(); show('setup');
+  if(SYNC) SYNC.leave();
+  closeHint(); updateGrid(); updateCode(); show('setup');
 }
 
-function endGame(){
+function endGame(fromTeammate){
   clearInterval(ticker); ticker=null; st.active=false;
-
-  // ── BENCHMARK CALCULATION ──────────────────────────────────────
-  // This uses estimated times until real data is available
-  // The best time will eventually come from real leaderboard data
-  const yourTime = st.elapsed;
-  const bestTime = BENCHMARK_BEST_TIME; // Currently using estimated best (1h15m)
-  const avgTime = Math.floor(BENCHMARK_BEST_TIME * 1.3); // Average = 130% of best time
-
-  // Calculate the maximum for the bar chart (add 10% padding)
-  const maxTime = Math.max(yourTime, bestTime, avgTime) * 1.1;
-
-  // Update display
-  document.getElementById('c-time').textContent=fmt(yourTime);
+  if(SYNC && !fromTeammate) SYNC.op({t:'finish'});
+  document.getElementById('c-time').textContent=fmt(st.elapsed);
   document.getElementById('c-team').textContent=st.team;
-
-  // Set benchmark times
-  document.getElementById('bench-your').textContent=fmt(yourTime);
-  document.getElementById('bench-best').textContent=fmt(bestTime);
-  document.getElementById('bench-avg').textContent=fmt(avgTime);
-
-  // Set bar widths (animated via CSS)
-  setTimeout(() => {
-    document.getElementById('bench-bar-your').style.width = (yourTime/maxTime*100) + '%';
-    document.getElementById('bench-bar-best').style.width = (bestTime/maxTime*100) + '%';
-    document.getElementById('bench-bar-avg').style.width = (avgTime/maxTime*100) + '%';
-  }, 100);
-
-  // Create congratulations message based on performance
-  let msg = '🎊 Congratulations! Thank you for playing our game!';
-  if (yourTime <= bestTime) {
-    msg = '🏆 Amazing! You beat the benchmark time!';
-  } else if (yourTime <= avgTime) {
-    msg = '⭐ Great job! You finished faster than average!';
-  }
-  document.getElementById('c-msg').textContent=msg;
-
-  // NOTE: Once you have real leaderboard data, update bench-note to say:
-  // "Benchmarks based on actual player times" or hide it entirely
-
-  // ── DETECT DEVICE + BROWSER (best-effort) ─────────────────────
-  const ua = navigator.userAgent;
-  const device  = /Mobi|Android/i.test(ua) ? 'mobile' : 'desktop';
-  const browser = /Edg/i.test(ua)    ? 'Edge'
-                : /Chrome/i.test(ua)  ? 'Chrome'
-                : /Firefox/i.test(ua) ? 'Firefox'
-                : /Safari/i.test(ua)  ? 'Safari'
-                : 'Other';
-
-  // Log completion event to Google Sheets
-  logAsync({event:'complete',teamName:st.team,backpackName:BACKPACK_NAME,
-            elapsedSeconds:st.elapsed,timeFormatted:fmt(st.elapsed),
-            lockTimestamps:st.lockTs,hintLog:st.hintLog,
-            device,browser,sessionId:st.sessionId});
+  document.getElementById('c-msg').textContent='🎊 Congratulations! Thank you for playing our game!';
+  const box=document.getElementById('bench-cmp');
+  if(SYNC){
+    box.innerHTML='<p style="opacity:.7">Comparing with other teams…</p>';
+    SYNC.flush().then(s=>{if(s&&s.finished_ms!=null)document.getElementById('c-time').textContent=fmt(s.elapsed_s);return SYNC.stats();})
+      .then(stats=>{box.innerHTML=EBSync.compareHTML(stats,LOCKS.map((l,i)=>'Lock '+(i+1)));});
+  } else box.innerHTML="<p style=\"opacity:.7\">Comparison with other teams isn't available right now.</p>";
   clearSt(); show('complete');
 }
 
@@ -719,12 +724,6 @@ function endGame(){
 function saveSt(){try{localStorage.setItem(LS_KEY,JSON.stringify(st))}catch(e){}}
 function loadSt(){try{const r=localStorage.getItem(LS_KEY);return r?JSON.parse(r):null}catch(e){return null}}
 function clearSt(){try{localStorage.removeItem(LS_KEY)}catch(e){}}
-
-// ── LOGGER ─────────────────────────────────────────────────
-function logAsync(p){
-  if(!LOGGER_URL||LOGGER_URL.includes('YOUR_')||LOGGER_URL.includes('formspree')) return;
-  fetch(LOGGER_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(p)}).catch(()=>{});
-}
 
 // ── UTILS ──────────────────────────────────────────────────
 function fmt(s){

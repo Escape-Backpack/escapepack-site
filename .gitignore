@@ -10,3 +10,7 @@ __pycache__/
 !/help/hiking/hints/
 # Norse is not in backpacks.txt yet: its hint page is built by kit.py in the design repo and copied here.
 !/help/norse/hints/
+
+# Local wrangler state for workers/stats (dev database, caches)
+workers/*/.wrangler/
+workers/*/node_modules/

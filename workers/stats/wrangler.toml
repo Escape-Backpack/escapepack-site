@@ -1,0 +1,20 @@
+# Stats API for the hint pages, served on escapepack.ca/api/* (same site, so no cross-origin calls).
+# Deploy from this folder: npx wrangler deploy
+# Schema: ../../db/schema.sql   (npx wrangler d1 execute escapepack-stats --remote --file=../../db/schema.sql)
+# Local test: npx wrangler d1 execute escapepack-stats --local --file=../../db/schema.sql, then npx wrangler dev
+name = "escapepack-stats"
+main = "src/index.js"
+compatibility_date = "2026-09-14"
+
+routes = [
+  { pattern = "escapepack.ca/api/*", zone_name = "escapepack.ca" },
+]
+
+[vars]
+# Pages that may call the API from another address (local previews). escapepack.ca itself is same-origin.
+ALLOWED_ORIGINS = "http://localhost:8742,http://127.0.0.1:8742,http://localhost:8741,http://127.0.0.1:8741"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "escapepack-stats"
+database_id = "9a709a1e-c269-43f2-96df-6b3087e18953"
