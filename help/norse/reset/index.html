@@ -5,11 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <script>try{var t=localStorage.getItem("ebp-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
-<title>Hint companion</title>
-<!-- Player-facing hint page from backpack-kit. kit.py build inlines the style, helpers and data,
-     so this one file is all a player's phone needs. Only hint text and solutions are included.
-     With "stats" in backpack.json, runs are logged to that API (see sync.js), teammates can join
-     a run with its game code, and the end screen compares the team with earlier teams. -->
+<title>Reset checklist</title>
+<!-- Player-facing reset checklist from backpack-kit (backpack.json: "publish_reset": true).
+     kit.py build inlines the style, helpers and data. One step per lock, last lock first, from the
+     puzzles' container / answer / reset_display and the props' found_in / after_game / ## Reset. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -217,50 +216,33 @@ h2 .n { color: var(--muted); font: 12px var(--mono); letter-spacing: .08em; marg
 </style>
 <style>
 main { max-width: 760px; }
-.bar-top { position: sticky; top: 0; z-index: 5; background: var(--nav-bg); backdrop-filter: blur(10px);
+.progress { position: sticky; top: 0; z-index: 5; background: var(--nav-bg); backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px); border-bottom: 2px solid var(--rust); }
-.bar-top .in { max-width: 760px; margin: 0 auto; padding: 10px clamp(16px, 4vw, 40px); display: flex; gap: 12px;
-  align-items: center; justify-content: space-between; flex-wrap: wrap; }
-.clock { font: 1.6rem/1 var(--mono); color: var(--brass); letter-spacing: .06em; }
-.team { font: 12px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--cream-3); }
-.start { background: var(--forest-2); border: 1px solid var(--line); border-radius: 2px; padding: 26px; margin-top: 10px; }
-.start input { width: 100%; padding: 12px 14px; border: 1px solid var(--line-strong); border-radius: 3px; margin: 10px 0 16px;
-  background: var(--forest-deep); color: var(--cream); font: 17px var(--sans); outline: none; }
-.start input:focus { border-color: var(--brass); }
-.join { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
-.joinrow { display: flex; gap: 8px; align-items: center; }
-.joinrow input { margin: 8px 0; text-transform: uppercase; letter-spacing: .2em; font-family: var(--mono); }
-.btn.big { font-size: 12px; padding: 12px 20px; background: var(--rust); color: var(--on-rust); }
-.btn.big:hover { background: var(--rust-2); }
-.btn.on { background: var(--brass); color: var(--forest-deep); border-color: var(--brass); }
-.gamecode { font: 13px var(--mono); letter-spacing: .08em; color: var(--cream-3); border: 1px dashed var(--line-strong); padding: 8px 12px; margin-bottom: 14px; }
-.gamecode b { color: var(--brass); letter-spacing: .2em; font-size: 15px; }
-.lockcard { background: var(--forest-2); border: 1px solid var(--line); border-radius: 2px; padding: 18px 20px; margin-bottom: 14px; }
-.lockcard.solved { opacity: .62; border-color: var(--brass); }
-.lockcard h3 { margin: 0 0 4px; font-size: 1.35rem; }
-.lockcard .kv { margin-bottom: 12px; }
-.levels { display: flex; flex-direction: column; gap: 8px; }
-.level { border-left: 2px solid var(--brass); padding: 6px 0 6px 12px; font-size: 15.5px; }
-.level b { font: 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--brass); display: block; margin-bottom: 2px; }
-.level.sol { border-left-color: var(--s-built); }
-.level.sol b { color: var(--s-built); }
-.code { font: 1.4rem var(--mono); letter-spacing: .14em; color: var(--brass-2); }
-.btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-.test { border: 1px dashed var(--stale); color: var(--stale); padding: 8px 12px; font: 12px var(--mono); letter-spacing: .06em; margin-bottom: 14px; }
-.cand { font: 10.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--stale); border: 1px dashed var(--stale); padding: 1px 6px; margin-left: 8px; vertical-align: middle; }
-#done { position: fixed; inset: 0; z-index: 30; background: rgba(10,20,15,.9); display: flex; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; }
-#done[hidden] { display: none; }
-#done .inner { background: var(--forest-2); border: 1px solid var(--brass); padding: 32px; max-width: 460px; width: 100%; text-align: center; }
-#done .clock { font-size: 2.4rem; margin: 10px 0 18px; }
-#cmp { margin: 4px 0 18px; font-size: 15px; }
+.progress .in { max-width: 760px; margin: 0 auto; padding: 10px clamp(16px, 4vw, 40px); display: flex; gap: 12px; align-items: center; }
+.progress .count { font: 1.1rem var(--mono); color: var(--brass); white-space: nowrap; }
+.progress .track { flex: 1; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.progress .bar { height: 100%; width: 0; background: var(--brass); transition: width .3s; }
+.intro { margin: 6px 0 18px; }
+.step { background: var(--forest-2); border: 1px solid var(--line); border-radius: 2px; padding: 18px 20px; margin-bottom: 14px; }
+.step.done { opacity: .55; border-color: var(--brass); }
+.step h3 { margin: 0 0 2px; font-size: 1.3rem; }
+.step .where { color: var(--cream-3); font: 13px var(--mono); letter-spacing: .04em; margin-bottom: 10px; }
+.step ul { margin: 6px 0 10px 20px; padding: 0; }
+.step li { margin: 2px 0; }
+.step .keep { color: var(--brass-2); }
+.step .lockline { border-left: 2px solid var(--brass); padding: 4px 0 4px 12px; margin: 10px 0 0; }
+.code { font-family: var(--mono); letter-spacing: .02em; color: var(--brass-2); white-space: nowrap; }
+.tick { display: flex; align-items: center; gap: 10px; margin-top: 14px; cursor: pointer; font: 12px var(--mono);
+  letter-spacing: .1em; text-transform: uppercase; color: var(--cream-3); }
+.tick input { width: 20px; height: 20px; accent-color: var(--brass); }
+.finished { border: 1px solid var(--brass); padding: 20px; text-align: center; margin: 18px 0; }
+.finished[hidden] { display: none; }
 </style>
 </head>
 <body>
-<div class="bar-top" id="bar" hidden><div class="in"><div><div class="clock" id="clock">00:00:00</div><div class="team" id="teamlbl"></div></div>
-  <div class="btnrow" style="margin:0"><button class="btn" id="pause">Pause</button><button class="btn" id="restart">Start over</button><button class="btn" id="finish">Done!</button></div></div></div>
-<header><div><div class="eyebrow">Hint companion</div><h1 id="proj">Backpack</h1><div class="sub"><a href="https://escapepack.ca">escapepack.ca</a></div></div></header>
+<div class="progress"><div class="in"><div class="count" id="count">0 / 0</div><div class="track"><div class="bar" id="bar"></div></div></div></div>
+<header><div><div class="eyebrow">Reset checklist</div><h1 id="proj">Backpack</h1><div class="sub"><a href="https://escapepack.ca">escapepack.ca</a></div></div></header>
 <main id="view"></main>
-<div id="done" hidden></div>
 <script>
 // Shared by index.html (design board) and play.html (play-test).
 "use strict";
@@ -344,340 +326,67 @@ function mdListItems(section) {
   document.body.prepend(bar);
 })();
 </script>
-<script>
-/* Hint-page sync: logs a team's run to a stats API (escapepack.ca's workers/stats), lets other
-   phones join the same run with a game code, and draws the end-screen comparison.
-   Works offline: actions queue in localStorage and are sent when the phone is back online.
-
-     const sync = EBSync.create({ api, backpack, version, locks, key });
-     sync.onState(state => ...)     // the run as the server has it, after each send or refresh
-     sync.start({ team, session })  // a new run; sync.code is its game code once the server answers
-     sync.join(code)                // follow a teammate's run -> state (throws if the code is unknown)
-     sync.op({ t: "solve", lock: 2, upto: true })   // also hint / unsolve / pause / resume / finish
-     sync.toLocal(serverMs)         // a server timestamp on this phone's clock
-     sync.stats()                   // comparison numbers for this run, or null
-     sync.leave()                   // stop following (Reset / Play again)
-
-   A copy is served by escapepack.ca as /sync.js for its hand-made Hiking page
-   (escapepack-site/tools/build_help.py copies it). */
-(function () {
-  "use strict";
-  const read = k => { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } };
-  const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
-
-  function device() {
-    const ua = navigator.userAgent;
-    return {
-      device: /Mobi|Android|iPhone|iPad/i.test(ua) ? "mobile" : "desktop",
-      browser: /Edg/i.test(ua) ? "Edge" : /Chrome|CriOS/i.test(ua) ? "Chrome" : /Firefox|FxiOS/i.test(ua) ? "Firefox" : /Safari/i.test(ua) ? "Safari" : "Other",
-    };
-  }
-
-  function create(cfg) {
-    const KEY = cfg.key + ":sync";
-    const blank = () => ({ code: "", session: "", offset: s ? s.offset : 0, queue: [], create: null });
-    let s = null;
-    s = Object.assign(blank(), read(KEY) || {});
-    const save = () => write(KEY, s);
-    const listeners = [];
-    let busy = false, again = false, soon = 0;
-
-    async function call(method, path, body) {
-      const t0 = Date.now();
-      const res = await fetch(cfg.api + path, {
-        method, keepalive: method === "POST",
-        headers: body ? { "Content-Type": "application/json" } : {},
-        body: body ? JSON.stringify(body) : undefined,
-      });
-      const t1 = Date.now();
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) { const e = new Error(data.error || "HTTP " + res.status); e.status = res.status; throw e; }
-      if (data.now) s.offset = Math.round(data.now - (t0 + t1) / 2);
-      return data;
-    }
-
-    // Send the queue (or just refresh) and hand the server's state to the page.
-    async function flush() {
-      if (!cfg.api) return null;
-      if (busy) { again = true; return null; }
-      busy = true;
-      try {
-        if (s.create) {
-          const st = await call("POST", "/runs", Object.assign({}, s.create, { age_ms: Date.now() - s.create.at }));
-          s.code = st.code; s.create = null; save();
-        }
-        if (!s.code) return null;
-        const sent = s.queue.slice();
-        const ops = sent.map(o => { const c = Object.assign({}, o, { ago: Date.now() - o.ts }); delete c.ts; return c; });
-        const st = ops.length ? await call("POST", "/runs/" + s.code + "/ops", { ops }) : await call("GET", "/runs/" + s.code);
-        s.queue.splice(0, sent.length); save();
-        // Actions made while this request was out would be undone by an older state: wait for the next one.
-        if (!s.queue.length) listeners.forEach(f => f(st));
-        return st;
-      } catch (e) {
-        if (e.status === 404 && s.code && !s.create) { s.code = ""; s.queue = []; save(); } // the run is gone
-        else if (s.create && e.status && e.status < 500) { s.create = null; save(); } // refused: stop retrying
-        return null;
-      } finally {
-        busy = false;
-        if (again) { again = false; schedule(); }
-      }
-    }
-    function schedule(ms) { clearTimeout(soon); soon = setTimeout(flush, ms || 250); }
-
-    const live = () => !!(s.code || s.create);
-    setInterval(() => { if (live() && document.visibilityState === "visible") flush(); }, 15000);
-    document.addEventListener("visibilitychange", () => { if (live() && document.visibilityState === "visible") flush(); });
-    window.addEventListener("online", () => { if (live()) flush(); });
-    if (live()) schedule(500);
-
-    return {
-      get code() { return s.code; },
-      get pending() { return !!s.create; },
-      onState(f) { listeners.push(f); },
-      start(info) {
-        if (!cfg.api) return Promise.resolve(null);
-        s = blank();
-        s.session = info.session;
-        s.create = Object.assign({ backpack: cfg.backpack, version: cfg.version, locks_total: cfg.locks,
-          team: info.team || "", team_size: info.team_size || undefined, session_id: info.session, at: Date.now() }, device());
-        save();
-        return flush();
-      },
-      async join(code) {
-        const st = await call("GET", "/runs/" + String(code).trim().toUpperCase().replace(/[^A-Z0-9]/g, ""));
-        if (st.backpack !== cfg.backpack) { const e = new Error("That code is for a different game."); e.status = 404; throw e; }
-        s = blank(); s.code = st.code; s.session = st.session_id; save();
-        return st;
-      },
-      op(o) {
-        if (!live()) return;
-        s.queue.push(Object.assign({}, o, { ts: Date.now() }));
-        save(); schedule();
-      },
-      flush,
-      toLocal: ms => (ms == null ? 0 : ms - s.offset),
-      async stats() {
-        if (!cfg.api) return null;
-        try {
-          return await call("GET", "/stats?backpack=" + encodeURIComponent(cfg.backpack) + "&version=" + encodeURIComponent(cfg.version)
-            + (s.session ? "&session=" + encodeURIComponent(s.session) : ""));
-        } catch (e) { return null; }
-      },
-      leave() { s = blank(); save(); },
-    };
-  }
-
-  // ---- end-screen comparison (inline styles use the page's own colour variables) ----
-  const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const mins = s => { const m = Math.round(s / 60); return m >= 60 ? Math.floor(m / 60) + " h " + String(m % 60).padStart(2, "0") : m + " min"; };
-  const WHY = {
-    test: "Test runs aren't compared with other teams.",
-    unfinished: "Not every lock was marked as solved, so this run isn't compared with other teams.",
-    continued: "This run picked up a game already under way, so its time isn't compared with other teams.",
-    short: "Runs under 30 minutes aren't compared with other teams.",
-    long: "Runs over 4 hours aren't compared with other teams.",
-  };
-
-  function strip(totals, mine) {
-    const all = totals.concat(mine != null ? [mine] : []);
-    const lo = Math.min(...all), hi = Math.max(...all), w = 300, pad = 10;
-    const x = t => hi === lo ? w / 2 : pad + (t - lo) / (hi - lo) * (w - 2 * pad);
-    const dots = totals.map(t => `<circle cx="${x(t).toFixed(1)}" cy="22" r="4" fill="currentColor" opacity=".45"/>`).join("");
-    const me = mine != null ? `<circle cx="${x(mine).toFixed(1)}" cy="22" r="7" fill="var(--brass, #d6ad6b)"/>
-      <text x="${x(mine).toFixed(1)}" y="9" text-anchor="middle" font-size="10" fill="var(--brass, #d6ad6b)">YOU</text>` : "";
-    return `<svg viewBox="0 0 ${w} 44" width="100%" style="max-width:${w}px;display:block;margin:10px auto 2px;color:var(--muted, #9db0a2)"
-      role="img" aria-label="Your time among other teams' times"><line x1="${pad}" y1="22" x2="${w - pad}" y2="22" stroke="currentColor" opacity=".35"/>${dots}${me}
-      <text x="${pad}" y="42" font-size="10" fill="currentColor">${esc(mins(lo))}</text><text x="${w - pad}" y="42" text-anchor="end" font-size="10" fill="currentColor">${esc(mins(hi))}</text></svg>`;
-  }
-
-  // stats: from sync.stats(). names: lock names, for the best-lock line.
-  function compareHTML(stats, names) {
-    if (!stats) return `<p style="opacity:.75">Comparison with other teams needs a connection. It will show here once you're back online.</p>`;
-    const you = stats.you || {}, min = stats.rules.minRuns;
-    let h = "";
-    if (you.reason && WHY[you.reason]) h += `<p style="opacity:.8">${WHY[you.reason]}</p>`;
-    if (stats.count < min) {
-      h += `<p>${stats.count ? `${stats.count} team${stats.count === 1 ? " has" : "s have"} finished so far.` : "You're one of the first teams to play!"}
-        Comparisons appear once ${min} teams have finished.</p>`;
-      return h;
-    }
-    if (you.faster_than != null) h += `<p style="font-size:1.15em"><strong>Faster than ${you.faster_than}% of teams</strong></p>`;
-    h += strip(stats.totals, you.counts ? you.total : null);
-    h += `<p style="opacity:.8">${stats.count} teams · typical time ${esc(mins(stats.median))} · fastest ${esc(mins(stats.fastest))}</p>`;
-    const best = (you.locks || []).map((p, i) => [p, i]).filter(([p]) => p != null).sort((a, b) => b[0] - a[0])[0];
-    if (best && best[0] >= 50) h += `<p>Your best lock: <strong>${esc(names[best[1]] || "Lock " + (best[1] + 1))}</strong>, faster than ${best[0]}% of teams.</p>`;
-    return h;
-  }
-
-  window.EBSync = { create, compareHTML };
-})();
-</script>
-<script>window.HINTS = {"name": "Norse Backpack · The Raven Inheritance", "builtAt": "2026-10-10 11:03", "locks": [{"id": "PZ-001", "title": "Lock 1", "lock": "4-digit", "status": "decided", "hints": ["Everything you need is already outside the bag.", "Both tags carry a hand-written address. Only one of them is in a place you have seen before.", "The postcard names L’Anse aux Meadows. That tag goes first."], "answer": "1021", "solution": "Tag A: Vinland Trail Lodge, 10 Skipper’s Wharf, L’Anse aux Meadows, NL — matches the postcard, so it reads first: 10. Tag B: Hôtel Rollon, 21 avenue Rollo, Rouen, France — reads second: 21. Code **1021**, the year tree-ring dating placed the Norse at L’Anse aux Meadows."}, {"id": "PZ-002", "title": "Lock 2", "lock": "4-digit", "status": "decided", "hints": ["Read the two new postcards. What do they both say about the sky?", "Bring the two skies together. The top edges of the cards matter.", "Turn one card upside down and lay it so its top edge meets the other card’s top edge, both picture side up. Look along the join with the magnifier."], "answer": "1576", "solution": "Laid top edge to top edge, one card upside down, the cloud fragments across the join read **1576**."}, {"id": "PZ-003", "title": "Lock 3", "lock": "4-letter", "status": "decided", "hints": ["The two ring-and-dots on the card match the two on the comb.", "Line the comb up so its holes sit over the printed dots — handle on the left, teeth over the writing.", "Some teeth are broken. Read the first letter you can see on each line they leave open, from top to bottom."], "answer": "BOOK", "solution": "With the comb in place only four lines show: **b**rother’s harbor… / **o**uld find about / **o**ngside the coins… / **k**eep it! Reading the first visible letter of each, top to bottom: **BOOK**."}, {"id": "PZ-004", "title": "Lock 4", "lock": "4-letter", "status": "decided", "hints": ["Three cards, three words, one drink.", "What do you get when honey ferments?", "Each card hides its word a different way — read one, count one, look at one."], "answer": "MEAD", "solution": "Staraya Ladoga spells **DRINK** with the first letter of each of its five sentences. Kyiv’s riddle (sweet but not fruit, gold but not metal, made by thousands, six-sided walls) is **HONEY**. Constantinople’s picture puzzle (sugar feeding yeast, a bubbling flask) means **FERMENTED**. A fermented honey drink is **MEAD**."}, {"id": "PZ-006", "title": "Lock 5", "lock": "3-digit", "status": "decided", "hints": ["The Island Settlement map and the Treasure Museum ticket go together: the ticket gives directions, and the Hvammur postcard says what to count on the way.", "Start at the northernmost chapel on the map and follow the ticket’s six steps along the roads.", "Keep three separate tallies as you go: bridges, fords and gates. On the fifth step, the postcard tells you which way to go and which road to follow."], "answer": "521", "solution": "Six legs: chapel → chapel (1 bridge), → well (2 fords, 1 bridge), → landing (1 bridge), → standing stone (1 bridge), → village at the crossing, south along the forest road (1 gate, 1 bridge), → the cave beyond the ruin (nothing). Totals: 5 bridges, 2 fords, 1 gate: **521**."}, {"id": "PZ-009", "title": "Lock 6", "lock": "3-digit", "status": "decided", "hints": ["Look closely at the pictures on three of the postcards. Each message mentions something small in passing.", "Count the Viking boats at Walcheren, the wild boars in Roumare Forest and the crossbow bolts at Châlus. Use the magnifier: some hide well. Read Roumare’s message again before you settle on its number.", "The Fun Facts on the backs date each place. Put the counts in date order. Liv thinks there were twice as many boars as she saw."], "answer": "562", "solution": "Walcheren **5** boats (before 911), then Roumare **3** boars doubled to **6** (911), then Châlus **2** crossbow bolts (1199): **562**."}, {"id": "PZ-005", "title": "Lock 7", "lock": "4-digit", "status": "decided", "hints": ["The chart is not empty. Something is drawn where the card is pointing.", "Are you certain which animal that is? Look at its pose and silhouette, not only its location.", "It is a bear. Read B, E, A, R off the index on the back of the museum ticket."], "answer": "3212", "solution": "The postcard points to square F1 on the sea chart, where the bear is drawn. Reading B, E, A, R off the museum ticket’s visitor index gives **3212**."}, {"id": "PZ-010", "title": "Lock 8", "lock": "4-letter", "status": "decided", "hints": ["Your museum ticket has a coin room. Sort the coins into its three groups.", "The treasure hunt ended at a cave. Look at the mark beside it on Aud’s map, then find the same mark on the ticket: only those coins count.", "Add up what those coins are worth on the ticket and set the total on the treasure tally.", "Turn the whole tally upside down and read the four characters from left to right."], "answer": "SOLE", "solution": "The marked group adds up to **3705**, which reads **SOLE** upside down."}, {"id": "PZ-007", "title": "Lock 9", "lock": "4-digit", "status": "decided", "hints": ["Read the Rouen postcard next to the back of the Rouen museum ticket. Some of Liv’s words have a partner on the ticket.", "The ticket pairs everyday Saxon words (numbered) with their Norman partners (lettered). A matched pair gives a letter and a number: a square on the Granted Lands map.", "Liv mentions fighting, people, poultry and an inn, in that order. For each word, find its square on the map and count the squares to the little drawing for that word."], "answer": "1486", "solution": "Fight: **1** square. People (folk): **4**. Poultry (hen): **8**. Inn: **6**. In the postcard’s order the code is **1486**."}, {"id": "PZ-011", "title": "Lock 10", "lock": "3-digit", "status": "decided", "hints": ["The Bayeux, Winchester and Battle postcards each end with a little picture puzzle. Read them as words.", "Two of the picture puzzles point to places on the Granted Lands map; the third tells you which scale of the ruler to use.", "Measure between those two places on the Granted Lands map, dot to dot, with the architect’s ruler on its 1:125 scale."], "answer": "104", "solution": "Bayeux: cross + bow + lightning bolt = CROSSBOW BOLT, so Châlus. Winchester: tree + tea = TREATY, so Saint-Clair-sur-Epte. Battle: SCALE 1:125. Châlus to Saint-Clair-sur-Epte measures 10.4 on the 1:125 scale: **104**."}, {"id": "PZ-008", "title": "Lock 11", "lock": "3-digit", "status": "decided", "hints": ["The board is eleven columns wide. Count what you can actually see.", "Something was lying on the ink. It is still in the bag, and it is the right shape.", "Work backward from a corner that is still reachable.", "F6 → H6 → H11 → K11 — then measure each leg."], "answer": "253", "solution": "Set out the starting position from Liv’s note, with columns I to K taken from the museum ticket. The king starts on the centre square F6 and escapes in exactly three moves: F6 → H6 → H11 → K11. The moves are **2**, **5** and **3** squares long: **253**."}, {"id": "PZ-012", "title": "Lock 12", "lock": "4-digit", "status": "decided", "hints": ["The underlined word on the Sicily postcard matters to the map’s unusual column labels.", "Read the columns R, A, V, E, N in that order. On Hedeby’s key, each stem’s left branches select the row; its right branches select the letter.", "Use the five decoded letters as perches on the raven’s flights card. Move directly from each letter to the next and read one digit from each flight. Do not add them."], "answer": "2648", "solution": "R6 → H, A10 → R, V9 → A, E3 → F, N2 → N: HRAFN. Then H → R = 2, R → A = 6, A → F = 4, F → N = 8: **2648**."}, {"id": "PZ-013", "title": "Lock 13", "lock": "4-digit", "status": "decided", "hints": ["The stamps are not decoration — they say which journey a card belongs to.", "Four of these cards do not belong to any journey. Something in the last bundle says which.", "Work one map at a time, with that trail’s cards laid out beside it."], "answer": "1972", "solution": "Set aside the four postcards whose mark is not in Liv’s journal. Put each map’s cards in the order Liv visited them, then join the stops on each map in that order. Leif’s map draws **1**, Rollo’s **9**, Aud’s **7** and Harald’s **2**: **1972**."}], "stats": {"api": "https://escapepack.ca/api", "backpack": "norse", "version": "2026-10-09", "linear": true}};</script>
+<script>window.RESET = {"name": "Norse Backpack · The Raven Inheritance", "builtAt": "2026-10-10 10:33", "general": ["There are 22 postcards: each goes back with the lock it came from, as listed below."], "steps": [{"id": "PZ-013", "lock": 13, "lockType": "4-digit", "where": "Inside lockable pocket 2", "code": "1972", "display": "0000", "put": ["Plane ticket and letter"], "keep": ["Adventure medallion"], "notes": [], "nested": []}, {"id": "PZ-012", "lock": 12, "lockType": "4-digit", "where": "Large pouch, in the main compartment", "code": "2648", "display": "0000", "put": ["Postcard: Patara", "The three transition tickets (booking confirmations)", "Liv's journal", "Family logo and crest note"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-008", "lock": 11, "lockType": "3-digit", "where": "Small pouch, in the main compartment", "code": "253", "display": "000", "put": ["Postcard: Hedeby", "Postcard: Aci Castello, Sicily", "The raven's flights card"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-011", "lock": 10, "lockType": "3-digit", "where": "Large pouch, in the main compartment", "code": "104", "display": "000", "put": ["Postcard: Oslo", "Map: The Varangian Road", "Hnefatafl board and pieces", "Hnefatafl Museum ticket, Oslo"], "keep": [], "notes": ["Take every piece off the board and pack the pieces with the board."], "nested": []}, {"id": "PZ-007", "lock": 9, "lockType": "4-digit", "where": "Small pouch, in the main compartment", "code": "1486", "display": "0000", "put": ["Postcard: Bayeux", "Postcard: Winchester", "Postcard: Battle"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-010", "lock": 8, "lockType": "4-letter", "where": "Large pouch, in the main compartment", "code": "SOLE", "display": "LOCK", "put": ["Postcard: Rouen", "Map: The Granted Lands", "Musée Ducal de Rouen ticket"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-005", "lock": 7, "lockType": "4-digit", "where": "Inside lockable pocket 1", "code": "3212", "display": "0000", "put": ["Postcard: Dögurðarnes", "Postcard: Esjuberg", "Treasure tally (four-wheel counter)", "The coin hoard"], "keep": [], "notes": ["Turn all four wheels back to 0000.", "Put every coin back, not only the ones that made the treasure."], "nested": []}, {"id": "PZ-009", "lock": 6, "lockType": "3-digit", "where": "Large pouch, in the main compartment", "code": "562", "display": "000", "put": ["Postcard: Brattahlíð", "Viking Museum of Brattahlíð ticket", "Map: The Western Lands"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-006", "lock": 5, "lockType": "3-digit", "where": "Front right pocket", "code": "521", "display": "000", "put": ["Postcard: Châlus", "Postcard: Roumare Forest", "Postcard: Walcheren"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-004", "lock": 4, "lockType": "4-letter", "where": "Main compartment", "code": "MEAD", "display": "LOCK", "put": ["Postcard: Hvammur", "Architect's scale ruler", "Map: The Island Settlement", "Aud's Treasure Museum ticket"], "keep": [], "notes": [], "nested": [{"lock": 6, "where": "Large pouch, in the main compartment"}, {"lock": 8, "where": "Large pouch, in the main compartment"}, {"lock": 9, "where": "Small pouch, in the main compartment"}, {"lock": 10, "where": "Large pouch, in the main compartment"}, {"lock": 11, "where": "Small pouch, in the main compartment"}, {"lock": 12, "where": "Large pouch, in the main compartment"}]}, {"id": "PZ-003", "lock": 3, "lockType": "4-letter", "where": "Left pocket (seen from the front)", "code": "BOOK", "display": "LOCK", "put": ["Postcard: Staraya Ladoga", "Postcard: Kyiv", "Postcard: Constantinople"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-002", "lock": 2, "lockType": "4-digit", "where": "Locked pouch inside the front pocket", "code": "1576", "display": "0000", "put": ["Postcard: Bjarnarhöfn", "Aud's comb"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-001", "lock": 1, "lockType": "4-digit", "where": "Front pocket", "code": "1021", "display": "0000", "put": ["Postcard: Battle Harbour (Markland)", "Postcard: Qikiqtarjuaq, Baffin Island (Helluland)", "Magnifier"], "keep": [], "notes": [], "nested": [{"lock": 2, "where": "Locked pouch inside the front pocket"}]}], "start": [{"where": "Open back pocket of the backpack", "put": ["Postcard: L'Anse aux Meadows"]}], "startNotes": [], "check": [{"name": "Luggage tags A and B", "where": "On the outside of the backpack"}]};</script>
 <script>
 "use strict";
-const H = window.HINTS;
+const R = window.RESET;
 const $ = s => document.querySelector(s);
-const LOCKS = H.locks;
-const KEY = "bp-hints:v2:" + H.name;
-// Logging, game codes and the comparison only run when backpack.json has a "stats" entry.
-const CFG = H.stats || null;
-const SYNC = CFG && window.EBSync ? EBSync.create({ api: CFG.api, backpack: CFG.backpack, version: CFG.version, locks: LOCKS.length, key: KEY }) : null;
+const KEY = "bp-reset:v1:" + R.name;
+let done = {};
+try { done = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {} };
 
-const fresh = () => ({ team: "", session: "", started: 0, paused: 0, pausedAt: 0, shown: {}, solved: {}, finished: 0 });
-let S = fresh();
-try { S = Object.assign(S, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) {}
-const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+const letters = s => /[A-Za-z]/.test(s || "");
+const spaced = s => esc(String(s).split("").join(" "));
+function lockLine(st) {
+  const code = st.code ? ` (code <span class="code">${spaced(st.code)}</span>)` : "";
+  const show = st.display
+    ? `leave it showing <span class="code">${spaced(st.display)}</span>`
+    : `turn the ${letters(st.code) ? "letters" : "numbers"} away from the code`;
+  return `Close it with <b>lock ${st.lock}</b>${code} and ${show}.`;
+}
+const list = items => items.length ? `<ul>${items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>` : "";
 
-const elapsed = () => {
-  if (!S.started) return 0;
-  const end = S.finished || S.pausedAt || Date.now();
-  return Math.max(0, end - S.started - S.paused);
-};
-const fmt = ms => { const t = Math.floor(ms / 1000); return [t / 3600, t / 60 % 60, t % 60].map(n => String(Math.floor(n)).padStart(2, "0")).join(":"); };
-const lockName = l => l.lock ? `${l.lock} lock` : "Lock";
-const heading = (l, i) => /^lock \d+$/i.test(l.title) ? l.title : `${i + 1}. ${l.title || lockName(l)}`;
+function steps() {
+  const out = R.steps.map(st => ({ id: st.id, html: `<h3>Lock ${st.lock}</h3><div class="where">${esc(st.where || "Container not recorded")}</div>
+    ${st.put.length ? `<div>Put back inside:</div>${list(st.put)}` : st.nested.length ? "" : `<div>Nothing goes back in here.</div>`}
+    ${st.nested.length ? `<div>Also put in, already locked:</div>${list(st.nested.map(x => `Lock ${x.lock}: ${x.where}`))}` : ""}
+    ${st.keep.length ? `<p class="keep">Yours to keep: ${esc(st.keep.join(", "))}.</p>` : ""}
+    ${st.notes.map(n => `<p class="note">${inline(n)}</p>`).join("")}
+    <p class="lockline">${lockLine(st)}</p>` }));
+  if (R.start.length || R.startNotes.length)
+    out.push({ id: "start", html: `<h3>Starting position</h3><div class="where">What stays outside the locks for the next team</div>
+      ${R.start.map(g => `<div>${esc(g.where)}:</div>${list(g.put)}`).join("")}
+      ${R.startNotes.map(n => `<p class="note">${inline(n)}</p>`).join("")}` });
+  if (R.check.length)
+    out.push({ id: "check", html: `<h3>Last check</h3>${list(R.check.map(c => c.name + (c.where ? ": " + c.where.charAt(0).toLowerCase() + c.where.slice(1) : "")))}` });
+  return out;
+}
 
 function render() {
-  $("#bar").hidden = !S.started;
-  if (!S.started) {
-    $("#view").innerHTML = `<div class="start"><h2 style="margin-top:0">Ready to start?</h2>
-      <label class="kv" for="team">Team name</label><input id="team" autocomplete="off" placeholder="Your team">
-      <button class="btn big" id="go">Start the timer</button>
-      ${SYNC ? `<div class="join"><label class="kv" for="joincode">Joining a teammate's game? Enter the code on their screen</label>
-        <div class="joinrow"><input id="joincode" autocomplete="off" maxlength="6" placeholder="CODE" autocapitalize="characters" spellcheck="false">
-        <button class="btn" id="joinbtn">Join</button></div><div class="note" id="joinmsg"></div></div>` : ""}</div>`;
-    return;
-  }
-  $("#teamlbl").textContent = S.team || "";
-  $("#pause").textContent = S.pausedAt ? "Resume" : "Pause";
-  let h = "";
-  if (SYNC) h += SYNC.code
-    ? `<div class="gamecode">Game code <b>${esc(SYNC.code)}</b>: teammates can join on their phone and share this timer and hints.</div>`
-    : `<div class="gamecode">${SYNC.pending ? "Connecting…" : "Offline"}: the game code appears once this phone is online. Your progress is kept.</div>`;
-  h += `<p class="note">Stuck? Open one hint at a time for the lock you're working on. The last step shows the solution.${SYNC ? " Tap “Mark solved” when a lock opens." : ""}</p>`;
-  if (!LOCKS.length) h += `<div class="empty">No locks are ready yet.</div>`;
-  LOCKS.forEach((l, i) => {
-    const n = S.shown[l.id] || 0, total = l.hints.length + 1, solved = !!S.solved[l.id];
-    const levels = l.hints.slice(0, n).map((t, k) => `<div class="level"><b>Hint ${k + 1}</b>${inline(t)}</div>`).join("")
-      + (n >= total ? `<div class="level sol"><b>Solution</b>${l.answer ? `<div class="code">${esc(l.answer)}</div>` : ""}${l.solution ? `<div class="md">${md(l.solution)}</div>` : ""}${!l.answer && !l.solution ? "<i>Not written yet.</i>" : ""}</div>` : "");
-    const next = n < l.hints.length ? `Hint ${n + 1}` : n < total ? "Show the solution" : "";
-    const buttons = (next ? `<button class="btn" data-next="${i}">${next}</button>` : "")
-      + (SYNC ? `<button class="btn${solved ? " on" : ""}" data-solve="${i}">${solved ? "✓ Solved" : "Mark solved"}</button>` : "");
-    h += `<section class="lockcard${solved ? " solved" : ""}"><h3>${esc(heading(l, i))}${l.status === "candidate" ? '<span class="cand">candidate</span>' : ""}</h3>
-      ${l.title ? `<div class="kv">${esc(lockName(l))}</div>` : ""}<div class="levels">${levels}</div>
-      ${buttons ? `<div class="btnrow">${buttons}</div>` : ""}</section>`;
-  });
-  $("#view").innerHTML = h;
-}
-function tick() { $("#clock").textContent = fmt(elapsed()); }
-
-// The run as the server has it (this phone's actions included, plus any teammate's).
-function fromServer(st) {
-  const next = Object.assign(fresh(), { team: st.team || S.team, session: st.session_id,
-    started: SYNC.toLocal(st.started_ms), paused: st.paused_total_ms,
-    pausedAt: st.paused_since_ms != null ? SYNC.toLocal(st.paused_since_ms) : 0,
-    finished: st.finished_ms != null ? SYNC.toLocal(st.finished_ms) : 0 });
-  LOCKS.forEach((l, i) => {
-    const lv = st.hints[i] || [];
-    if (lv.length) next.shown[l.id] = Math.max(...lv) + 1;
-    if (st.lock_times[i] != null) next.solved[l.id] = true;
-  });
-  const shape = x => JSON.stringify([x.team, x.shown, x.solved, !!x.pausedAt, !!x.finished]);
-  const changed = shape(next) !== shape(S) || !S.started, ended = next.finished && !S.finished;
-  S = next; save();
-  if (changed) render();
-  tick();
-  if (ended) showDone();
-}
-if (SYNC) SYNC.onState(fromServer);
-
-function showDone() {
-  const used = Object.values(S.shown).reduce((a, b) => a + b, 0);
-  $("#done").innerHTML = `<div class="inner"><div class="eyebrow">Adventure complete</div><h2>Congratulations${S.team ? ", " + esc(S.team) : ""}!</h2>
-    <div class="clock">${fmt(elapsed())}</div><p class="note">${used} hint${used === 1 ? "" : "s"} opened. Thank you for playing ${esc(H.name)}!</p>
-    ${SYNC ? `<div id="cmp"><p style="opacity:.7">Comparing with other teams…</p></div>` : ""}
-    <button class="btn big" id="again">Play again</button></div>`;
-  $("#done").hidden = false; tick();
-  // The server's time is the one every teammate's phone shows.
-  if (SYNC) SYNC.flush().then(st => {
-    const clock = $("#done .clock");
-    if (st && st.finished_ms != null && clock) clock.textContent = fmt(st.elapsed_s * 1000);
-    return SYNC.stats();
-  }).then(stats => {
-    const box = $("#cmp");
-    if (box) box.innerHTML = EBSync.compareHTML(stats, LOCKS.map(heading));
-  });
+  const all = steps(), n = all.filter(s => done[s.id]).length;
+  $("#count").textContent = `${n} / ${all.length}`;
+  $("#bar").style.width = all.length ? (100 * n / all.length) + "%" : "0";
+  $("#view").innerHTML = `<div class="intro"><p>Thank you for packing the backpack back up for the next team!
+      Work from the top: the last lock comes first, so every pouch is locked before the pocket around it closes.</p>
+      ${R.general.map(g => `<p class="note">${inline(g)}</p>`).join("")}</div>
+    ${all.map(s => `<section class="step${done[s.id] ? " done" : ""}">${s.html}
+      <label class="tick"><input type="checkbox" data-step="${esc(s.id)}"${done[s.id] ? " checked" : ""}> Done</label></section>`).join("")}
+    <div class="finished"${n === all.length && all.length ? "" : " hidden"}><h2 style="margin-top:0">All packed!</h2>
+      <p>The backpack is ready for the next team. Thank you!</p><button class="btn" id="over">Start the checklist over</button></div>`;
 }
 
-document.addEventListener("click", async e => {
-  if (e.target.id === "go") {
-    S = Object.assign(fresh(), { team: $("#team").value.trim(), started: Date.now(),
-      session: "s" + Date.now() + "_" + Math.random().toString(36).slice(2, 5) });
-    save();
-    if (SYNC) SYNC.start({ team: S.team, session: S.session }).then(() => render());
-    render(); tick(); return;
-  }
-  if (e.target.id === "joinbtn") {
-    const msg = $("#joinmsg");
-    msg.textContent = "Joining…";
-    try { fromServer(await SYNC.join($("#joincode").value)); }
-    catch (err) { msg.textContent = err.status === 404 ? "No game with that code. Check the code on your teammate's screen." : "Couldn't connect. Check your connection and try again."; }
-    return;
-  }
-  const nx = e.target.closest("[data-next]");
-  if (nx) {
-    const i = +nx.dataset.next, l = LOCKS[i], n = S.shown[l.id] || 0;
-    if (n >= l.hints.length && !confirm("Show the solution for this lock?")) return;
-    S.shown[l.id] = n + 1; save(); render();
-    if (SYNC) SYNC.op({ t: "hint", lock: i, level: n });
-    return;
-  }
-  const sv = e.target.closest("[data-solve]");
-  if (sv) {
-    const i = +sv.dataset.solve, linear = !!(CFG && CFG.linear);
-    if (!S.solved[LOCKS[i].id]) {
-      // Locks open in order: marking one also marks any earlier lock the team forgot to mark.
-      LOCKS.forEach((l, j) => { if (j === i || (linear && j < i)) S.solved[l.id] = true; });
-      SYNC.op({ t: "solve", lock: i, upto: linear });
-    } else {
-      LOCKS.forEach((l, j) => { if (j === i || (linear && j > i)) delete S.solved[l.id]; });
-      SYNC.op({ t: "unsolve", lock: i, after: linear });
-    }
-    save(); render(); return;
-  }
-  if (e.target.id === "again") {
-    S = fresh(); save(); if (SYNC) SYNC.leave();
-    $("#done").hidden = true; render();
-  }
+document.addEventListener("change", e => {
+  const id = e.target.dataset && e.target.dataset.step;
+  if (!id) return;
+  if (e.target.checked) done[id] = true; else delete done[id];
+  save(); render();
 });
-$("#pause").addEventListener("click", () => {
-  if (S.pausedAt) { S.paused += Date.now() - S.pausedAt; S.pausedAt = 0; if (SYNC) SYNC.op({ t: "resume" }); }
-  else { S.pausedAt = Date.now(); if (SYNC) SYNC.op({ t: "pause" }); }
-  save(); render(); tick();
-});
-// Start over on this phone: timer, hints and solved locks cleared. The logged run stays unfinished,
-// so it is never compared; teammates who joined keep the old game.
-$("#restart").addEventListener("click", () => {
-  const shared = SYNC && SYNC.code ? " Teammates who joined with the game code keep the current game." : "";
-  if (!confirm("Start over? This clears the timer, hints and solved locks on this phone." + shared)) return;
-  S = fresh(); save(); if (SYNC) SYNC.leave();
-  $("#done").hidden = true; render(); tick(); window.scrollTo(0, 0);
-});
-$("#finish").addEventListener("click", () => {
-  if (!S.finished && !confirm("Did you open the last lock? This stops the timer.")) return;
-  if (!S.finished) {
-    if (S.pausedAt) { S.paused += Date.now() - S.pausedAt; S.pausedAt = 0; }
-    S.finished = Date.now(); save();
-    if (SYNC) SYNC.op({ t: "finish" });
-  }
-  showDone();
-});
+document.addEventListener("click", e => { if (e.target.id === "over") { done = {}; save(); render(); window.scrollTo(0, 0); } });
 
-$("#proj").textContent = H.name;
-document.title = H.name + " · Hint companion";
-render(); tick(); setInterval(tick, 1000);
-if (S.finished) showDone();
+$("#proj").textContent = R.name;
+document.title = R.name + " · Reset checklist";
+render();
 </script>
 </body>
 </html>

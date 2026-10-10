@@ -139,7 +139,8 @@ lock under 3 min drops only that lock's time) is decided when stats are read, in
 `help/norse/hints/` is the kit-built hint page from the design repository (`NorseBackpack/`,
 `python ../backpack-kit/kit.py build`, then copy `site/hints/index.html` here). Norse is not in
 `backpacks.txt` yet because its records live in a subfolder of the design repository. The old
-`norse-hints.html` redirects to it.
+`norse-hints.html` redirects to it. `help/norse/reset/` is the kit-built reset checklist
+(`publish_reset` in `backpack.json`; copy `site/reset/index.html` here after a rebuild).
 
 ## Space Exploration
 `/help/space/` redirects to the kit-generated hint page at
