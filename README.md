@@ -117,6 +117,12 @@ python tools/build_help.py
 It reads `hiking-hints.html` and `hiking-reset.html`, extracts their embedded images
 into `help/hiking/media/`, and writes lighter copies (1.4 MB → 42 KB, 4.1 MB → 26 KB).
 
+## Norse help page
+`help/norse/hints/` is the kit-built hint page from the design repository (`NorseBackpack/`,
+`python ../backpack-kit/kit.py build`, then copy `site/hints/index.html` here). Norse is not in
+`backpacks.txt` yet because its records live in a subfolder of the design repository. The old
+`norse-hints.html` redirects to it.
+
 ## Space Exploration
 `/help/space/` redirects to the kit-generated hint page at
 `https://space-design.escapepack.ca/hints/` (see `_redirects`).

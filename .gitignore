@@ -8,3 +8,5 @@ __pycache__/
 !/design/index.template.html
 /help/*/hints/
 !/help/hiking/hints/
+# Norse is not in backpacks.txt yet: its hint page is built by kit.py in the design repo and copied here.
+!/help/norse/hints/

@@ -11,6 +11,12 @@
 /help/canada/         /help/canada/hints/   302
 /help/hockey          /help/hockey/hints/   302
 /help/hockey/         /help/hockey/hints/   302
+# Norse: hint page copied from the design repo's kit build (not in backpacks.txt yet).
+/help/norse          /help/norse/hints/   302
+/help/norse/         /help/norse/hints/   302
+# The old 5-station Norse hint page now points at the 13-lock one.
+/norse-hints.html    /help/norse/hints/   302
+/norse-hints         /help/norse/hints/   302
 # Norse online edition: one chapter so far. 302 so /play/norse/ can become a chapter list later.
 /play/norse          /play/norse/leif/    302
 /play/norse/         /play/norse/leif/    302
