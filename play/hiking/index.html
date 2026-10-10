@@ -7,10 +7,10 @@
   <link rel="icon" href="assets/hiking.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Young+Serif&family=Architects+Daughter&family=Caveat:wght@400;600&display=swap">
-  <link rel="stylesheet" href="styles.css?v=8"><link rel="stylesheet" href="clues.css?v=9"><link rel="stylesheet" href="later.css?v=25">
+  <link rel="stylesheet" href="styles.css?v=8"><link rel="stylesheet" href="clues.css?v=9"><link rel="stylesheet" href="later.css?v=28">
   <!-- Three.js for the 3D Lego puzzles (lego-flat.js, lego-square.js), loaded only when one is first shown. -->
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-  <script src="game-data.js?v=12" defer></script><script src="clues.js?v=8" defer></script><script src="later.js?v=21" defer></script><script src="game.js?v=14" defer></script>
+  <script src="game-data.js?v=13" defer></script><script src="clues.js?v=8" defer></script><script src="later.js?v=21" defer></script><script src="game.js?v=16" defer></script>
 </head>
 <body>
   <header class="masthead">
@@ -28,7 +28,7 @@
         <div class="selection"><strong id="selected-name">Water bottle</strong><span id="selected-kind">Three sides to explore</span></div>
         <div class="object-actions"><button id="inspect">Inspect <kbd>↵</kbd></button><button id="flip">Turn <kbd>F</kbd></button><button id="rotate" title="Rotate the selected item">Rotate <kbd>R</kbd></button><button id="stow" title="Keep this item in the collected items tray">Put away</button></div>
         <div class="view-tools"><div class="zoom-tools" role="group" aria-label="Table zoom"><button id="zoom-out" title="Zoom out (−)" aria-label="Zoom out">−</button><button id="zoom-fit" title="Fit the whole table (0)">Fit</button><button id="zoom-in" title="Zoom in (+)" aria-label="Zoom in">+</button></div>
-        <button id="tidy" class="tidy" title="Arrange items without erasing your puzzle work">Tidy table</button><button id="fullscreen" title="Use the whole screen">Full screen</button></div>
+        <button id="tidy" class="tidy" title="Arrange items without erasing your puzzle work">Tidy table</button><button id="spread" class="tidy" title="Give the table its full size again; nothing moves" hidden>Full table</button><button id="fullscreen" title="Use the whole screen">Full screen</button></div>
       </div>
       <div id="table-frame"><div id="table-fit"><div id="table">
         <span class="table-label" aria-hidden="true">CAMP TABLE<span>Look closely · turn things over</span></span>
