@@ -33,6 +33,7 @@
 .help-page{background:var(--paper);padding:clamp(48px,6vw,80px) 0 clamp(72px,8vw,115px)}
 .help-page h1{font-size:clamp(40px,5vw,70px);white-space:normal;max-width:15ch}
 .help-lead{font-size:17px;color:#53695a;max-width:60ch;margin-bottom:38px}
+.help-game{font:400 26px var(--serif);margin:38px 0 16px}
 .help-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:950px}
 .help-pair a{background:#fffaf1;border:1px solid var(--line);padding:28px;text-decoration:none;display:flex;flex-direction:column;min-height:220px}
 .help-pair a:hover{border-color:#a54c32}.help-pair .eyebrow{margin-bottom:18px}.help-pair strong{font:400 29px var(--serif);margin-bottom:12px}.help-pair span:last-child{font-size:14px;color:#566d5c}
