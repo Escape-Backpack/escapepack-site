@@ -21,7 +21,7 @@ about 2 seconds.
 | File | What |
 |---|---|
 | `src/index.js` | API, cron snapshot, uploads |
-| `src/github.js` | repo download (tarball) and commits (Git Data API) |
+| `src/github.js` | reading record files (one GraphQL request) and commits (Git Data API) |
 | `src/markdown.js` | record files <-> JSON, keeping frontmatter comments |
 | `src/auth.js` | Cloudflare Access check |
 | `public/studio/index.html` | the page |

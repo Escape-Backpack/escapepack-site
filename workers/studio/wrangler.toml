@@ -8,6 +8,7 @@
 name = "escapepack-studio"
 main = "src/index.js"
 compatibility_date = "2026-09-14"
+compatibility_flags = ["nodejs_compat"]   # node:buffer for fast base64 of uploads
 
 routes = [
   { pattern = "escapepack.ca/studio*", zone_name = "escapepack.ca" },

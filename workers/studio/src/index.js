@@ -23,7 +23,7 @@
 //   GET  /a/:bp/export                   every record as Markdown (kit.py studio pull)
 import { caller } from "./auth.js";
 import { parse, serialize, slugify, TYPES, PREFIX_TYPE } from "./markdown.js";
-import { download, commit } from "./github.js";
+import { texts, commit } from "./github.js";
 
 const KIT_REPO = "Escape-Backpack/backpack-kit";
 const MAX_BODY = 200_000, MAX_FILE = 20_000_000;
@@ -300,27 +300,25 @@ async function putRaw(env, adv, id, markdown, baseRev, name) {
 const RECORD_FILE = /^records\/[^/]+\/[^/]+\.md$/;
 
 async function kitFiles(env) {
-  const files = await download(env, KIT_REPO, p => p === "ciphers.json" || /^templates\/records\/\w+\.md$/.test(p));
-  const dec = b => new TextDecoder().decode(b);
+  const files = await texts(env, KIT_REPO, { files: ["ciphers.json"], folders: ["templates/records"] });
   const templates = {};
-  for (const [p, b] of Object.entries(files)) if (p.startsWith("templates/")) templates[p.split("/").pop().replace(".md", "")] = dec(b);
-  return { ciphers: JSON.parse(dec(files["ciphers.json"] || new TextEncoder().encode("{}"))), templates };
+  for (const [p, t] of Object.entries(files)) if (/^templates\/records\/\w+\.md$/.test(p)) templates[p.split("/").pop().replace(".md", "")] = t;
+  return { ciphers: JSON.parse(files["ciphers.json"] || "{}"), templates };
 }
 
 async function readRepo(env, repo) {
-  const files = await download(env, repo, p => p === "backpack.json" || RECORD_FILE.test(p));
-  const dec = b => new TextDecoder().decode(b);
+  const files = await texts(env, repo, { files: ["backpack.json"], folders: ["records"] });
   const records = [], skipped = [];
-  for (const [path, bytes] of Object.entries(files)) {
-    if (path === "backpack.json") continue;
+  for (const [path, text] of Object.entries(files)) {
+    if (!RECORD_FILE.test(path)) continue;
     try {
-      const p = parse(dec(bytes));
+      const p = parse(text);
       const id = p.data.id, type = p.data.type || PREFIX_TYPE[String(id).split("-")[0]];
       if (!/^[A-Z]{1,2}-\d{3,}$/.test(id || "") || !TYPES[type]) throw new Error("bad id or type");
       records.push({ ...p, id, type, path });
     } catch (e) { skipped.push(`${path}: ${e.message}`); }
   }
-  return { config: files["backpack.json"] ? JSON.parse(dec(files["backpack.json"])) : {}, records, skipped };
+  return { config: files["backpack.json"] ? JSON.parse(files["backpack.json"]) : {}, records, skipped };
 }
 
 async function importAdventure(env, bp, repo, name) {
