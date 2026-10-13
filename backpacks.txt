@@ -1,6 +1,6 @@
 # Backpacks whose design boards build.sh puts under /design/<slug>/ and /help/<slug>/hints/.
 # <slug>  <GitHub owner/repo>  [kit version: blank = latest (envelopes + cipher), v1 = lock-based]
 space  Escape-Backpack/Space-Exploration
-aurora  Escape-Backpack/Space-Station-Aurora  v1
-canada  Escape-Backpack/Canada-Exploration  v1
-hockey  Escape-Backpack/Hockey-Expedition  v1
+aurora  Escape-Backpack/Space-Station-Aurora
+canada  Escape-Backpack/Canada-Exploration
+hockey  Escape-Backpack/Hockey-Expedition
