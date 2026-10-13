@@ -1,0 +1,36 @@
+# The Studio: live shared design board at escapepack.ca/studio/ (page in public/, API in src/).
+# Deploy from this folder: npx wrangler deploy
+# Schema: ../../db/studio.sql  (npx wrangler d1 execute escapepack-studio --remote --file=../../db/studio.sql)
+# Secret: npx wrangler secret put GITHUB_TOKEN  (fine-grained token: Contents read/write on the adventure repos)
+# Login: a Cloudflare Access application on escapepack.ca/studio covers both the page and the API;
+#        put its team name and Application Audience (AUD) tag below.
+# Local test: npx wrangler dev --local --var DEV_USER:you@example.com (after applying the schema with --local)
+name = "escapepack-studio"
+main = "src/index.js"
+compatibility_date = "2026-09-14"
+
+routes = [
+  { pattern = "escapepack.ca/studio*", zone_name = "escapepack.ca" },
+]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = ["/studio/api/*"]
+
+# Snapshot changed records to GitHub every 10 minutes.
+[triggers]
+crons = ["*/10 * * * *"]
+
+[vars]
+ACCESS_TEAM = "simonlife"   # Zero Trust team: simonlife.cloudflareaccess.com
+ACCESS_AUD = "6e84404afe0c51ba065d007546625bd69a7e1b3a15b2804e597ee3ae36fa9e22"   # Escape Studio application
+
+[[d1_databases]]
+binding = "DB"
+database_name = "escapepack-studio"
+database_id = "defbb418-0747-4ce2-97b5-63cbe9621535"
+
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "escapepack-studio-files"
