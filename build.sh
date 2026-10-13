@@ -24,15 +24,23 @@ repo_url() {
   fi
 }
 
-git clone --depth 1 --quiet https://github.com/Escape-Backpack/backpack-kit "$WORK/backpack-kit"
+# One kit checkout per version: main (envelopes + cipher) or a tag such as v1 (lock-based backpacks).
+kit_for() {
+  local ref="${1:-main}" dir="$WORK/kit-${1:-main}"
+  if [ ! -d "$dir" ]; then
+    git clone --depth 1 --quiet --branch "$ref" https://github.com/Escape-Backpack/backpack-kit "$dir"
+  fi
+  echo "$dir"
+}
 
 boards=""   # design/clues/ is committed here, not built: never use "clues" as a slug
-while read -r slug repo _; do
+while read -r slug repo kitref _; do
   case "$slug" in ''|\#*) continue ;; esac
-  echo "== $slug ($repo)"
+  echo "== $slug ($repo, kit ${kitref:-main})"
+  kit=$(kit_for "$kitref")
   # Full history: the board's "last touched" dates come from git.
   git clone --quiet "$(repo_url "$repo")" "$WORK/$slug"
-  "$PY" "$WORK/backpack-kit/kit.py" --project "$WORK/$slug" build
+  "$PY" "$kit/kit.py" --project "$WORK/$slug" build
   name=$("$PY" -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["name"])' "$WORK/$slug/backpack.json")
 
   rm -rf "design/$slug" "help/$slug/hints"
