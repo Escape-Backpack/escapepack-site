@@ -158,6 +158,12 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 400; color: var(--head); ma
 .prose h4, .prose h5, .prose h6 { font: 600 14px var(--sans); margin: 1em 0 .3em; color: var(--head); }
 .prose code { font: 12.5px var(--mono); background: var(--sunk); padding: 0 4px; border-radius: 3px; }
 .prose blockquote { margin: 0 0 .7em; padding-left: 10px; border-left: 2px solid var(--accent); color: var(--ink-2); }
+.prose .tablewrap { overflow-x: auto; margin: 0 0 .9em; }
+.prose table { border-collapse: collapse; font-size: 13.5px; }
+.prose th, .prose td { border: 1px solid var(--line-strong); padding: 4px 8px; text-align: left; vertical-align: top; }
+.prose th { background: var(--sunk); font-weight: 600; }
+.layout.single { grid-template-columns: minmax(0,1fr); max-width: 900px; }
+.layout.single .prose { max-width: none; }
 .ref { font: 12.5px var(--mono); color: var(--accent-ink); border: 0; background: none; padding: 0; text-decoration: underline; text-underline-offset: 2px; }
 textarea.md { width: 100%; min-height: 300px; padding: 10px; font: 13px/1.55 var(--mono); resize: vertical; }
 .files { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); }
@@ -280,17 +286,26 @@ function inline(s) {
   const codes = [];
   s = esc(s).replace(/`([^`]+)`/g, (m, c) => { codes.push(c); return `\u0000${codes.length - 1}\u0000`; });
   s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>").replace(/(^|[^*\w])\*([^*\s][^*]*)\*/g, "$1<em>$2</em>")
-    .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>').replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, "$1")
     .replace(/(^|[^\w-])((?:PR|ST|PZ|PP|Q|AS)-\d{3,})\b/g, (m, pre, id) => pre + (R[id] ? `<button type="button" class="ref" data-open="${id}" title="${esc(R[id].data.title)}">${id}</button>` : id));
   return s.replace(/\u0000(\d+)\u0000/g, (m, i) => `<code>${codes[i]}</code>`);
 }
 function md(src) {
   src = String(src || "").replace(/<!--[^]*?-->/g, "");
-  let html = "", para = [], list = null;
+  let html = "", para = [], list = null, table = null;
   const fp = () => { if (para.length) { html += `<p>${inline(para.join(" "))}</p>`; para = []; } };
-  const fl = () => { if (list) { html += `<${list.t}>${list.items.map(i => `<li>${inline(i)}</li>`).join("")}</${list.t}>`; list = null; } };
+  const box = i => inline(i).replace(/^\[([ xX])\]\s*/, (m, x) => x === " " ? "☐ " : "☑ ");
+  const fl = () => { if (list) { html += `<${list.t}>${list.items.map(i => `<li>${box(i)}</li>`).join("")}</${list.t}>`; list = null; } };
+  const ft = () => {
+    if (!table) return;
+    const [head, ...rows] = table.filter(r => !r.every(c => /^:?-+:?$/.test(c)));
+    html += `<div class="tablewrap"><table><tr>${head.map(c => `<th>${inline(c)}</th>`).join("")}</tr>${rows.map(r => `<tr>${r.map(c => `<td>${inline(c)}</td>`).join("")}</tr>`).join("")}</table></div>`;
+    table = null;
+  };
   for (const ln of src.replace(/\r/g, "").split("\n")) {
     let m;
+    if (/^\s*\|/.test(ln)) { fp(); fl(); (table ||= []).push(ln.trim().replace(/^\||\|$/g, "").split("|").map(c => c.trim())); continue; }
+    ft();
     if ((m = ln.match(/^(#{1,4})\s+(.*)/))) { fp(); fl(); html += `<h${Math.min(m[1].length + 3, 6)}>${inline(m[2])}</h${Math.min(m[1].length + 3, 6)}>`; continue; }
     if ((m = ln.match(/^\s*([-*]|\d+\.)\s+(.*)/))) { fp(); const t = /\d/.test(m[1]) ? "ol" : "ul"; if (!list || list.t !== t) { fl(); list = { t, items: [] }; } list.items.push(m[2]); continue; }
     if ((m = ln.match(/^>\s?(.*)/))) { fp(); fl(); html += `<blockquote>${inline(m[1])}</blockquote>`; continue; }
@@ -298,7 +313,7 @@ function md(src) {
     if (list && /^\s{2,}/.test(ln)) { list.items[list.items.length - 1] += " " + ln.trim(); continue; }
     fl(); para.push(ln.trim());
   }
-  fp(); fl();
+  fp(); fl(); ft();
   return html;
 }
 
@@ -309,6 +324,7 @@ async function boot() {
   if (!ME.name) return askName();
   ADVS = await api("GET", "/adventures");
   const want = location.hash.slice(1).split("/")[0] || pref("adventure");
+  if (want === "bureau") return loadBureau();
   const pick = ADVS.find(a => a.bp === want) || ADVS[0];
   if (!pick) return addAdventure();
   await load(pick.bp);
@@ -346,11 +362,11 @@ async function load(bp) {
 let pollTimer = null;
 async function poll() {
   clearTimeout(pollTimer);
-  if (document.hidden) return;
+  if (document.hidden || !A) return;
   const bp = A.adventure.bp;
   try {
     const ch = await api("GET", `/a/${bp}/changes?since=${SEQ}${openId ? "&viewing=" + openId : ""}`);
-    if (A.adventure.bp !== bp) return;
+    if (!A || A.adventure.bp !== bp) return;
     online = true;
     PRESENCE = ch.presence; EXPORTED = { seq: ch.exported_seq, at: ch.exported_at };
     let touched = false;
@@ -373,10 +389,11 @@ function take(r, theirs) {
 }
 
 // ---------- layout ----------
+const switcher = cur => `<select class="switch" id="adv" aria-label="Adventure"><option value="bureau"${cur === "bureau" ? " selected" : ""}>The Bureau (series)</option>${ADVS.map(a => `<option value="${esc(a.bp)}"${a.bp === cur ? " selected" : ""}>${esc(a.name)}</option>`).join("")}<option value="+">+ Add an adventure…</option></select>`;
 function shell() {
   $("#app").innerHTML = `<div class="top"><div class="bar">
       <h1>Escape Studio</h1>
-      <select class="switch" id="adv" aria-label="Adventure">${ADVS.map(a => `<option value="${esc(a.bp)}"${a.bp === A.adventure.bp ? " selected" : ""}>${esc(a.name)}</option>`).join("")}<option value="+">+ Add an adventure…</option></select>
+      ${switcher(A.adventure.bp)}
       <span class="spacer"></span>
       <div class="people" id="people"></div>
       <span class="status" id="status"><span class="dot"></span><span id="statusl">Saved</span></span>
@@ -481,7 +498,30 @@ function route() {
   renderTop(); renderView(); renderRail();
   if (id && R[id]) openRecord(id, true); else if (openId) closeRecord(true);
 }
-window.addEventListener("hashchange", () => A && route());
+window.addEventListener("hashchange", () => {
+  const bp = location.hash.slice(1).split("/")[0];
+  if (bp === "bureau") return A || !BUREAU ? loadBureau() : showBureau();
+  if (A) route(); else if (ME?.name && ADVS.length) load(ADVS.some(a => a.bp === bp) ? bp : ADVS[0].bp);
+});
+
+// ---------- the Bureau: series roadmap and bible, read-only from its GitHub repo ----------
+const BUREAU_TABS = [["roadmap", "Roadmap", "ROADMAP.md"], ["bible", "Bible", "Bureau_Bible.md"]];
+let BUREAU = null;
+async function loadBureau() {
+  clearTimeout(pollTimer); A = null; openId = null; editingBody = false;
+  for (const k of Object.keys(R)) delete R[k];
+  pref("adventure", "bureau");
+  try { BUREAU = await api("GET", "/bureau"); } catch (e) { BUREAU = { error: e.message }; }
+  showBureau();
+}
+function showBureau() {
+  const [k, , file] = BUREAU_TABS.find(([t]) => t === location.hash.slice(1).split("/")[1]) || BUREAU_TABS[0];
+  const repo = BUREAU.repo && `<a href="https://github.com/${esc(BUREAU.repo)}/blob/main/${file}" target="_blank" rel="noopener">${esc(BUREAU.repo)}</a>`;
+  $("#app").innerHTML = `<div class="top"><div class="bar"><h1>Escape Studio</h1>${switcher("bureau")}</div>
+      <nav class="tabs">${BUREAU_TABS.map(([t, l]) => `<a href="#bureau/${t}" class="${t === k ? "on" : ""}">${l}</a>`).join("")}</nav></div>
+    <main class="layout single"><section class="section">${BUREAU.error ? `<p>Couldn't read the Bureau's files: ${esc(BUREAU.error)}</p>`
+      : `<div class="prose">${md(BUREAU.files[file]) || '<p class="empty">This file is missing.</p>'}</div><p class="meta">Read-only here. Edit ${file} in ${repo}.</p>`}</section></main>`;
+}
 
 // ---------- drawer ----------
 function openRecord(id, fromHash) {
@@ -619,7 +659,12 @@ document.addEventListener("click", async e => {
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && openId && !editingBody) closeRecord(); });
 document.addEventListener("change", async e => {
-  if (e.target.id === "adv") { if (e.target.value === "+") return addAdventure(); location.hash = e.target.value; return load(e.target.value); }
+  if (e.target.id === "adv") {
+    const v = e.target.value;
+    if (v === "+") return addAdventure();
+    if (location.hash.slice(1) !== v) { location.hash = v; return; }   // hashchange loads it
+    return v === "bureau" ? loadBureau() : load(v);
+  }
   if (e.target.id === "upload") return uploadFiles([...e.target.files]);
   const key = e.target.dataset.field; if (!key || !openId) return;
   let v = e.target.value.trim();

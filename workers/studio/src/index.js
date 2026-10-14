@@ -9,6 +9,7 @@
 // API (all under /studio/api, behind Cloudflare Access):
 //   GET/POST /me                         who you are / set your display name
 //   GET  /adventures, POST /adventures   list / import one from GitHub {bp, repo}
+//   GET  /bureau                         the series roadmap and bible, read from BUREAU_REPO
 //   GET  /a/:bp/state                    everything the page needs
 //   GET  /a/:bp/changes?since=&viewing=  what changed since seq (also reports who's here)
 //   POST /a/:bp/records                  new record {type, title, set}
@@ -26,6 +27,7 @@ import { parse, serialize, slugify, TYPES, PREFIX_TYPE } from "./markdown.js";
 import { texts, commit } from "./github.js";
 
 const KIT_REPO = "Escape-Backpack/backpack-kit";
+const BUREAU_REPO = "Escape-Backpack/Cryptic-Bureau", BUREAU_FILES = ["ROADMAP.md", "Bureau_Bible.md"];
 const MAX_BODY = 200_000, MAX_FILE = 20_000_000;
 
 class HttpError extends Error { constructor(status, message, extra) { super(message); this.status = status; this.extra = extra; } }
@@ -84,10 +86,15 @@ async function route(request, env, url, who) {
     const { results } = await env.DB.prepare("SELECT bp, repo, config, exported_at FROM adventures ORDER BY bp").all();
     return json(results.map(r => ({ bp: r.bp, repo: r.repo, name: JSON.parse(r.config).name || r.bp, exported_at: r.exported_at })));
   }
+  if (path === "/bureau" && method === "GET") {
+    const files = await texts(env, BUREAU_REPO, { files: BUREAU_FILES }).catch(e => fail(502, e.message));
+    return json({ repo: BUREAU_REPO, files });
+  }
   if (path === "/adventures" && method === "POST") {
     const b = await body(request);
     const bp = String(b.bp || "").toLowerCase(), repo = String(b.repo || "");
     if (!/^[a-z0-9-]{1,30}$/.test(bp) || !/^[\w.-]+\/[\w.-]+$/.test(repo)) fail(400, "bp (slug) and repo (owner/name) are required");
+    if (bp === "bureau") fail(400, "bureau is the series page: pick another short name");
     if (await env.DB.prepare("SELECT 1 FROM adventures WHERE bp = ?").bind(bp).first()) fail(409, "already in the Studio");
     return json(await importAdventure(env, bp, repo, name));
   }
