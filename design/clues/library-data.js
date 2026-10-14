@@ -294,12 +294,13 @@ window.CLUE_LIBRARY = {
       "m": "Print, and a card you can crease",
       "t": "crease origami halves sentence physical",
       "w": "A crease brings two distant parts of a page together, forming a word or sentence present in neither half.",
-      "x": "Folding a card so the postmark meets the address line makes two half-words into one. Print a spare — creasing is destructive.",
+      "x": "A designed crease brings two printed fragments together to form a short instruction. Use a scored or hinged prototype and check repeated folding before choosing it for a reusable kit.",
       "s": [
         "Origami",
         "https://en.wikipedia.org/wiki/Origami"
       ],
-      "id": "fold-to-join"
+      "id": "fold-to-join",
+      "warn": "Check wear and whether existing folds disclose the method to the next group. A reusable fold is a design to test, not a guaranteed durable mechanism."
     },
     {
       "c": "text",
@@ -1917,12 +1918,13 @@ window.CLUE_LIBRARY = {
       "m": "Print only",
       "t": "digits sum to confirm validation check your answer",
       "w": "A rule the correct answer must satisfy — digits summing to a stated total, or a stated first digit. Lets players confirm themselves rather than burning attempts on a lock.",
-      "x": "\"All four add to nineteen.\" Players who derive 1972 can check it before touching the padlock.",
+      "x": "A note says that the four digits sum to nineteen. The candidate 1972 passes this partial check, but so does 1927. Use an independent order check if transposition is a plausible mistake.",
       "s": [
         "Checksum",
         "https://en.wikipedia.org/wiki/Checksum"
       ],
-      "id": "checksum-self-verifying-code"
+      "id": "checksum-self-verifying-code",
+      "warn": "A checksum can reject some errors, not all. Check both the answer and its order against independent evidence."
     },
     {
       "c": "logic",
@@ -2086,9 +2088,9 @@ window.CLUE_LIBRARY = {
       "n": "Burst structure",
       "d": 2,
       "m": "Structural",
-      "t": "lock releases props then pointer chain then next code pacing hardware budget",
-      "w": "A lock opens a compartment releasing three or four props; those play out as a pointer-and-instrument chain among themselves with no hardware at all; the last step produces the code for the next lock.",
-      "x": "Eight locks and roughly thirty solving moments on a single padlock budget. The shape we are aiming at for the Norse bag.",
+      "t": "envelope several discoveries pointer instrument chain pacing",
+      "w": "An envelope releases several props that support a short chain of discoveries. Only the last step produces the answer for the next envelope.",
+      "x": "An envelope releases a note, a map and a mask. The note identifies the map feature; that feature sets the mask; the exposed result identifies the next envelope. Several discoveries lead to one opening.",
       "s": [
         "Peeking Behind the Locked Door",
         "https://scottnicholson.com/pubs/erfacwhite.pdf"
@@ -2099,11 +2101,11 @@ window.CLUE_LIBRARY = {
       "c": "combine",
       "n": "One digit per prop",
       "d": 1,
-      "m": "Several props, one lock",
+      "m": "Several props, one shared answer",
       "t": "four objects four digits split the code across items",
       "w": "A four-digit code with each digit carried by a different object. The most obvious way to make one lock need four props.",
-      "x": "Four postcards, one digit hidden in each Fun Fact block.",
-      "warn": "The easiest multi-prop lock to get wrong. If three digits can be found and the fourth guessed, it is not a puzzle — make every digit cost real work, or use a lock with more dials than you have props.",
+      "x": "Four short tasks each produce one digit. A labelled result strip supplies their reading order before the shared envelope lookup.",
+      "warn": "Visible envelope labels may let players infer a missing digit. Check partial-answer shortcuts against every label, including decoys; do not assume extra digits or decoys prevent guessing.",
       "s": [
         "13 Rules for Puzzle Design",
         "https://thecodex.ca/13-rules-for-escape-room-puzzle-design/"
@@ -2244,12 +2246,13 @@ window.CLUE_LIBRARY = {
       "m": "Structural",
       "t": "second clue confirms the answer checksum self-check before trying lock",
       "w": "One clue produces the answer and a second, unrelated one confirms it. Lets players check themselves instead of testing guesses against a padlock.",
-      "x": "\"All four add to nineteen.\" Anyone who derives 1972 can verify it before touching the lock, and anyone who derives 1927 knows immediately that something is wrong.",
+      "x": "\"All four digits add to nineteen\" is a partial check: both 1972 and 1927 pass. To check order as well, a separate source could establish that the final digit is 2. That distinguishes these two candidates, but does not prove a unique answer; check the full candidate set.",
       "s": [
         "Checksum",
         "https://en.wikipedia.org/wiki/Checksum"
       ],
-      "id": "validator-pairing"
+      "id": "validator-pairing",
+      "warn": "A digit sum is unchanged when digits are reordered. Validate the complete answer and its order before players open an envelope; a partial check is not proof."
     },
     {
       "c": "combine",

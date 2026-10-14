@@ -1,23 +1,10 @@
 # Designer Clue Library
 
-Local implementation for review at `/design/clues/` (moved from `/designer/clues/`). Uses the public site's
-`site.css` colour and typography tokens. No framework or build step.
+Local implementation for review at `/design/clues/` (moved from `/designer/clues/`). Uses its own Cryptic Bureau Archive theme and local font/logo assets. No framework or build step.
 
-## Access: not configured
+## Access: public, noindex
 
-Planned: the Cloudflare Access rule on `escapepack.ca/design/*` (see the site README).
-
-This folder contains game examples and spoilers. It has no authentication yet.
-Do not push/publish it until the intended access policy and repository visibility
-have been checked. The existing site deploys static files from its repository root.
-An unlisted URL or `noindex` does not make the files private; neither would a
-password check implemented only in browser JavaScript.
-
-The intended next hosting step is server-enforced access for the designer area,
-including its scripts/data and any alternate deployment domains. If this
-repository is public, keep sensitive source/data in a private repository as well.
-Cloudflare settings and repository visibility were not verified in this pass.
-Remove the local-preview label only once access has been configured and tested.
+The designer area is public without authentication, as recorded in the site README (Access login deferred). The page includes puzzle examples and spoilers. An unlisted URL and `noindex` do not make it private. The designer requested committing and pushing the updated library on 2026-10-14; this supersedes the earlier local-preview publication hold. No access settings were changed.
 
 ## Files
 
@@ -29,10 +16,11 @@ Remove the local-preview label only once access has been configured and tested.
 - `library.js`: search/filtering, illustrative SVGs, shortlist and idea brief export.
 - `library-expansion.js`: 44 new technique/pattern briefs with stable IDs and
   illustrative examples; selected primary references carry review dates.
+- `library-envelope.js`: four envelope-oriented briefs, editorial fit/reset/participation profiles and action grouping for the shortlist variety check.
 - `library-guidance.js`: family checklists for the imported catalogue and six
   specific briefs for frequently useful existing techniques.
 
-No public navigation link was added. Open this page directly for local review.
+No public navigation link was added. Open `/design/clues/` directly.
 The stable technique links use `#technique/<id>`. Explicit IDs are stored in
 the two catalogue files; preserve them when renaming techniques.
 
@@ -49,7 +37,7 @@ the two catalogue files; preserve them when renaming techniques.
 - Action, material and output tags are editorial starting points derived from
   technique names, categories and materials. They need refinement through use.
 - Twelve diagrams demonstrate generic examples. They are not print masters.
-- 211 entries across 13 categories: 50 specific briefs and 161 family checklists.
+- 215 entries across 13 categories: 54 specific briefs and 161 family checklists.
   Coverage is a breadth/depth inventory, not a completeness or playtest claim.
 - Selected primary sources were reviewed on 2026-09-28: Puzzled Pint authoring,
   Nicholson's Ask Why, Audacity's Reverse/Change Tempo, Mathigon/Polypad Tangram,
@@ -96,3 +84,29 @@ The kit regression suite passed eight tests; the existing Space Exploration
 project still passes its 31-record structural check. Its generated Flow and
 Setup & reset views were checked in the browser. Readiness gaps are intentionally
 reported as missing evidence rather than filled with assumed design decisions.
+
+## Envelope edition — 2026-10-14
+
+Added paper sliders, paper weaving, reconstruction from multiple views and a story-timeline variation of constraint ordering. New examples are proposals, not print masters or playtest evidence. Stable existing IDs and browser shortlist storage are unchanged.
+
+Envelope fit, reset and solo/group filters combine with all existing filters and search. Profiles use conservative family defaults plus explicit exceptions; they are editorial starting points, not measured size/cost/durability claims. Read each technique's build/reset details before adapting it. Unknown physical requirements remain “Needs prop prototype” or “Define in build”.
+
+The shortlist compares broad action families across the whole saved set, even when filters hide cards. It excludes structure/combination patterns from action counts and flags repetition for review without assigning a score or assuming a play order. Exported briefs carry envelope guidance and use the current kit's envelope/needs terminology.
+
+Design notes cover varied actions, several discoveries per envelope, quick symbol lookup, reliable confirmation, accidental-opening recovery, reusable materials and solo/parallel play. Corrected the digit-sum examples: 1972 and 1927 both total 19. Updated burst structure, one-digit-per-prop and folding guidance for reusable envelopes; unrelated historical lock examples remain labelled as imported and unverified.
+
+Validation: Node syntax checks and git diff whitespace checks passed. Catalogue checks found 215 unique entries, 54 specific briefs, complete editorial profiles and valid guide technique links; original imported IDs remain. Enumerated the illustrative timeline orders and multiple-view placements: each has one valid arrangement. In-app browser over local HTTP: combined fit/reset/participation/search filters, clear and empty results, new detail dialog, clipboard brief export, shortlist save/remove/persistence and repeated-action warnings passed. The variety panel kept whole-shortlist counts while filtering. Coverage counts and guide links passed. Desktop and 390px mobile layouts inspected; fixed narrow mobile envelope selects. No console warnings/errors observed. Test shortlist entries removed. Physical prototypes, printing and repeated-use durability remain untested. No commit or deployment.
+
+## Bureau Archive styling — 2026-10-14
+
+At the designer's request, the Clue Library now uses the approved Bureau identity: burgundy #542C3B, ivory #F4EBDD and copper #B87650; Cormorant Garamond 600 headings/wordmark and Source Sans 3 400/600 body text. The former green Escape Backpack styling is superseded on this page. The header uses the existing CB-L02-H01 envelope with hidden flap lettering, displayed from an unchanged raster copy through an SVG viewport. Favicon, title, footer, cards, filters, dialogs, guidance panels and SVG illustrations follow the same identity.
+
+`library.css` now owns the page's base styles; it no longer loads `../../site.css` or remote Google Fonts. Shared public site styling is unchanged. Font files and OFL licences are in `assets/`, with provenance in `assets/README.md`. This is a web application of the approved concept, not a replacement vector logo master. Existing technique IDs and shortlist storage keys are preserved.
+
+Checks: existing logo copy verified byte-for-byte, local asset references verified, JS syntax and git whitespace checks passed. Desktop and 390px mobile views visually inspected over local HTTP, including finder, diagrams and technique dialog. No horizontal mobile overflow or console errors observed. No print validation or deployment.
+
+## Dark mode — 2026-10-14
+
+The header's Dark mode toggle remembers a choice in `bureau-clue-theme`. Without a saved choice, the page follows the device colour scheme and responds to changes. `library-theme.js` applies the theme before the stylesheet paints. Blocked storage falls back to an in-session choice. The toggle exposes its state with aria-pressed; native form controls follow the theme. Diagram panels remain light for their fixed illustrative colours; the approved raster logo retains its original colours. Removed the local-preview badge for the requested publication; access remains as documented in the site README.
+
+Dark-mode validation: system default/change, saved overrides, toggle state and blocked storage passed isolated behavior checks. Browser checks passed for light/dark switching and reload persistence; desktop cards/dialogs/diagrams and 390px mobile layout visually inspected with no horizontal overflow or console errors. Prior 215-entry catalogue and envelope checks remain applicable.

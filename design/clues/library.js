@@ -32,6 +32,7 @@ function suggestedTags(t) {
 const records = CLUE_LIBRARY.techniques.map(t => ({...t, id:t.id || slug(t.n), ...suggestedTags(t),
   ...Object.fromEntries(["action","build","output"].filter(k=>t[k]).map(k=>[k,t[k]])),
   details:t.details || CLUE_DETAIL_OVERRIDES[t.id],
+  ...clueEnvelopeProfile(t),
 }));
 const byId = new Map(records.map(t => [t.id,t]));
 let saved = new Set(), storageAvailable = true;
@@ -48,24 +49,34 @@ function toggleSave(id) {
 }
 function addOptions(selector, values) { for(const [value,label] of values) { const option=document.createElement("option"); option.value=value; option.textContent=label; $(selector).append(option); } }
 addOptions("#category",categories.map(c=>[c.id,c.label]));
-for(const [selector,key] of [["#action","action"],["#material","build"],["#output","output"]]) addOptions(selector,[...new Set(records.map(t=>t[key]))].sort().map(v=>[v,v]));
+for(const [selector,key] of [["#action","action"],["#material","build"],["#output","output"],["#fit","fit"],["#reset","reset"],["#participation","participation"]]) addOptions(selector,[...new Set(records.map(t=>t[key]))].sort().map(v=>[v,v]));
 $("#library-count").textContent=records.length;
 function filtered() {
   const words=$("#search").value.toLowerCase().trim().split(/\s+/).filter(Boolean);
-  return records.filter(t=>(mode!=="saved"||saved.has(t.id)) && (!$("#category").value||t.c===$("#category").value) && (!$("#action").value||t.action===$("#action").value) && (!$("#material").value||t.build===$("#material").value) && (!$("#output").value||t.output===$("#output").value) && (!$("#depth").value||($("#depth").value==="specific"?!!t.details:!t.details)) && words.every(w=>[t.n,t.w,t.x,t.m,t.t,t.warn,t.action,t.output,categoryName(t.c),...Object.values(t.details||{})].join(" ").toLowerCase().includes(w)));
+  return records.filter(t=>(mode!=="saved"||saved.has(t.id)) && (!$("#category").value||t.c===$("#category").value) && (!$("#action").value||t.action===$("#action").value) && (!$("#material").value||t.build===$("#material").value) && (!$("#output").value||t.output===$("#output").value) && ["fit","reset","participation"].every(k=>!$("#"+k).value||t[k]===$("#"+k).value) && (!$("#depth").value||($("#depth").value==="specific"?!!t.details:!t.details)) && words.every(w=>[t.n,t.w,t.x,t.m,t.t,t.warn,t.action,t.output,t.fit,t.reset,t.participation,categoryName(t.c),...Object.values(t.details||{})].join(" ").toLowerCase().includes(w)));
+}
+function renderVariety() {
+  const panel=$("#variety"); panel.hidden=mode!=="saved";
+  if(mode!=="saved") return;
+  const list=[...saved].map(id=>byId.get(id));
+  const groups=new Map();
+  for(const t of list) {const group=clueVarietyGroup(t);if(group!=="Flow patterns")groups.set(group,(groups.get(group)||0)+1);}
+  const repeated=[...groups].filter(([,count])=>count>1);
+  panel.innerHTML=`<h3>Check the mix</h3><p>Whole shortlist · ${list.length} entries, including ${list.filter(t=>clueVarietyGroup(t)==="Flow patterns").length} flow patterns. Filters below do not change this check.</p><div class="chips">${[...groups].map(([group,count])=>`<span class="chip">${esc(group)} · ${count}</span>`).join("")}</div><p>${!list.length?"Save some techniques to compare player actions.":repeated.length?`Similar actions recur: ${repeated.map(([group,count])=>`${esc(group)} (${count})`).join(", ")}. Check whether each creates a different discovery; consider another action between them.`:"No repeated action families in this selection. That alone does not establish variety or enjoyment."}</p>${list.some(t=>t.fit==="Consumable / redesign"||t.fit==="Digital / equipment"||t.participation==="Requires solo redesign")?"<p>Some selections need adaptation for reusable, no-app or solo play. Read their envelope notes.</p>":""}<p class="evidence">Editorial prompts, not a score. This is a set of ideas, not an ordered game plan; flow patterns are excluded from action counts.</p>`;
 }
 function saveButton(t) { return `<button type="button" class="save" data-save="${t.id}" aria-pressed="${saved.has(t.id)}" aria-label="${saved.has(t.id)?"Remove":"Save"} ${esc(t.n)}${saved.has(t.id)?" from":" to"} shortlist">${saved.has(t.id)?"✓ Saved":"＋ Save"}</button>`; }
 function render() {
   const items=filtered();
   $("#results-title").textContent=mode==="saved"?"Your shortlist":($("#category").value?categoryName($("#category").value):"The full collection");
   $("#result-count").textContent=`${items.length} of ${mode==="saved"?saved.size:records.length} techniques${mode==="saved"?" · saved in this browser":" · open a card for examples and notes"}`;
-  $("#results").innerHTML=items.map(t=>`<article class="technique"><div class="card-kicker">${esc(categoryName(t.c))}</div><h3><button type="button" data-open="${t.id}">${esc(t.n)}</button></h3><p class="description">${esc(t.w)}</p><div class="chips"><span class="chip">${esc(t.action)}</span><span class="chip">${esc(t.build)}</span></div><div class="card-bottom"><button type="button" class="open-card" data-open="${t.id}" aria-label="Explore ${esc(t.n)}">Explore technique ↗</button>${saveButton(t)}</div></article>`).join("");
+  $("#results").innerHTML=items.map(t=>`<article class="technique"><div class="card-kicker">${esc(categoryName(t.c))}</div><h3><button type="button" data-open="${t.id}">${esc(t.n)}</button></h3><p class="description">${esc(t.w)}</p><div class="chips"><span class="chip">${esc(t.action)}</span><span class="chip">${esc(t.build)}</span><span class="chip">${esc(t.fit)}</span></div><div class="card-bottom"><button type="button" class="open-card" data-open="${t.id}" aria-label="Explore ${esc(t.n)}">Explore technique ↗</button>${saveButton(t)}</div></article>`).join("");
   $("#empty").hidden=items.length>0;
   $("#empty-message").textContent=mode==="saved"&&!saved.size?"Save techniques from the finder or visual examples to collect them here.":"Try fewer filters or a different search.";
   $("#empty-clear").textContent=mode==="saved"&&!saved.size?"Browse techniques":"Clear filters";
   $("#export").hidden=mode!=="saved"||!saved.size;
+  renderVariety();
 }
-function clearFilters() { for(const s of ["#search","#category","#action","#material","#output","#depth"]) $(s).value=""; render(); }
+function clearFilters() { for(const s of ["#search","#category","#action","#material","#output","#depth","#fit","#reset","#participation"]) $(s).value=""; render(); }
 function setMode(next, changeHash=true) {
   mode=["find","saved","inspire","guide","coverage"].includes(next)?next:"find";
   $("#browse").hidden=!["find","saved"].includes(mode); $("#inspiration").hidden=mode!=="inspire"; $("#guide").hidden=mode!=="guide";
@@ -73,7 +84,7 @@ function setMode(next, changeHash=true) {
   document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===mode)));
   render(); if(changeHash) history.replaceState(null,"",`#${mode}`);
 }
-function brief(t) { return `<!-- Candidate idea: ${t.n} — not an approved design or tested build.\nCreate the record with kit.py new puzzle, then REPLACE its whole body (everything below the front matter) with this brief; pasting it in addition duplicates the headings.\nKeep status idea and publish_hints no. Put the library link in the technique: field:\ntechnique: ${location.href.split("#")[0]}#technique/${t.id} -->\n\n## How it works\n[open]\n\n## Player notices\n[open]\n\n## Player does\n[${t.action}; adapt to the story]\n\n## Player obtains\n[open]\n\n## Story reason\n[open]\n\n## Reading order\n[open]\n\n## Hints\n1.\n\n## Solution\n[open]\n\n## Playtest evidence\n<!-- No test recorded. Add dated observations after testing. -->\n\n<!-- Prop-record follow-up: materials (${t.m}), container, starting state, reset, replacement.\nAvailability: link props, needs and found_in when known. -->\n`; }
+function brief(t) { return `<!-- Candidate idea: ${t.n} — not an approved design or tested build.\nCreate the record with kit.py new puzzle, then REPLACE its whole body (everything below the front matter) with this brief; pasting it in addition duplicates the headings.\nKeep status idea and publish_hints no. Put the library link in the technique: field:\ntechnique: ${location.href.split("#")[0]}#technique/${t.id} -->\n\n## How it works\n[open]\n\n## Player notices\n[open]\n\n## Player does\n[${t.action}; adapt to the story]\n\n## Player obtains\n[open]\n\n## Story reason\n[open]\n\n## Reading order\n[open]\n\n## Hints\n1.\n\n## Solution\n[open]\n\n## Playtest evidence\n<!-- No test recorded. Add dated observations after testing. -->\n\n<!-- Envelope guidance (editorial, untested): ${t.fit}; ${t.fitNote}\nReset starting point: ${t.reset}. Participation: ${t.participation}.\nVary the main action (${t.action}) against adjacent puzzles. Keep the final symbol lookup brief.\nProp-record follow-up: materials (${t.m}), envelope (start or releasing puzzle ID), starting state, reset, replacement.\nAvailability: link props and prerequisite puzzles with needs when known. -->\n`; }
 async function copyText(text, label, host) {
   try { await navigator.clipboard.writeText(text); toast(label); }
   catch {
@@ -91,6 +102,8 @@ function openDetail(id, push=true) {
   $("#detail-body").innerHTML=`<p class="card-kicker">${esc(categoryName(t.c))}</p><h2 id="detail-title">${esc(t.n)}</h2><p>${esc(t.w)}</p>${demo?`<div class="illustration">${diagram(demo)}</div><p class="evidence">Illustrative example · not a tested prop</p>`:""}<dl class="detail-meta"><dt>Player action</dt><dd>${esc(t.action)}</dd><dt>Materials</dt><dd>${esc(t.m)}</dd><dt>Possible output</dt><dd>${esc(t.output)}</dd><dt>Difficulty</dt><dd>${t.d}/5 · inherited estimate; depends on clues and execution</dd></dl><div class="detail-example"><h3>${t.id==="acrostic"?"Illustrative example":"Imported example · implementation unverified"}</h3><p>${esc(t.x)}</p></div>${t.warn?`<p class="detail-warning"><strong>Design consideration:</strong> ${esc(t.warn)}</p>`:""}<p class="evidence">Playtest evidence: not recorded here. Check the current backpack records before reusing game-specific details.</p>${t.s?`<a href="${esc(t.s[1])}" target="_blank" rel="noopener noreferrer">Reference: ${esc(t.s[0])} ↗</a>`:""}<div class="detail-actions"><span id="detail-save"></span><button type="button" class="secondary" id="copy-brief">Copy idea brief</button><button type="button" class="secondary" id="copy-link">Copy link</button></div>`;
   const detailMeta=$("#detail-body .detail-meta");
   detailMeta.lastElementChild.textContent=t.d?`${t.d}/5 · inherited estimate; depends on clues and execution`:"Not rated · prototype before assigning difficulty";
+  detailMeta.insertAdjacentHTML("beforeend",`<dt>Envelope fit</dt><dd>${esc(t.fit)}</dd><dt>Reset method</dt><dd>${esc(t.reset)}</dd><dt>Solo / group</dt><dd>${esc(t.participation)}</dd>`);
+  $("#detail-body .detail-example").insertAdjacentHTML("beforebegin",`<p class="envelope-note">${esc(t.fitNote)} These are editorial starting points, not tested fit or durability. ${t.participation!=="Solo or shared"?"Plan and test a solo alternative.":"Sharing a task does not guarantee useful work for every player."}</p>`);
   if(t.evidence==="illustrative") $("#detail-body .detail-example h3").textContent="Original illustrative proposal · not playtested";
   const guidance=t.details || CLUE_GUIDANCE[t.c] || {};
   const titles={cue:"Fair cue",setup:"Build & setup",solve:"Solving path",check:"Failure modes & test",reset:"Reset & replacement",access:"Accessibility",variants:"Variations"};
@@ -115,7 +128,7 @@ document.addEventListener("click",e=>{
   const category=e.target.closest("[data-category]");
   if(category){clearFilters();$("#category").value=category.dataset.category;setMode("find");}
 });
-for(const s of ["#search","#category","#action","#material","#output","#depth"]) $(s).addEventListener("input",render);
+for(const s of ["#search","#category","#action","#material","#output","#depth","#fit","#reset","#participation"]) $(s).addEventListener("input",render);
 $("#clear").onclick=clearFilters;
 $("#empty-clear").onclick=()=>{clearFilters();if(mode==="saved"&&!saved.size)setMode("find");};
 $("#export").onclick=()=>copyText([...saved].map(id=>brief(byId.get(id))).join("\n---\n\n"),"Shortlist copied.",$(".results-area"));
@@ -136,20 +149,20 @@ const demos=[
 ];
 function diagram(d) {
   const text=(x,y,s,size=16,extra="")=>`<text x="${x}" y="${y}" font-size="${size}" ${extra}>${s}</text>`;
-  const box=(x,y,w,h,fill="#fbf7ee",extra="")=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="4" fill="${fill}" stroke="#8c9f84" ${extra}/>`;
+  const box=(x,y,w,h,fill="#fcf8f1",extra="")=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="4" fill="${fill}" stroke="#bca7a5" ${extra}/>`;
   let art="";
-  if(d.art==="acrostic") art=box(32,16,246,163)+text(51,42,"“Look to the beginnings.”",13)+["Meet me beside the trees.","A trail runs north from here.","Pack the little compass.","Start before the sun sets."].map((s,i)=>text(51,70+i*25,s,14)).join("")+`<rect x="46" y="54" width="18" height="101" rx="3" fill="#b95b3d" opacity=".18"/>`;
+  if(d.art==="acrostic") art=box(32,16,246,163)+text(51,42,"“Look to the beginnings.”",13)+["Meet me beside the trees.","A trail runs north from here.","Pack the little compass.","Start before the sun sets."].map((s,i)=>text(51,70+i*25,s,14)).join("")+`<rect x="46" y="54" width="18" height="101" rx="3" fill="#B87650" opacity=".18"/>`;
   if(d.art==="grille") art=Array.from({length:12},(_,i)=>box(29+(i%4)*66,27+Math.floor(i/4)*47,55,36)+text(51+(i%4)*66,51+Math.floor(i/4)*47,[4,8,6,9,3,2,0,5,7,3,6,1][i],20)).join("")+[0,5,8,11].map(i=>box(25+(i%4)*66,23+Math.floor(i/4)*47,63,44,"none",'stroke-width="3"')).join("")+text(28,186,"Read selected cells row by row",12);
-  if(d.art==="route") art=Array.from({length:6},(_,i)=>`<path d="M 35 ${29+i*26} H 275 M ${40+i*45} 20 V 169" stroke="#bec9b0" stroke-width="1"/>`).join("")+`<path d="M65 47 H245 L65 145 H245" fill="none" stroke="#b95b3d" stroke-width="5" stroke-linecap="round"/>`+[[65,47],[245,47],[65,145],[245,145]].map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="14" fill="#17372d"/>`+`<text x="${x}" y="${y+5}" text-anchor="middle" style="fill:#fff7e8" font-size="14">${i+1}</text>`).join("");
+  if(d.art==="route") art=Array.from({length:6},(_,i)=>`<path d="M 35 ${29+i*26} H 275 M ${40+i*45} 20 V 169" stroke="#d7c6bf" stroke-width="1"/>`).join("")+`<path d="M65 47 H245 L65 145 H245" fill="none" stroke="#B87650" stroke-width="5" stroke-linecap="round"/>`+[[65,47],[245,47],[65,145],[245,145]].map(([x,y],i)=>`<circle cx="${x}" cy="${y}" r="14" fill="#542C3B"/>`+`<text x="${x}" y="${y+5}" text-anchor="middle" style="fill:#F4EBDD" font-size="14">${i+1}</text>`).join("");
   if(d.art==="order") art=text(27,35,"Leaf before moon. Moon before sun.",13)+["LEAF","MOON","SUN"].map((s,i)=>box(26+i*95,61,72,90)+text(62+i*95,88,s,12,'text-anchor="middle"')+text(62+i*95,132,[2,4,7][i],30,'text-anchor="middle"')).join("");
-  if(d.art==="overlay") art=box(22,51,70,100)+box(112,51,70,100)+box(212,51,70,100)+`<path d="M40 70 H75 M 164 70 V 131 M 230 70 H264 V131" stroke="#b95b3d" stroke-width="7" fill="none"/>`+text(98,107,"+",20)+text(190,107,"=",20)+text(35,178,"Sheet A",12)+text(124,178,"Sheet B",12)+text(222,178,"Aligned",12);
+  if(d.art==="overlay") art=box(22,51,70,100)+box(112,51,70,100)+box(212,51,70,100)+`<path d="M40 70 H75 M 164 70 V 131 M 230 70 H264 V131" stroke="#B87650" stroke-width="7" fill="none"/>`+text(98,107,"+",20)+text(190,107,"=",20)+text(35,178,"Sheet A",12)+text(124,178,"Sheet B",12)+text(222,178,"Aligned",12);
   if(d.art==="match") art=text(29,30,"Keep the top row’s order",13)+["☾","☆","☼"].map((s,i)=>box(31+i*91,46,65,48)+text(63+i*91,79,s,28,'text-anchor="middle"')).join("")+text(32,139,"KEY:  ☼ = 7     ☾ = 4     ☆ = 2",16)+text(91,177,"4   ·   2   ·   7",23);
-  if(d.art==="uv") art=box(22,40,117,123)+box(170,40,117,123,"#17372d")+text(38,64,"Field note",13)+text(184,64,"Field note",13,'style="fill:#d0dac9"')+`<path d="M38 88 H118 M38 104 H112 M38 120 H117" stroke="#9aab92"/>`+text(227,130,"427",36,'style="fill:#cfef87" text-anchor="middle"')+text(37,184,"Daylight",12)+text(190,184,"UV light",12);
-  if(d.art==="meta") art=["4","2","7"].map((s,i)=>box(32+i*93,26,58,48)+text(61+i*93,59,s,25,'text-anchor="middle"')+`<path d="M${61+i*93} 78 L155 126" stroke="#859b7a" stroke-width="2" fill="none"/>`).join("")+box(97,126,116,53,"#17372d")+text(155,163,"427",31,'style="fill:#fff7e8" text-anchor="middle"');
+  if(d.art==="uv") art=box(22,40,117,123)+box(170,40,117,123,"#542C3B")+text(38,64,"Field note",13)+text(184,64,"Field note",13,'style="fill:#e8d5cb"')+`<path d="M38 88 H118 M38 104 H112 M38 120 H117" stroke="#bca7a5"/>`+text(227,130,"427",36,'style="fill:#F4EBDD" text-anchor="middle"')+text(37,184,"Daylight",12)+text(190,184,"UV light",12);
+  if(d.art==="meta") art=["4","2","7"].map((s,i)=>box(32+i*93,26,58,48)+text(61+i*93,59,s,25,'text-anchor="middle"')+`<path d="M${61+i*93} 78 L155 126" stroke="#bca7a5" stroke-width="2" fill="none"/>`).join("")+box(97,126,116,53,"#542C3B")+text(155,163,"427",31,'style="fill:#F4EBDD" text-anchor="middle"');
   if(d.art==="index") art=[['CAMP',3,'M'],['TRAIL',3,'A'],['ROPE',3,'P']].map(([word,index,letter],i)=>box(24,20+i*52,262,42)+text(38,48+i*52,word,19)+text(158,48+i*52,`[${index}]  →  ${letter}`,20)).join('');
-  if(d.art==="texture") art=[['FELT','2'],['RIDGES','4'],['SMOOTH','7']].map(([label,value],i)=>box(22+i*95,27,77,116)+text(60+i*95,165,label,11,'text-anchor="middle"')+text(60+i*95,185,value,16,'text-anchor="middle"')).join('')+Array.from({length:25},(_,i)=>`<circle cx="${32+i%5*12}" cy="${42+Math.floor(i/5)*19}" r="2" fill="#8c9f84"/>`).join('')+Array.from({length:6},(_,i)=>`<path d="M125 ${42+i*15} H182" stroke="#8c9f84" stroke-width="4"/>`).join('');
-  if(d.art==="shared") art=box(20,33,123,130)+box(167,33,123,130)+text(33,58,'FIELD NOTE',12)+text(180,58,'CATALOGUE',12)+text(33,97,'Specimen A',16)+text(33,127,'Triangle',16)+text(180,97,'Specimen A',16)+text(180,127,'Value: 4',16)+`<path d="M145 98 H165" stroke="#b95b3d" stroke-width="3"/>`;
-  if(d.art==="truth") art=text(22,28,'Exactly one claim is true',16)+text(112,55,'“red”',12)+text(189,55,'“not green”',12)+[['RED','T','T'],['BLUE','F','T'],['GREEN','F','F']].map(([name,a,b],i)=>box(20,66+i*38,270,33,i===1?'#d4dfc0':'#fbf7ee')+text(31,88+i*38,name,13)+text(123,88+i*38,a,15)+text(219,88+i*38,b,15)).join('');
+  if(d.art==="texture") art=[['FELT','2'],['RIDGES','4'],['SMOOTH','7']].map(([label,value],i)=>box(22+i*95,27,77,116)+text(60+i*95,165,label,11,'text-anchor="middle"')+text(60+i*95,185,value,16,'text-anchor="middle"')).join('')+Array.from({length:25},(_,i)=>`<circle cx="${32+i%5*12}" cy="${42+Math.floor(i/5)*19}" r="2" fill="#bca7a5"/>`).join('')+Array.from({length:6},(_,i)=>`<path d="M125 ${42+i*15} H182" stroke="#bca7a5" stroke-width="4"/>`).join('');
+  if(d.art==="shared") art=box(20,33,123,130)+box(167,33,123,130)+text(33,58,'FIELD NOTE',12)+text(180,58,'CATALOGUE',12)+text(33,97,'Specimen A',16)+text(33,127,'Triangle',16)+text(180,97,'Specimen A',16)+text(180,127,'Value: 4',16)+`<path d="M145 98 H165" stroke="#B87650" stroke-width="3"/>`;
+  if(d.art==="truth") art=text(22,28,'Exactly one claim is true',16)+text(112,55,'“red”',12)+text(189,55,'“not green”',12)+[['RED','T','T'],['BLUE','F','T'],['GREEN','F','F']].map(([name,a,b],i)=>box(20,66+i*38,270,33,i===1?'#e5cdbd':'#fcf8f1')+text(31,88+i*38,name,13)+text(123,88+i*38,a,15)+text(219,88+i*38,b,15)).join('');
   return `<svg viewBox="0 0 310 200" role="img" aria-label="${esc(d.caption)}">${art}</svg>`;
 }
 $("#gallery").innerHTML=demos.map(d=>`<article class="inspiration-card"><div class="illustration">${diagram(d)}<div class="diagram-caption">${esc(d.caption)}</div></div><div class="gallery-copy"><div class="card-kicker">${esc(byId.get(d.id).action)}</div><h3>${esc(d.verb)}</h3><p>${esc(d.note)}</p><button type="button" class="open-card" data-open="${d.id}">Explore ${esc(byId.get(d.id).n.toLowerCase())} ↗</button></div></article>`).join("");
