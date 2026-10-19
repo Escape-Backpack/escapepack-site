@@ -65,14 +65,12 @@ examples and a browser-local shortlist). It sits under `/design/`, which is publ
 ## Hiking online playtest
 
 `/play/hiking/` is packaged from the design repository's `Hiking_Trip/Digital/`
-(`index.html`, the three stylesheets, `game-data.js`, `clues.js`, `later.js`, `game.js`,
+(`index.html`, the stylesheets and presentation layer, `game-data.js`, `clues.js`, `later.js`, `game.js`,
 the 3D Lego puzzle modules `lego-*.js` / `lego3d.js` and `assets/`, which holds their
 Stud.io `.ldr` exports). Edit those, then run `node tools/build_hiking.cjs` from this repository
 (optional argument: another absolute path to that `Digital` folder). The script strips the
 design record from `index.html` (it lists every code), links the brand to the homepage,
-and checks that every referenced asset and imported module was copied. The 3D puzzles
-load Three.js from jsdelivr through the page's import map, so lock 7 needs a connection; the page
-fonts (Young Serif, Inter Tight) come from Google Fonts. The look follows the Norse playtest (DG-H24). Answers are checked locally and are
+and checks that every referenced asset and imported module was copied. The 3D props use a pinned local copy of Three.js 0.160.0 and its required addons in `vendor/three/` (MIT licence included). The optional page fonts come from Google Fonts, with system fallbacks. `experience.css` and `experience.js` supply the camp presentation, title and finale screens, visible progress, pause/settings, reduced motion and optional synthesised audio (off by default; preferences are browser-local). Play time pauses in the title screen and utility menus, when hidden, and after five minutes idle. The design record describes this presentation pass in DG-H40. Answers are checked locally and are
 inspectable in JavaScript. The design record is the source page opened with `?design=1`.
 
 ## Norse online playtest

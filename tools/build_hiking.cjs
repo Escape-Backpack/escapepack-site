@@ -4,8 +4,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const source = path.resolve(process.argv[2] || path.join(__dirname, '../../EscapeBackpack/Hiking_Trip/Digital'));
 const target = path.resolve(__dirname, '../play/hiking');
-const files = ['index.html', 'styles.css', 'clues.css', 'later.css', 'game-data.js', 'clues.js', 'later.js', 'game.js',
-  // Lock 7's 3D Lego puzzles, loaded on first use (Three.js itself comes from jsdelivr via the page's import map).
+const files = ['index.html', 'styles.css', 'clues.css', 'later.css', 'game-data.js', 'clues.js', 'later.js', 'game.js', 'experience.js', 'experience.css',
+  // Lock 7's 3D Lego puzzles, loaded on first use (Three.js is pinned locally in vendor/three via the page's import map).
   'lego-flat.js', 'lego-square.js', 'lego-puzzle.js', 'lego-sim.js', 'lego3d.js',
   // The 3D satellite (locks 4–5): real part shapes from a pack made by tools/pack-lego.mjs.
   'lego-model.js', 'lego-satellite.js',
@@ -22,6 +22,7 @@ for (const name of fs.readdirSync(path.join(source, 'assets'))) {
   if (stat.size > 25 * 1024 * 1024) throw new Error(`Asset exceeds hosting limit: ${name}`);
   fs.copyFileSync(path.join(source, 'assets', name), path.join(target, 'assets', name));
 }
+fs.cpSync(path.join(source, 'vendor'), path.join(target, 'vendor'), { recursive: true });
 for (const filename of files) {
   let text = fs.readFileSync(path.join(source, filename), 'utf8');
   if (filename === 'index.html') {
@@ -44,5 +45,14 @@ for (const name of referenced) if (!fs.existsSync(path.join(target, 'assets', na
 // Every module a packaged script imports (import('./x.js') or from './x.js') must be packaged too.
 for (const filename of files.filter(f => f.endsWith('.js'))) for (const [, name] of fs.readFileSync(path.join(target, filename), 'utf8').matchAll(/(?:import\(|from )'\.\/([\w.-]+\.js)'/g)) {
   if (!files.includes(name)) throw new Error(`${filename} imports ${name}; add it to the file list in build_hiking.cjs`);
+}
+// All import-map entries stay local, and required third-party modules and licence ship together.
+const html = fs.readFileSync(path.join(target, 'index.html'), 'utf8');
+const imports = JSON.parse(html.match(/<script type="importmap">(.*?)<\/script>/s)[1]).imports;
+for (const item of Object.values(imports)) {
+  if (!item.startsWith('./vendor/') || !fs.existsSync(path.resolve(target, item))) throw new Error(`Missing local import-map dependency: ${item}`);
+}
+for (const item of ['three.module.js', 'LICENSE', 'addons/controls/OrbitControls.js', 'addons/utils/BufferGeometryUtils.js']) {
+  if (!fs.existsSync(path.join(target, 'vendor/three', item))) throw new Error(`Missing Three.js dependency: ${item}`);
 }
 console.log(`Packaged Hiking online with ${fs.readdirSync(path.join(target, 'assets')).length} assets at ${target}`);

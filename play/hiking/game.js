@@ -1,6 +1,7 @@
 'use strict';
 (() => {
   const G = window.HikingGame, C = window.HikingClues, L = window.HikingLater, $ = id => document.getElementById(id);
+  const X = window.HikingExperience, experience = X.init();
   const KEY = 'escape-backpack.hiking-opening.v1', NS = 'http://www.w3.org/2000/svg';
   let state = G.fresh(), hadSave = false, scale = 1, zoom = 1, selected = 'bottle', inspected = null, z = 2, toastTimer;
   let compareId = '', bottle3d = null, bottleLoad = 0, anchor = null, draft = null, wordDown = null, wordMoved = false, savedFocused = null;
@@ -199,7 +200,7 @@
       bottle3d = null; const mine = id + (++bottleLoad);
       import('./bottle3d.js').then(m => m.mount(stage, { stickers: G.stickers, face: p.face, onFace: f => { if (piece(id).face !== f) { piece(id).face = f; save(); } } }))
         .then(h => { if ((inspected === id || compareId === id) && stage.isConnected && mine === id + bottleLoad) bottle3d = h; else h.dispose(); })
-        .catch(err => { console.error(err); stage.replaceChildren(el('p', 'bottle3d-status', 'The 3D bottle could not load. Check the internet connection, then close and reopen it.')); });
+        .catch(err => { console.error(err); stage.replaceChildren(el('p', 'bottle3d-status', 'The 3D bottle could not load. Close and reopen it, or try reloading the game. Your saved progress will stay.')); });
       return view;
     }
     if (id === 'note') { const view = el('div', 'note-view'); view.append(note(p.face)); return view; }
@@ -329,6 +330,7 @@
     w.querySelector('.prev').textContent = set[(v + n - 1) % n]; w.querySelector('.cur').textContent = set[v]; w.querySelector('.next').textContent = set[(v + 1) % n];
     w.setAttribute('aria-valuenow', v); w.setAttribute('aria-valuemin', 0); w.setAttribute('aria-valuemax', n - 1); w.setAttribute('aria-valuetext', set[v]);
     if (dir) { w.style.setProperty('--dir', dir > 0 ? '10px' : '-10px'); w.classList.remove('spin'); void w.offsetWidth; w.classList.add('spin'); }
+    if (dir) experience.cue('wheel');
     $('combination').value = dialVals.map((k, j) => dialChars[j][k]).join('');
   }
   function turnWheel(i, d) {
@@ -378,24 +380,25 @@
     }
     [...$('progress').children].forEach((node, i) => {
       const status = i < state.stage ? 'Opened' : i === state.stage ? 'Your next lock' : 'Locked';
+      if (i === state.stage) node.setAttribute('aria-current', 'step'); else node.removeAttribute('aria-current');
       node.className = i < state.stage ? 'done' : i === state.stage ? 'current' : ''; node.title = `Lock ${i + 1} · ${G.locks[i].name} · ${status}`;
       node.querySelector('.step-number').textContent = i < state.stage ? '✓' : i + 1; node.querySelector('small').textContent = ` · ${status}`;
     });
-    $('lock-panel').hidden = state.stage >= G.locks.length; $('complete').hidden = state.stage < G.locks.length; $('complete-time').textContent = `Your time: ${G.duration(state.played)}.`; drawTimer();
+    $('lock-panel').hidden = state.stage >= G.locks.length; $('complete').hidden = state.stage < G.locks.length; renderEnding(); drawTimer();
     if (state.stage < G.locks.length) {
       const lock = G.locks[state.stage]; $('lock-number').textContent = `LOCK ${String(state.stage + 1).padStart(2, '0')}`; $('lock-name').textContent = lock.name;
       $('lock-prompt').textContent = lock.prompt;
       $('combination-label').textContent = `${lock.answer.length === 4 ? 'FOUR' : 'THREE'}-${lock.letters ? 'LETTER' : 'DIGIT'} COMBINATION`;
       if (dialStage !== state.stage) { buildDial(lock.answer.length, !!lock.letters); dialStage = state.stage; $('padlock').classList.remove('unlocked', 'wrong'); }
     }
-    drawHints();
+    drawHints(); experience.progress(state, G.locks);
   }
   // Opening a lock: a banner over the table (it never blocks play) with a 1–5 star rating, kept in the save and reported.
   const track = (name, props = {}) => { try { window.zaraz?.track?.(name, { game: 'hiking-online', ...props }); } catch (_) { /* analytics never blocks play */ } };
   let bannerTimer;
   function showBanner(lock, title, text) {
     $('banner-title').textContent = title; $('banner-text').textContent = text; $('unlock-banner').hidden = false;
-    const rate = $('rate'); rate.querySelectorAll('button').forEach(b => b.remove());
+    const rate = $(lock === G.locks.length ? 'final-rate' : 'rate'); rate.querySelectorAll('button').forEach(b => b.remove());
     for (let n = 1; n <= 5; n++) {
       const b = button('★', () => {
         state.ratings[lock - 1] = n; save(); track('puzzle_rated', { lock, rating: n, hints: state.hints[lock - 1], seconds: Math.round(state.lockTime[lock - 1] / 1000) });
@@ -404,7 +407,7 @@
       });
       b.setAttribute('aria-label', `${n} of 5`); b.setAttribute('aria-pressed', String(state.ratings[lock - 1] === n)); b.classList.toggle('on', n <= state.ratings[lock - 1]); rate.append(b);
     }
-    track('lock_opened', { lock, hints: state.hints[lock - 1], seconds: Math.round(state.lockTime[lock - 1] / 1000) });
+    track('lock_opened', { lock, hints: state.hints[lock - 1], tries: state.attempts[lock - 1].length, seconds: Math.round(state.lockTime[lock - 1] / 1000) });
     if (lock === G.locks.length) track('game_completed', { minutes: Math.round(state.played / 60000) });
     clearTimeout(bannerTimer); bannerTimer = setTimeout(hideBanner, 16000);
   }
@@ -412,18 +415,26 @@
   $('banner-close').addEventListener('click', hideBanner);
   let opening = false;
   $('lock-form').addEventListener('submit', async event => {
-    event.preventDefault(); if (opening) return; const value = $('combination').value;
+    event.preventDefault(); if (opening || state.stage >= G.locks.length) return; const value = $('combination').value;
+    const before = new Set(G.available(state.stage, state.found));
     if (!G.unlock(state, value)) {
+      const log = state.attempts[state.stage]; if (value && !log.includes(value) && log.length < 30) { log.push(value.slice(0, 12)); save(); }
+      experience.cue('wrong');
       $('lock-message').textContent = 'Still locked. Take another look at your clues.'; $('lock-message').className = 'error';
       const pad = $('padlock'); pad.classList.remove('wrong'); void pad.offsetWidth; pad.classList.add('wrong'); return;
     }
-    opening = true; $('padlock').classList.add('unlocked'); $('lock-message').className = ''; $('lock-message').textContent = 'Click! The lock springs open.';
-    await new Promise(r => setTimeout(r, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 420)); opening = false;
+    experience.cue(state.stage === G.locks.length ? 'finish' : 'unlock');
+    opening = true; $('lock-form').querySelector('[type=submit]').disabled = true; $('padlock').classList.add('unlocked'); $('lock-message').className = ''; $('lock-message').textContent = 'Click! The lock springs open.';
+    await new Promise(r => setTimeout(r, experience.motion() ? 420 : 0)); opening = false;
     const opened = G.locks[state.stage - 1];
     const tidied = state.tidied;
     $('combination').value = ''; $('lock-message').textContent = ''; $('lock-message').className = ''; selected = opened.selected; drawTable(); drawProgress(); save();
     if (tidied) toast('The table was rearranged to make room for the new items.');
+    $('lock-form').querySelector('[type=submit]').disabled = false;
+    experience.reveal(G.available(state.stage, state.found).filter(id => !before.has(id)));
     showBanner(state.stage, opened.title, opened.message);
+    if (state.stage === G.locks.length) { hideBanner(); $('ending-dialog').showModal(); experience.setActive(false); }
+    else $('lock-name').focus({ preventScroll: true });
   });
   $('notes').value = state.notes; $('notes').addEventListener('input', () => { state.notes = $('notes').value; save(); });
   $('close-finds').addEventListener('click', () => $('finds-dialog').close());
@@ -444,8 +455,9 @@
   $('game-btn').addEventListener('click', e => { e.stopPropagation(); const open = $('game-menu').hidden; $('game-menu').hidden = !open; $('game-btn').setAttribute('aria-expanded', String(open)); });
   $('game-menu').addEventListener('click', closeMenu);
   document.addEventListener('click', e => { if (!e.target.closest('.menu-wrap')) closeMenu(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('game-menu').hidden) { closeMenu(); $('game-btn').focus(); } });
-  $('how-to').addEventListener('click', () => $('intro').showModal()); $('begin').addEventListener('click', () => { $('intro').close(); save(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('game-menu').hidden) { e.preventDefault(); closeMenu(); $('game-btn').focus(); } });
+  $('how-to').addEventListener('click', () => $('intro').showModal()); $('begin').addEventListener('click', () => { $('intro').close(); lastTick = lastInput = Date.now(); experience.setActive(state.stage < G.locks.length, true); drawTimer(); save(); });
+  $('intro').addEventListener('cancel', event => { event.preventDefault(); $('begin').click(); });
   $('restart').addEventListener('click', () => $('restart-dialog').showModal());
   $('restart-confirm').addEventListener('click', () => { hideBanner(); noteOpen = false; state = G.fresh(); selected = 'bottle'; $('notes').value = ''; $('combination').value = ''; $('lock-message').textContent = ''; $('restart-dialog').close(); dialStage = null; drawTable(); drawProgress(); save(); $('intro').showModal(); });
   document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => b.closest('dialog').close()));
@@ -465,7 +477,7 @@
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && $('inspector').open && (anchor || wordDown)) { event.preventDefault(); anchor = draft = wordDown = null; showLines(); $('word-status').textContent = 'Selection cancelled.'; return; }
     if (event.defaultPrevented || /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName) || event.ctrlKey || event.metaKey || event.altKey) return;
-    if (document.querySelector('dialog[open]')) { if ($('inspector').open && event.key.toLowerCase() === 'f') { event.preventDefault(); turn(inspected); } if ($('inspector').open && event.key.toLowerCase() === 'n') { event.preventDefault(); setNoteOpen(!noteOpen); } return; }
+    if (document.querySelector('dialog[open]')) { if ($('inspector').open && event.key.toLowerCase() === 'f') { event.preventDefault(); turn(inspected); } if ($('inspector').open && event.key.toLowerCase() === 'n') { event.preventDefault(); setNoteOpen(!noteOpen); } if ($('inspector').open && event.key.toLowerCase() === 'm') { event.preventDefault(); setLens(!lensOn); } return; }
     if (event.key.toLowerCase() === 'f') { event.preventDefault(); turn(selected); }
     if (event.key.toLowerCase() === 'r') { event.preventDefault(); rotate(); }
     if (event.key === 'Enter' && document.activeElement?.classList.contains('prop')) { event.preventDefault(); inspect(selected); }
@@ -477,16 +489,31 @@
      Counted only while the page is visible and someone has touched it in the last five minutes, so a game left open or in
      another tab does not run up the clock. It stops at the last lock. Kept per lock in the save. */
   let lastInput = Date.now(), lastTick = Date.now(), idle = false;
+  const clockRunning = () => X.clockRuns({ hidden: document.visibilityState !== 'visible', idle, title: $('intro').open, paused: ['pause-dialog', 'save-dialog', 'restart-dialog', 'feedback-dialog', 'ending-dialog', 'design-notes'].some(id => $(id)?.open), done: state.stage >= G.locks.length });
+  function openPause() { hideTools(); dropTip(); save(); $('pause-dialog').showModal(); experience.setActive(false); drawTimer(); }
+  $('pause-button').addEventListener('click', openPause);
+  $('menu-settings').addEventListener('click', openPause);
+  $('resume-button').addEventListener('click', () => $('pause-dialog').close());
+  $('pause-dialog').addEventListener('close', () => { lastTick = lastInput = Date.now(); experience.setActive(clockRunning(), true); drawTimer(); });
+  $('pause-save').addEventListener('click', () => { $('pause-dialog').close(); $('save-copy').click(); });
+  $('pause-help').addEventListener('click', () => { $('pause-dialog').close(); $('how-to').click(); });
+  $('menu-help').addEventListener('click', () => $('how-to').click());
+  $('ending-return').addEventListener('click', () => $('ending-dialog').close());
+  $('ending-copy').addEventListener('click', () => $('copy-result').click());
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !e.defaultPrevented && !document.querySelector('dialog[open]') && $('game-menu').hidden && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName)) { e.preventDefault(); openPause(); }
+  });
   for (const type of ['pointerdown', 'keydown', 'wheel', 'pointermove']) document.addEventListener(type, () => { lastInput = Date.now(); }, { passive: true, capture: true });
   function drawTimer() {
     $('timer-text').textContent = G.clock(state.played);
-    const done = state.stage >= G.locks.length, paused = !done && (idle || document.visibilityState !== 'visible');
+    const done = state.stage >= G.locks.length, paused = !done && !clockRunning();
     $('timer-state').textContent = done ? 'done' : paused ? 'paused' : ''; $('timer').classList.toggle('paused', paused); $('timer').classList.toggle('done', done);
   }
   function tickTimer() {
     const now = Date.now(), dt = Math.min(now - lastTick, 5000); lastTick = now;
     idle = now - lastInput > 300000;
-    if (document.visibilityState === 'visible' && !idle && state.stage < G.locks.length) { state.played += dt; state.lockTime[state.stage] += dt; if (++tickCount % 15 === 0) save(); }
+    experience.setActive(clockRunning());
+    if (clockRunning()) { state.played += dt; state.lockTime[state.stage] += dt; if (++tickCount % 15 === 0) save(); }
     drawTimer();
   }
   let tickCount = 0;
@@ -563,6 +590,50 @@
   });
   $('inspector').addEventListener('close', () => { noteOpen = false; $('inspect-note').hidden = true; });
 
+  /* ---------- Magnifier: a lens that follows the pointer over a close-up (papers and drawings; not the 3D items) ----------
+     It shows a scaled copy of the close-up, kept up to date as the page changes. Scroll over the page for strength. */
+  let lensOn = false, lensEl = null, lensZoom = 2.5, lensPoint = null, lensTimer = null, lensWatch = null;
+  const LENS = 190;
+  function lensRefresh() {
+    if (!lensOn || !lensEl) return;
+    const src = $('inspector-content'), clone = src.cloneNode(true); clone.removeAttribute('id'); clone.classList.add('lens-clone');
+    clone.style.width = `${src.clientWidth}px`; clone.style.height = `${src.clientHeight}px`;
+    const from = [src, ...src.querySelectorAll('*')], to = [clone, ...clone.querySelectorAll('*')];
+    from.forEach((n, i) => {
+      const c = to[i]; if (!c) return;
+      if (n.scrollTop || n.scrollLeft) { c.dataset.st = n.scrollTop; c.dataset.sl = n.scrollLeft; }
+      if (/^(INPUT|TEXTAREA|SELECT)$/.test(n.tagName)) c.value = n.value;
+      if (n.tagName === 'CANVAS') c.remove();
+    });
+    lensEl.replaceChildren(clone);
+    clone.querySelectorAll('[data-st]').forEach(n => { n.scrollTop = +n.dataset.st; n.scrollLeft = +n.dataset.sl; }); if (clone.dataset.st) { clone.scrollTop = +clone.dataset.st; clone.scrollLeft = +clone.dataset.sl; }
+    lensPlace();
+  }
+  function lensPlace() {
+    if (!lensEl) return;
+    const src = $('inspector-content'), r = src.getBoundingClientRect(), p = lensPoint, clone = lensEl.firstChild;
+    const inside = p && p.x >= r.left && p.x <= r.right && p.y >= r.top && p.y <= r.bottom;
+    lensEl.hidden = !inside; if (!inside || !clone) return;
+    lensEl.style.left = `${p.x - LENS / 2}px`; lensEl.style.top = `${p.y - LENS / 2}px`;
+    clone.style.transform = `translate(${LENS / 2 - (p.x - r.left) * lensZoom}px, ${LENS / 2 - (p.y - r.top) * lensZoom}px) scale(${lensZoom})`;
+  }
+  function lensLater() { clearTimeout(lensTimer); lensTimer = setTimeout(lensRefresh, 120); }
+  function setLens(on) {
+    if (on && $('inspector-content').querySelector('canvas')) { toast('The magnifier works on papers and drawings. For the 3D items, drag to turn them and scroll to zoom.'); on = false; }
+    lensOn = on; $('inspect-lens').setAttribute('aria-pressed', String(on)); $('inspector-content').classList.toggle('lens-on', on);
+    lensWatch?.disconnect(); lensWatch = null; lensEl?.remove(); lensEl = null;
+    if (!on) return;
+    lensEl = el('div', 'lens'); lensEl.hidden = true; lensEl.setAttribute('aria-hidden', 'true'); $('inspector').append(lensEl);
+    lensWatch = new MutationObserver(lensLater); lensWatch.observe($('inspector-content'), { subtree: true, childList: true, attributes: true, characterData: true });
+    lensRefresh();
+  }
+  $('inspect-lens').addEventListener('click', () => setLens(!lensOn));
+  $('inspector').addEventListener('pointermove', e => { lensPoint = { x: e.clientX, y: e.clientY }; if (lensOn) lensPlace(); });
+  $('inspector').addEventListener('pointerleave', () => { lensPoint = null; if (lensOn) lensPlace(); });
+  $('inspector-content').addEventListener('scroll', lensLater, true); $('inspector-content').addEventListener('input', lensLater, true);
+  $('inspector-content').addEventListener('wheel', e => { if (!lensOn) return; e.preventDefault(); lensZoom = Math.min(6, Math.max(1.5, lensZoom * (e.deltaY < 0 ? 1.15 : 1 / 1.15))); lensRefresh(); }, { passive: false });
+  $('inspector').addEventListener('close', () => setLens(false));
+
   /* ---------- First-time tips: a short pointer at a time, each with "Got it" and "No more tips" ---------- */
   const TIPS_KEY = 'escape-backpack.hiking-tips.v1';
   let tipsSeen = new Set(), tipEl = null;
@@ -589,9 +660,46 @@
   document.addEventListener('pointerdown', e => { if (tipEl && !e.target.closest('.tip')) dropTip(); });
   renderItemNotes(); markNotes();
 
+  /* ---------- The ending and feedback (sent to the same Formspree form as the site's feedback page) ---------- */
+  const FORMSPREE = 'https://formspree.io/f/xaqavoan';
+  const totalHints = () => state.hints.reduce((a, b) => a + b, 0), totalTries = () => state.attempts.reduce((a, l) => a + l.length, 0);
+  const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+  function renderEnding() {
+    const stats = [['Time', G.duration(state.played)], ['Hints', String(totalHints())], ['Wrong tries', String(totalTries())], ['Locks', `${state.stage} of ${G.locks.length}`]];
+    $('ending-stats').replaceChildren(...stats.flatMap(([k, v]) => [el('dt', '', k), el('dd', '', v)]));
+  }
+  function statsText() {
+    const lines = G.locks.map((l, i) => i < state.stage ? `Lock ${i + 1} (${l.name}): ${G.duration(state.lockTime[i])}, ${plural(state.hints[i], 'hint', 'hints')}, ${plural(state.attempts[i].length, 'wrong try', 'wrong tries')}, rated ${state.ratings[i] || '–'}/5` : null).filter(Boolean);
+    const now = state.stage < G.locks.length ? `Now on lock ${state.stage + 1} (${G.duration(state.lockTime[state.stage])} so far, ${plural(state.hints[state.stage], 'hint', 'hints')}, ${plural(state.attempts[state.stage].length, 'wrong try', 'wrong tries')})` : 'Finished';
+    return [`${state.stage}/${G.locks.length} locks · ${G.duration(state.played)} played · ${innerWidth}×${innerHeight}${matchMedia('(pointer: coarse)').matches ? ' touch' : ''}`, ...lines, now].join('\n');
+  }
+  function openFeedback() { $('fb-result').textContent = ''; $('fb-send').disabled = false; $('feedback-dialog').showModal(); $('fb-message').focus(); }
+  $('feedback-top').addEventListener('click', openFeedback); $('open-feedback-end').addEventListener('click', openFeedback);
+  $('review-table').addEventListener('click', () => $('table-frame').scrollIntoView({ block: 'center' }));
+  $('copy-result').addEventListener('click', async () => {
+    const text = `The Hiking Backpack · ${state.stage}/${G.locks.length} locks · ${G.duration(state.played)} · ${plural(totalHints(), 'hint', 'hints')}\nescapepack.ca/play/hiking/`;
+    try { await navigator.clipboard.writeText(text); toast('Copied. Paste it wherever you like: no answers are included.'); } catch (_) { toast(text); }
+  });
+  $('feedback-form').addEventListener('submit', async e => {
+    e.preventDefault(); if (!$('feedback-form').reportValidity()) return;
+    const body = { game: 'hiking-online', rating: $('fb-rating').value, email: $('fb-email').value.trim(), _subject: 'The Hiking Backpack · online playtest feedback',
+      message: $('fb-message').value.trim() + ($('fb-stats').checked ? `\n\n--- Game stats ---\n${statsText()}` : '') };
+    $('fb-send').disabled = true; $('fb-result').textContent = 'Sending…';
+    try {
+      const r = await fetch(FORMSPREE, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body) });
+      if (!r.ok) throw new Error(r.status === 429 ? 'busy' : 'failed');
+      track('feedback_submitted', { rating: body.rating || 'none' });
+      $('fb-result').textContent = 'Thank you. It’s on its way to us.'; $('feedback-form').reset(); setTimeout(() => $('feedback-dialog').close(), 1800);
+    } catch (err) { $('fb-result').textContent = err.message === 'busy' ? 'Too many messages right now. Please try again in a minute.' : 'We couldn’t send it. Check your connection and try again.'; $('fb-send').disabled = false; }
+  });
+  // Utility menus pause immediately; the item inspector remains part of play time.
+  const menuObserver = new MutationObserver(() => { lastTick = lastInput = Date.now(); experience.setActive(clockRunning()); drawTimer(); });
+  for (const id of ['intro', 'pause-dialog', 'save-dialog', 'restart-dialog', 'feedback-dialog', 'ending-dialog', 'design-notes']) {
+    if ($(id)) menuObserver.observe($(id), { attributes: true, attributeFilter: ['open'] });
+  }
   new ResizeObserver(fit).observe($('table-frame'));
   drawTable(); drawProgress();
   if (new URLSearchParams(location.search).get('design') === '1' && $('design-notes')) { $('design-notes').showModal(); $('design-notes').scrollTop = 0; }
-  else if (!hadSave) $('intro').showModal();
-  else save();
+  else { $('intro').showModal(); if (hadSave) save(); }
+  drawTimer();
 })();
