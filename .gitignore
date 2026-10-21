@@ -5,6 +5,7 @@ __pycache__/
 .build/
 /design/*
 !/design/clues/
+!/design/norse-box/
 !/design/index.template.html
 /help/*/hints/
 !/help/hiking/hints/
