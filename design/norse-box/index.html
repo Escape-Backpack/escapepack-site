@@ -8,11 +8,11 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,"Segoe UI",sans-serif}
 .wrap{display:grid;grid-template-columns:150px 1fr;max-width:1300px;margin:0 auto}
-nav{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;padding:16px 10px;border-right:1px solid var(--rule)}
-nav a{display:block;padding:5px 8px;border-radius:6px;color:var(--ink);text-decoration:none;font-size:14px}
-nav a:hover{background:var(--spoil)}
-nav a b{display:inline-block;min-width:1.6em;color:var(--accent)}
-nav a span{color:var(--mute);font-size:12px;letter-spacing:.05em}
+.wrap>nav{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;padding:16px 10px;border-right:1px solid var(--rule)}
+.wrap>nav a{display:block;padding:5px 8px;border-radius:6px;color:var(--ink);text-decoration:none;font-size:14px}
+.wrap>nav a:hover{background:var(--spoil)}
+.wrap>nav a b{display:inline-block;min-width:1.6em;color:var(--accent)}
+.wrap>nav a span{color:var(--mute);font-size:12px;letter-spacing:.05em}
 main{padding:0 24px 80px;min-width:0}
 .top{padding:28px 0 10px}
 .top h1{margin:0;font-size:30px}
@@ -58,7 +58,7 @@ details.spoiler>div p{margin:6px 0}
 .sol{margin-top:10px}
 .code{padding:8px 12px;border-radius:8px;background:var(--bg)}
 code{background:var(--spoil);padding:0 4px;border-radius:4px}
-nav a.navcost{margin-top:8px;border-top:1px solid var(--rule);border-radius:0 0 6px 6px}
+.wrap>nav a.navcost{margin-top:8px;border-top:1px solid var(--rule);border-radius:0 0 6px 6px}
 .tbl{overflow-x:auto}
 table.cost{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
 table.cost th,table.cost td{padding:5px 8px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:middle}
@@ -91,10 +91,52 @@ details.plan{border:1px solid var(--rule);border-radius:10px;margin:10px 0;backg
 details.plan>summary{cursor:pointer;padding:10px 14px;font-weight:600}
 details.plan>div{padding:0 16px 10px}
 h3.plan-h{font-size:16px}
-@media(max-width:760px){.wrap{display:block}nav{display:none}main{padding:0 14px 60px}}
-@media print{nav,.bar{display:none}.wrap{display:block}details.spoiler:not([open])>div{display:block}.env{break-inside:avoid-page}}
+@media(max-width:760px){.wrap{display:block}.wrap>nav{display:none}main{padding:0 14px 60px}}
+@media print{.wrap>nav,.bar{display:none}.wrap{display:block}details.spoiler:not([open])>div{display:block}.env{break-inside:avoid-page}}
+</style><meta name="theme-color" content="#17372d">
+<link rel="icon" type="image/png" href="../../assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../site.css?v=4"><link rel="stylesheet" href="../../site-pages.css?v=4"><link rel="stylesheet" href="../../site-dark.css?v=4">
+<script>try{var t=localStorage.getItem("ebp-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script><script src="/theme.js?v=4" defer></script>
+<style>
+:root{--bg:var(--paper);--card:#fffaf1;--ink:#20392e;--mute:#566d5c;--rule:rgba(32,57,46,.17);--accent:#963f29;--rust:#a54c32;--spoil:#eae0d0;--btn:#17372d}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--card:#1f4639;--ink:#f7f1e6;--mute:#c5d3c8;--rule:rgba(247,241,230,.16);--accent:#e58f6e;--rust:#e58f6e;--spoil:#1b4033;--btn:#f7f1e6}}
+:root[data-theme="dark"]{--card:#1f4639;--ink:#f7f1e6;--mute:#c5d3c8;--rule:rgba(247,241,230,.16);--accent:#e58f6e;--rust:#e58f6e;--spoil:#1b4033;--btn:#f7f1e6}
+:root[data-theme="light"]{--bg:var(--paper);--card:#fffaf1;--ink:#20392e;--mute:#566d5c;--rule:rgba(32,57,46,.17);--accent:#963f29;--rust:#a54c32;--spoil:#eae0d0;--btn:#17372d}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink)}
+.wrap{width:min(1180px,calc(100% - 48px));max-width:none}
+main{padding-left:28px}
+.bar{background:var(--paper)}
+h1,h2,h3,.top h1{font-family:var(--serif);font-weight:400;letter-spacing:-.02em}
+.top h1{font-size:clamp(34px,4.4vw,58px);line-height:1.1;white-space:normal}
+h3.inside,h5{font-family:var(--mono);font-weight:500;letter-spacing:.14em}
+h4{font-family:var(--sans);font-weight:700}
+.env,.prop,.logic,.chip,.noimg,figure img,.tbl table,button,details.plan,.st,input{border-radius:0!important}
+.env{background:var(--card)}
+.env>header{align-items:flex-start}
+.prop{background:var(--paper)}
+.num{border-radius:0;background:var(--btn);color:var(--paper);font-family:var(--serif);font-weight:400}
+button{border-color:var(--btn);color:var(--btn);font-weight:600}
+button:hover,.tabs button[aria-selected=true]{background:var(--btn);color:var(--paper)}
+.tabs button[aria-selected=true]{background:var(--btn);color:var(--paper)}
+nav a:hover{background:var(--spoil)}
+.wrap>nav{border-right:1px solid var(--rule)}
+a{color:var(--accent);text-underline-offset:3px}
+.site-header a,.site-footer a{color:inherit}
+.site-header .main-nav{display:flex}
+.breadcrumb{margin:30px 0 14px;font:500 12px var(--mono)}
+.breadcrumb a{color:inherit}
+.design-warning{margin:0 0 6px}
+:root[data-theme="dark"] .design-warning,:root:not([data-theme="light"]) .design-warning{}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .design-warning{background:#3a2a24}}
+:root[data-theme="dark"] .design-warning{background:#3a2a24}
+.container.pagehead{padding-top:0}
+@media(max-width:760px){.wrap{width:min(100% - 32px,520px)}main{padding-left:0}}
 </style></head><body>
-<div class="wrap"><nav>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../../index.html" aria-label="Escape Backpack home"><span class="brand-mark" aria-hidden="true"></span><span>Escape<br><strong>Backpack</strong></span></a><nav class="main-nav" aria-label="Main navigation"><a href="../../index.html#adventures">Adventures</a><a href="../../index.html#how-it-works">How it works</a><a class="nav-help" href="../../help/">Hints &amp; reset ↗</a><a href="../../borrow.html">Borrow a backpack</a></nav></div></header>
+<div class="wrap" id="main"><nav>
 <a href="#box" data-tab="design">The box</a>
 <a href="#env1" data-tab="design"><b>1</b> <span>ᚷᛉᚦᛉ</span></a>
 <a href="#env2" data-tab="design"><b>2</b> <span>ᛉᛖᚠᛁ</span></a>
@@ -117,8 +159,11 @@ h3.plan-h{font-size:16px}
 <a href="#plan" data-tab="next"><b>…</b> Full plan</a>
 </nav>
 <main>
+<div class="breadcrumb"><a href="../index.html">Design studio</a><span aria-hidden="true"> / </span><span>Norse box</span></div>
+<p class="eyebrow">Behind the scenes</p>
+<div class="design-warning" role="note"><strong>Spoiler warning.</strong> Every puzzle, answer and solution of The Raven Inheritance is on this page. If you might play this backpack, turn back now.</div>
 <div class="top"><h1>Norse Backpack · The Raven Inheritance: the full adventure</h1>
-<p>Designer copy with spoilers. <b>Design:</b> envelope by envelope, what is inside, the puzzle that opens it, its logic, hints and solution (13 envelopes). <b>Production:</b> components, print costs, how it gets made. <b>Next steps:</b> playtesting, quotes, launch plan. Built from the records, 2026-10-21 16:59.</p></div>
+<p>Designer copy with spoilers. <b>Design:</b> envelope by envelope, what is inside, the puzzle that opens it, its logic, hints and solution (13 envelopes). <b>Production:</b> components, print costs, how it gets made. <b>Next steps:</b> playtesting, quotes, launch plan. Built from the records, 2026-10-21 17:26.</p></div>
 <div class="tabs" role="tablist"><button data-go="design" role="tab">Design</button><button data-go="production" role="tab">Production</button><button data-go="next" role="tab">Next steps</button></div>
 <div class="bar" id="designbar"><button id="open">Open all hints and solutions</button><button id="close">Close all</button>
 <span class="mute" style="color:var(--mute);font-size:13px">Hints and solutions are folded until you open them.</span></div>
@@ -763,7 +808,7 @@ h3.plan-h{font-size:16px}
 </main></div>
 <script>
 (function(){
-var tabs=document.querySelectorAll('.tab'),btns=document.querySelectorAll('.tabs button'),links=document.querySelectorAll('nav a'),bar=document.getElementById('designbar');
+var tabs=document.querySelectorAll('.tab'),btns=document.querySelectorAll('.tabs button'),links=document.querySelectorAll('.wrap>nav a'),bar=document.getElementById('designbar');
 function show(name){tabs.forEach(function(t){t.hidden=t.getAttribute('data-tab')!==name});
   btns.forEach(function(b){b.setAttribute('aria-selected',b.getAttribute('data-go')===name)});
   links.forEach(function(a){a.style.display=a.getAttribute('data-tab')===name?'':'none'});
@@ -850,4 +895,5 @@ document.getElementById('cost-clear').onclick=function(){if(!confirm('Put back t
   radios.forEach(function(r){r.checked=(r.value==='boxA')});calc();msg.textContent='Quoted prices restored.'};
 calc();
 })();
-</script></body></html>
+</script><footer class="site-footer"><div class="container footer-inner"><span>Escape Backpack · Ottawa</span><div><a href="../../index.html">Home</a><a href="../../help/">Hints &amp; reset</a><a href="../../feedback.html">Feedback</a></div></div></footer>
+</body></html>
