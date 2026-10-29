@@ -78,3 +78,9 @@ CREATE TABLE IF NOT EXISTS presence (
   bp TEXT NOT NULL, name TEXT NOT NULL, viewing TEXT, at INTEGER NOT NULL,
   PRIMARY KEY (bp, name)
 );
+
+-- Shared values for single pages (the Norse print-costs page): one row per field the page saved.
+CREATE TABLE IF NOT EXISTS page_data (
+  page TEXT NOT NULL, k TEXT NOT NULL, v TEXT NOT NULL, by_name TEXT NOT NULL, at TEXT NOT NULL,
+  PRIMARY KEY (page, k)
+);

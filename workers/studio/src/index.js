@@ -28,6 +28,7 @@ import { texts, commit } from "./github.js";
 
 const KIT_REPO = "Escape-Backpack/backpack-kit";
 const BUREAU_REPO = "Escape-Backpack/Cryptic-Bureau", BUREAU_FILES = ["ROADMAP.md", "Bureau_Bible.md"];
+const PAGE_DATA = ["norse-costs"];   // pages that may keep shared values at /studio/api/page-data/<page>
 const MAX_BODY = 200_000, MAX_FILE = 20_000_000;
 
 class HttpError extends Error { constructor(status, message, extra) { super(message); this.status = status; this.extra = extra; } }
@@ -79,6 +80,32 @@ async function route(request, env, url, who) {
     }
     return json({ email: who.email, name: await nameOf(env, who) });
   }
+  // Small shared key/value store for single pages (the Norse print-costs page). Signed-in people only (Access).
+  let pd = path.match(/^\/page-data\/([a-z0-9-]+)$/);
+  if (pd) {
+    if (!PAGE_DATA.includes(pd[1])) fail(404, "no such page");
+    if (method === "GET") {
+      const { results } = await env.DB.prepare("SELECT k, v, by_name, at FROM page_data WHERE page = ?").bind(pd[1]).all();
+      const data = {}; let at = "";
+      for (const r of results) { data[r.k] = r.v; if (r.at > at) at = r.at; }
+      return json({ data, count: results.length, at });
+    }
+    if (method === "PATCH") {
+      const b = await body(request), set = b.set || {}, del = Array.isArray(b.del) ? b.del : [];
+      const keys = Object.keys(set);
+      if (keys.length + del.length > 600) fail(413, "too many keys");
+      const ok = k => typeof k === "string" && k.length > 0 && k.length <= 120;
+      if (!keys.every(ok) || !del.every(ok) || !keys.every(k => typeof set[k] === "string" && set[k].length <= 4000)) fail(400, "bad keys or values");
+      const by = await nameOf(env, who) || who.email, at = now();
+      const up = env.DB.prepare("INSERT INTO page_data (page, k, v, by_name, at) VALUES (?, ?, ?, ?, ?) ON CONFLICT(page, k) DO UPDATE SET v = excluded.v, by_name = excluded.by_name, at = excluded.at");
+      const rm = env.DB.prepare("DELETE FROM page_data WHERE page = ? AND k = ?");
+      const batch = [...keys.map(k => up.bind(pd[1], k, set[k], by, at)), ...del.map(k => rm.bind(pd[1], k))];
+      if (batch.length) await env.DB.batch(batch);
+      return json({ ok: true, saved: keys.length, removed: del.length, at });
+    }
+    fail(405, "method not allowed");
+  }
+
   const name = await nameOf(env, who);
   if (!name) fail(403, "name needed", { needName: true });
 
