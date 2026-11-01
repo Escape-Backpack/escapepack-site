@@ -1,13 +1,13 @@
 /* Package the Leif pilot's player files only. No design pages or solution PDFs.
-   Run: node tools/build_leif.cjs [path/to/EscapeBackpack/NorseBackpack/Digital] */
+   Run: node tools/build_leif.cjs [path/to/Norse-Expedition/Digital] */
 const fs = require('node:fs');
 const path = require('node:path');
-const source = path.resolve(process.argv[2] || path.join(__dirname, '../../EscapeBackpack/NorseBackpack/Digital'));
+const source = path.resolve(process.argv[2] || path.join(__dirname, '../../Norse-Expedition/Digital'));
 const target = path.resolve(__dirname, '../play/norse/leif');
 const game = require(path.join(source, 'leif-data.js'));
 const assetPaths = new Set(Object.values(game.items).flatMap(item => item.faces || []));
 assetPaths.add('../Props/_Renders/Luggage_Tag_Inserts_Sheet.png');
-assetPaths.add('../../Fonts/Cinzel/Cinzel-VariableFont_wght.ttf');
+assetPaths.add('../Fonts/Cinzel/Cinzel-VariableFont_wght.ttf');
 assetPaths.add('./assets/Caveat-Medium.woff2'); // Liv's handwriting font (SIL OFL); its licence is shipped with it
 assetPaths.add('./assets/Caveat-OFL.txt');
 assetPaths.add('./assets/Raven_Postmark.png'); // the opening letter's postmark
@@ -27,7 +27,7 @@ const rebase = text => text
   .replaceAll('../Props/_Renders/', './assets/')
   .replaceAll('../Props/RouenTicket/', './assets/')
   .replaceAll('../Props/RavenFlights/', './assets/')
-  .replaceAll('../../Fonts/Cinzel/', './assets/');
+  .replaceAll('../Fonts/Cinzel/', './assets/');
 for (const filename of ['Leif.html', 'leif.css', 'leif.js', 'leif-data.js', 'leif-sound.js', 'leif-room.js', 'table-layout.js']) {
   let text = rebase(fs.readFileSync(path.join(source, filename), 'utf8'));
   if (filename === 'Leif.html') {
