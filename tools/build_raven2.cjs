@@ -1,13 +1,13 @@
 /* Package the Norse online game V2 (box, envelopes and cypher wheel): player files only.
-   Run: node tools/build_raven2.cjs [path/to/EscapeBackpack/NorseBackpack/Digital]
+   Run: node tools/build_raven2.cjs [path/to/Norse-Expedition/Digital]
    Writes play/norse/v2/. V1 (tools/build_leif.cjs, play/norse/leif/) is untouched. */
 const fs = require('node:fs');
 const path = require('node:path');
-const source = path.resolve(process.argv[2] || path.join(__dirname, '../../EscapeBackpack/NorseBackpack/Digital'));
+const source = path.resolve(process.argv[2] || path.join(__dirname, '../../Norse-Expedition/Digital'));
 const target = path.resolve(__dirname, '../play/norse/v2');
 const game = require(path.join(source, 'raven2-data.js'));
 const assetPaths = new Set(Object.values(game.items).flatMap(item => item.faces || []));
-assetPaths.add('../../Fonts/Cinzel/Cinzel-VariableFont_wght.ttf');
+assetPaths.add('../Fonts/Cinzel/Cinzel-VariableFont_wght.ttf');
 assetPaths.add('./assets/Caveat-Medium.woff2'); // Liv's handwriting font (SIL OFL); its licence is shipped with it
 assetPaths.add('./assets/Caveat-OFL.txt');
 assetPaths.add('./assets/Raven_Postmark.png'); // the opening letter's postmark
@@ -24,7 +24,7 @@ for (const [name, asset] of names) fs.copyFileSync(path.resolve(source, asset), 
 const rebase = text => text
   .replaceAll('../Web/Postcards/', './assets/')
   .replaceAll('./assets/v2/', './assets/')
-  .replaceAll('../../Fonts/Cinzel/', './assets/');
+  .replaceAll('../Fonts/Cinzel/', './assets/');
 for (const filename of ['Raven_V2.html', 'leif.css', 'raven2.css', 'raven2.js', 'raven2-data.js', 'raven2-sizes.js', 'table-layout2.js', 'leif-sound.js', 'leif-room.js']) {
   let text = rebase(fs.readFileSync(path.join(source, filename), 'utf8'));
   if (filename === 'Raven_V2.html') {
