@@ -1,5 +1,6 @@
 .norse-cover{margin:0;min-width:0}
-.norse-cover>img{width:100%;height:auto;aspect-ratio:1;object-fit:cover;box-shadow:12px 14px 0 var(--paper-deep)}
+.norse-cover>a{display:block;background:#e9ddca;padding:16px;box-shadow:12px 14px 0 var(--paper-deep)}
+.norse-cover img{width:100%;height:auto}
 .norse-cover>figcaption{font-size:12px;color:var(--muted);margin-top:26px}
 .norse-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
 .norse-gallery figure{margin:0;min-width:0}
@@ -9,4 +10,8 @@
 .norse-gallery figcaption span{font:500 11px var(--mono);color:var(--muted)}
 .norse-gallery figcaption strong{font-weight:500;font-size:17px;text-align:right}
 .norse-art-note{margin:28px 0 0;font-size:13px;color:var(--muted)}
-@media(max-width:600px){.norse-gallery{grid-template-columns:1fr;gap:28px}.norse-cover>img{box-shadow:8px 10px 0 var(--paper-deep)}}
+@media(max-width:600px){.norse-gallery{grid-template-columns:1fr;gap:28px}.norse-cover>a{box-shadow:8px 10px 0 var(--paper-deep)}}
+
+.norse-tools{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);align-items:center;margin-top:40px;padding-top:40px;border-top:1px solid var(--line)}
+.norse-tools figure:first-child img{background:#fff}
+@media(max-width:600px){.norse-tools{grid-template-columns:1fr}}
