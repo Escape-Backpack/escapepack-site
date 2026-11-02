@@ -26,3 +26,17 @@
 .norse-props figcaption strong{margin-top:5px}
 @media(max-width:800px){.norse-props{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.norse-props{grid-template-columns:1fr}}
+
+.norse-contents{border-top:1px solid var(--line)}
+.contents-scroll{overflow-x:auto}
+.contents-table{border-collapse:collapse;width:100%;min-width:500px;font-size:15px;text-align:left}
+.contents-table caption{text-align:left;font:400 24px var(--serif);padding:0 0 18px}
+.contents-table th,.contents-table td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+.contents-table thead th{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.05em;background:var(--paper-deep)}
+.contents-table tbody th{font-weight:600;width:28%}
+.contents-table th:nth-child(2),.contents-table td:nth-child(2){width:60px;text-align:center;font-variant-numeric:tabular-nums}
+.contents-table td:last-child{color:var(--muted)}
+.contents-extra{margin-top:26px;border-bottom:1px solid var(--line)}
+.contents-extra summary{cursor:pointer;font-weight:600;padding:16px 0}
+.contents-extra[open]{padding-bottom:20px}
+@media(max-width:600px){.contents-table{font-size:13px;min-width:0;table-layout:fixed}.contents-table th,.contents-table td{padding:12px 10px}}
