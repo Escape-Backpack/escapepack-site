@@ -51,6 +51,7 @@ examples and a browser-local shortlist). It sits under `/design/`, which is publ
 | Path | What |
 |---|---|
 | `index.html` | Home: all adventures, how it works, player help |
+| `adventures/norse/` | The Raven Inheritance: public story, postcard artwork gallery and V2 online playtest link. Reuses existing cover art and postcard fronts; no solutions or postcard backs. |
 | `play/norse/leif/` | Norse online playtest (The Raven Inheritance): the whole game, 13 locks across four trails and the final route, with original prop artwork, hints, local saves, tablet support, optional shared rooms (“Play together”), sound, an ending with a shareable result and printable certificate, and built-in feedback. |
 | `play/hiking/` | Hiking online playtest: all ten locks, laptop first, local saves. **Unlisted**: no homepage link while the physical backpack is lent out (it would give away every answer); `noindex`. |
 | `hiking.html` | The Hiking Backpack: story, facts, borrowing, hints and reset links |
