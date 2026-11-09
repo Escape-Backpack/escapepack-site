@@ -652,6 +652,7 @@ button { transition:background-color .16s,border-color .16s,box-shadow .16s; }
 .note { border-radius:0; padding:9px 10px; }
 .note.wish,.p6-side .note.wish { font:500 13px/1.5 var(--sans); gap:9px; background:#f3e6b9; border-top:3px solid #bca46a; }
 .note.wish > b { font:700 16px var(--display); text-transform:uppercase; letter-spacing:.05em; margin-bottom:3px; }
+.report .note.formula { align-self:flex-start; margin:4px 0 2px 4px; padding:6px 14px 8px; font-size:22px; line-height:1.1; transform:rotate(-2deg); }
 #rules { gap:8px; }
 .rule { padding-left:22px; text-indent:-22px; }
 .rule::before { width:22px; font-size:13px; }
@@ -879,6 +880,20 @@ button { transition:background-color .16s,border-color .16s,box-shadow .16s; }
  .schedule-controls label { flex-basis:100%; }
 }
 
+.dispatch {
+  width: min(490px, calc(100% - 24px));
+  max-height: calc(100dvh - 24px);
+  margin: auto;
+  padding: clamp(16px, 4vw, 28px);
+  border: 0;
+  border-top: 4px solid var(--copper);
+  background: var(--paper);
+  color: var(--ink);
+}
+.dispatch::backdrop { background: #10232c; }
+.dispatch h1 { font: 700 clamp(30px, 6vw, 42px)/1.05 var(--display); margin: 8px 0 12px; }
+.dispatch .dispatch-brief { font-size: 15px; line-height: 1.5; }
+.dispatch .primary { min-height: 44px; margin-top: 16px; padding-inline: 14px; }
 </style>
 
 <header class="masthead">
@@ -916,6 +931,13 @@ button { transition:background-color .16s,border-color .16s,box-shadow .16s; }
     <button type="button" data-k="0" class="zero">0</button><button type="button" data-k=".">.</button>
   </div>
 </div>
+
+<dialog class="dispatch" id="dispatch" aria-labelledby="dispatchTitle" aria-describedby="dispatchBrief">
+  <p class="eyebrow">Emergency dispatch &middot; WO 2026-1103</p>
+  <h1 id="dispatchTitle">Emergency furnace replacement</h1>
+  <p class="dispatch-brief" id="dispatchBrief">You’ve been called to a rural home where the propane furnace failed overnight. It’s &minus;24&nbsp;&deg;C outside. Work through the service sheet to plan a heat pump retrofit and get the family warm again.</p>
+  <button class="primary" type="button" id="beginCall" autofocus>Start service call &rarr;</button>
+</dialog>
 
 <main>
   <!-- ============ SERVICE CALL (left) ============ -->
@@ -1222,6 +1244,7 @@ button { transition:background-color .16s,border-color .16s,box-shadow .16s; }
                 <tr class="tot"><td>Total UA</td><td>140</td><td>126</td></tr>
               </table>
               <p>Indoor setpoint 21&nbsp;&deg;C. Design outdoor temperature for Ottawa &minus;25&nbsp;&deg;C.</p>
+              <div class="note formula"><b>Peak heat loss</b><br>UA &times; &Delta;T</div>
             </div>
             <div class="tscale"><span>&minus;10&deg;</span><i></i><span>22&nbsp;&deg;C</span></div>
           </div>
@@ -1635,10 +1658,13 @@ async function loadTeaching() {
 }
 loadTeaching();
 
-const t0 = Date.now();
+let t0, timer;
 const fmt = s => Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
 const elapsed = () => Math.floor((Date.now() - t0) / 1000);
-const timer = setInterval(() => { $("clock").textContent = fmt(elapsed()); }, 1000);
+function startClock() {
+  t0 = Date.now();
+  timer = setInterval(() => { $("clock").textContent = fmt(elapsed()); }, 1000);
+}
 const LAST_BUILT = 6;
 
 const store = {
@@ -2885,13 +2911,18 @@ $("calcScreen").addEventListener("keydown", e => {
 
 // Navigation
 document.querySelectorAll("[data-next]").forEach(b => b.addEventListener("click", () => show(+b.dataset.next, { focus:true })));
+function restartCall() {
+  store.clear();
+  history.replaceState(null, "", location.pathname + location.search);
+  location.reload();
+}
 let resetArmed = null;
 $("resetBtn").addEventListener("click", () => {
-  if (resetArmed) { store.clear(); location.reload(); return; }
+  if (resetArmed) { restartCall(); return; }
   $("resetBtn").textContent = "Click again to reset";
   resetArmed = setTimeout(() => { resetArmed = null; $("resetBtn").textContent = "Reset"; }, 3000);
 });
-document.querySelectorAll("[data-again]").forEach(b => b.addEventListener("click", () => { store.clear(); location.hash = ""; location.reload(); }));
+document.querySelectorAll("[data-again]").forEach(b => b.addEventListener("click", restartCall));
 
 // Playtest feedback: same Formspree form as escapepack.ca/feedback.html and the Hiking playtest.
 const FORMSPREE = "https://formspree.io/f/xaqavoan";
@@ -2935,6 +2966,18 @@ solvedSoFar.forEach(n => {
   document.querySelector(`[data-answer="${n}"]`).classList.add("done");
 });
 const jump = /^#line([1-6])$/.exec(location.hash);
-show(jump ? +jump[1] : Math.min(LAST_BUILT, Math.max(0, ...solvedSoFar) + 1), { review:true });
-if (solvedSoFar.length === LAST_BUILT) { clearInterval(timer); $("clock").textContent = "Complete"; }
+if (!jump && solvedSoFar.length === 0) {
+  const dispatch = $("dispatch");
+  dispatch.addEventListener("cancel", event => event.preventDefault());
+  $("beginCall").addEventListener("click", () => {
+    dispatch.close();
+    startClock();
+    show(1, { focus:true });
+  }, { once:true });
+  dispatch.showModal();
+} else {
+  if (solvedSoFar.length === LAST_BUILT) $("clock").textContent = "Complete";
+  else startClock();
+  show(jump ? +jump[1] : Math.min(LAST_BUILT, Math.max(0, ...solvedSoFar) + 1), { review:true });
+}
 </script>
