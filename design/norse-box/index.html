@@ -108,6 +108,15 @@ details.plan{border:1px solid var(--rule);border-radius:10px;margin:10px 0;backg
 details.plan>summary{cursor:pointer;padding:10px 14px;font-weight:600}
 details.plan>div{padding:0 16px 10px}
 h3.plan-h{font-size:16px}
+.ptform{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;padding:10px 4px 6px}
+.ptform label{display:flex;flex-direction:column;gap:2px;font-size:13px;color:var(--mute)}
+.ptform label.wide,.ptform .wide{grid-column:1/-1}
+.ptform input,.ptform select,.ptform textarea,table.pt select,table.pt textarea{font:inherit;font-size:14px;padding:4px 6px;border:1px solid var(--rule);border-radius:6px;background:var(--bg);color:var(--ink);width:100%}
+table.pt select{min-width:0}
+table.pt th,table.pt td{padding:4px}
+table.pt input[type=text],table.pt input[type=date]{text-align:left;min-width:0;font:inherit;font-size:14px;padding:4px 6px;border:1px solid var(--rule);border-radius:6px;background:var(--bg);color:var(--ink)}
+table.pt textarea{min-width:150px}table.pt input[data-f=n]{min-width:150px}table.pt input[data-f=w]{min-width:120px}table.pt{table-layout:auto}
+table.pt td.plays{white-space:nowrap}table.pt td.plays a{margin-left:6px}
 @media(max-width:760px){.wrap{display:block}.wrap>nav{display:none}main{padding:0 14px 60px}}
 @media print{.wrap>nav,.bar{display:none}.wrap{display:block}details.spoiler:not([open])>div{display:block}.env{break-inside:avoid-page}}
 </style><meta name="theme-color" content="#17372d">
@@ -174,14 +183,17 @@ a{color:var(--accent);text-underline-offset:3px}
 <a href="#nextsteps" data-tab="next"><b>→</b> Next steps</a>
 <a href="#outreach" data-tab="next"><b>?</b> Open questions</a>
 <a href="#plan" data-tab="next"><b>…</b> Full plan</a>
+<a href="#pt-outreach" data-tab="playtests"><b>✓</b> Who to ask</a>
+<a href="#pt-sessions" data-tab="playtests"><b>▶</b> Play sessions</a>
+<a href="#pt-changes" data-tab="playtests"><b>↻</b> Changes</a>
 </nav>
 <main>
 <div class="breadcrumb"><a href="../index.html">Design studio</a><span aria-hidden="true"> / </span><span>Norse box</span></div>
 <p class="eyebrow">Behind the scenes</p>
 <div class="design-warning" role="note"><strong>Spoiler warning.</strong> Every puzzle, answer and solution of The Raven Inheritance is on this page. If you might play this backpack, turn back now.</div>
 <div class="top"><h1>Norse Backpack · The Raven Inheritance: the full adventure</h1>
-<p>Designer copy with spoilers. <b>Design:</b> envelope by envelope, what is inside, the puzzle that opens it, its logic, hints and solution (13 envelopes). <b>Production:</b> components, print costs, how it gets made. <b>Next steps:</b> playtesting, quotes, launch plan. Built from the records, 2026-11-12 15:18.</p></div>
-<div class="tabs" role="tablist"><button data-go="design" role="tab">Design</button><button data-go="production" role="tab">Production</button><button data-go="next" role="tab">Next steps</button></div>
+<p>Designer copy with spoilers. <b>Design:</b> envelope by envelope, what is inside, the puzzle that opens it, its logic, hints and solution (13 envelopes). <b>Production:</b> components, print costs, how it gets made. <b>Next steps:</b> quotes, launch plan. <b>Playtests:</b> who to ask, each play, changes to try. Built from the records, 2026-11-12 17:44.</p></div>
+<div class="tabs" role="tablist"><button data-go="design" role="tab">Design</button><button data-go="production" role="tab">Production</button><button data-go="next" role="tab">Next steps</button><button data-go="playtests" role="tab">Playtests</button></div>
 <div class="bar" id="designbar"><button id="open">Open all hints and solutions</button><button id="close">Close all</button>
 <span class="mute" style="color:var(--mute);font-size:13px">Hints and solutions are folded until you open them.</span></div>
 <div class="tab" id="tab-design" data-tab="design"><section class="env" id="box"><header><span class="num">Box</span><div><h2>On top of the box</h2><p>Loose on the lid before any envelope is opened. Postcard L1 and the wheel start the first code (a worked example).</p></div></header><h3 class="inside">Inside</h3><div class="props"><article class="prop" id="PP-001"><h4>Postcard L1 · L&#x27;Anse aux Meadows <span class="id">PP-001</span></h4>
@@ -833,7 +845,7 @@ Packaging - Pack Loose in Box</textarea></td></tr><tr data-qr="fl1" data-shop="n
 <li>Canadian Toy Testing Council closure: <a href="https://amp.cbc.ca/news/canada/ottawa/canadian-toy-testing-council-shuts-down-1.3039490" target="_blank" rel="noopener">CBC</a>.</li>
 <li>Comparable campaigns: <a href="https://www.kicktraq.com/projects/envelescape/envelescape-pop-up-escape-room/" target="_blank" rel="noopener">Envelescape</a>, <a href="https://fanbasepress.com/press/interviews/gaming/item/6069-the-kickstarter-report-an-interview-with-the-creators-of-escape-room-in-a-box/" target="_blank" rel="noopener">Escape Room in a Box</a>.</li>
 <li>US tariffs / de minimis: <a href="https://cardboardedison.com/tariffs" target="_blank" rel="noopener">Cardboard Edison</a>, <a href="https://www.fulfillrite.com/blog/usa-tariffs-what-ecommerce-kickstarter-brands-must-know/" target="_blank" rel="noopener">Fulfillrite</a> — vendor sources, conflicting; verify with CBP.</li>
-</ul></div></details></section></div>
+</ul></div></details></section></div><div class="tab" id="tab-playtests" data-tab="playtests" hidden><div id="playtests"><script type="application/json" id="pt-seeds">{"orgs": [{"id": "ottawa-strategy", "n": "Ottawa Strategy Games", "nt": "Meetup, weekly and free. Ask the organizer for a Monday slot or after a Learn to Play session. meetup.com/ottawa-strategy-games"}, {"id": "staja", "n": "Studio Staja", "nt": "Small board game caf\u00e9 that organizes events. https://staja.ca/"}, {"id": "levelone", "n": "Level One", "nt": "Largest board game caf\u00e9 in Ottawa. https://www.levelonegamepub.com/hiw"}, {"id": "protoTO", "n": "ProtoTO (Toronto)", "nt": "Tabletop game design convention. Travel needed; not checked whether it runs this season."}, {"id": "reddit", "n": "Reddit: Ottawa subreddit", "nt": "Draft post is in Q-064. Not posted. Needs the play time, venue and date first."}, {"id": "blacksuit", "n": "Black Suit Games (publisher lead)", "nt": "https://www.blacksuitgames.com/ Not contacted. Look at what they publish before reaching out."}], "changes": [{"id": "Q-053", "n": "Playtest 1: the trail maps need a design pass", "st": "idea", "rec": "Q-053", "src": "Playtest 1", "nt": ""}, {"id": "Q-054", "n": "Playtest 1: the final puzzle asks too much rereading of the postcards", "st": "adopted", "rec": "Q-054", "src": "Playtest 1", "nt": "Marks give the order and decoys carry no mark (designer, 12 Oct 2026). Built with iconography-crop marks and stamps on the maps; see PZ-013."}, {"id": "Q-055", "n": "Keep the transition tickets and Travel highlights now that the marks give the order", "st": "adopted", "rec": "Q-055", "src": "Playtest 1", "nt": "Option 2. Cut the Travel highlights, keep the transition tickets (designer, 12 Oct 2026)."}, {"id": "Q-063", "n": "Physical game review: readability and difficulty progression", "st": "idea", "rec": "Q-063", "src": "Physical game review", "nt": ""}]}</script><section class="env" id="pt-outreach"><header><span class="num">✓</span><div><h2>Playtests</h2><p>Who to ask, what happened when they played, and what to change. Saved for everyone signed in to the Studio (otherwise only in this browser). Plan: Phase 1 of the Kickstarter plan; outreach ideas are in Q-064.</p></div></header><p class="meta" id="pt-sync" role="status"></p><p class="meta" id="pt-summary"></p><h3 class="inside">1 · Who to reach out to</h3><p class="meta"><b>Person</b> = one play (a friend, say). <b>Group or event</b> = a club, café or meetup where you can record several plays.</p><div class="costbar"><button type="button" data-pt-add="p">Add person</button><button type="button" data-pt-add="o">Add group or event</button></div><div class="tbl"><table class="cost pt" id="pt-people"><thead><tr><th>Done</th><th>Name</th><th>Type</th><th>Status</th><th>Date</th><th>Contact</th><th>Notes</th><th>Plays</th><th></th></tr></thead><tbody></tbody></table></div><div id="pt-sugg-o" class="costbar"></div></section><section class="env" id="pt-sessions"><header><span class="num">▶</span><div><h2>Play sessions</h2><p>One card per time the box was played. Add a play from a row above, or here.</p></div></header><div class="costbar"><button type="button" data-pt-add="s">Add a play</button></div><div id="pt-sesslist"></div></section><section class="env" id="pt-changes"><header><span class="num">↻</span><div><h2>Potential changes</h2><p>Ideas that came out of playtests or reviews. Decisions go in the records; this list tracks what is being tried.</p></div></header><div class="costbar"><button type="button" data-pt-add="c">Add a change</button></div><div class="tbl"><table class="cost pt" id="pt-chlist"><thead><tr><th>Change</th><th>Status</th><th>Came from</th><th>Records</th><th>Notes</th><th></th></tr></thead><tbody></tbody></table></div><div id="pt-sugg-c" class="costbar"></div></section></div></div>
 </main></div>
 <script>
 (function(){
@@ -1027,8 +1039,148 @@ document.getElementById('cost-copy-notes').onclick=function(){
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(lines.join('\n')).then(done,fallback)}else{fallback()}};
 document.getElementById('cost-clear').onclick=function(){
   if(!confirm('Put back the quoted prices (20 Oct 2026)? This clears the saved edits for everyone signed in to the Studio too.'))return;
-  Object.keys(saved).forEach(function(k){dirty[k]=1});saved={};persist();applySaved();calc();sched();msg.textContent='Quoted prices restored.'};
+  Object.keys(saved).forEach(function(k){if(k.indexOf('pt:')!==0)dirty[k]=1});var keep={};Object.keys(saved).forEach(function(k){if(k.indexOf('pt:')===0)keep[k]=saved[k]});saved=keep;persist();applySaved();calc();sched();msg.textContent='Quoted prices restored.'};
 applySaved();calc();pull();
+})();
+</script>
+<script>
+(function(){
+var root=document.getElementById('playtests');if(!root)return;
+var KEY='norse-playtests-v1',API='/studio/api/page-data/norse-costs',PFX='pt:';
+var saved={},dirty={},timer=0,lastPull=0,syncEl=document.getElementById('pt-sync'),openCards={},seeds={orgs:[],changes:[]};
+try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{};dirty=JSON.parse(localStorage.getItem(KEY+':dirty')||'{}')||{}}catch(err){saved={};dirty={}}
+try{seeds=JSON.parse(document.getElementById('pt-seeds').textContent)}catch(err){}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(saved));localStorage.setItem(KEY+':dirty',JSON.stringify(dirty))}catch(err){}}
+function status(t){if(syncEl)syncEl.textContent=t}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function get(k){try{return JSON.parse(saved[k])}catch(err){return null}}
+function put(k,o){var c={};Object.keys(o).forEach(function(f){if(f!=='_k')c[f]=o[f]});var s=JSON.stringify(c);
+  if(s.length>3900){status('Too long to save: shorten the notes in that item.');return false}
+  saved[k]=s;dirty[k]=1;persist();sched();return true}
+function del(k){delete saved[k];dirty[k]=1;persist();sched()}
+function list(kind){return Object.keys(saved).filter(function(k){return k.indexOf(PFX+kind+':')===0}).map(function(k){var o=get(k);if(o)o._k=k;return o}).filter(Boolean)
+  .sort(function(a,b){return (a.c||0)-(b.c||0)})}
+function newId(kind){return PFX+kind+':'+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
+var ST={'':'—',wait:'Waiting for a reply',booked:'Booked',played:'Played',no:'Declined or no reply'};
+var CS={idea:'Idea',test:'To test',adopted:'Adopted',dropped:'Dropped'};
+function opts(map,cur){return Object.keys(map).map(function(k){return '<option value="'+k+'"'+(k===cur?' selected':'')+'>'+esc(map[k])+'</option>'}).join('')}
+function entName(k){var e=k&&get(k);return e?(e.n||'(unnamed)'):'(not linked)'}
+function sessLabel(s){return (s.r?'Round '+s.r+' · ':'')+(s.d||'no date')+' · '+entName(s.e)}
+function inp(f,v,type,extra){return '<input type="'+(type||'text')+'" data-f="'+f+'" value="'+esc(v)+'" '+(extra||'')+'>'}
+function ta(f,v,rows){return '<textarea data-f="'+f+'" rows="'+(rows||2)+'" maxlength="1200">'+esc(v)+'</textarea>'}
+function playsOf(k){return list('s').filter(function(s){return s.e===k})}
+
+function renderPeople(){
+  var rows=list('e').map(function(e){
+    var pl=playsOf(e._k),org=e.t==='o',cell;
+    if(org){cell=pl.length+' <button type="button" class="rowbtn" data-pt-play="'+e._k+'">Add play</button>'
+      +pl.map(function(s){return ' <a href="#" data-pt-go="'+s._k+'">'+esc(s.d||'play')+'</a>'}).join('')}
+    else{cell=pl.length?pl.map(function(s){return '<a href="#" data-pt-go="'+s._k+'">'+esc(s.d||'played')+'</a>'}).join(' ')
+      :'<button type="button" class="rowbtn" data-pt-play="'+e._k+'">Add the play</button>'}
+    return '<tr data-key="'+e._k+'"><td><input type="checkbox" data-f="x"'+(e.x?' checked':'')+' aria-label="Reached out" title="Reached out"></td>'
+      +'<td>'+inp('n',e.n,'text','placeholder="Name" aria-label="Name"')+'</td><td>'+(org?'Group':'Person')+'</td>'
+      +'<td><select data-f="st" aria-label="Status">'+opts(ST,e.st||'')+'</select></td>'
+      +'<td>'+inp('d',e.d,'date','aria-label="Date"')+'</td>'
+      +'<td>'+inp('w',e.w,'text','placeholder="Email, link, how to reach" aria-label="Contact"')+'</td>'
+      +'<td><textarea data-f="nt" rows="2" maxlength="1200" aria-label="Notes" placeholder="Notes">'+esc(e.nt)+'</textarea></td>'
+      +'<td class="plays">'+cell+'</td>'
+      +'<td><button type="button" class="rowbtn" data-pt-del="'+e._k+'" title="Delete">✕</button></td></tr>'}).join('');
+  root.querySelector('#pt-people tbody').innerHTML=rows||'<tr><td colspan="9" class="meta">Nobody yet. Use Add person or Add group or event.</td></tr>'}
+
+function sessionCard(s){
+  var ents=list('e').map(function(e){return '<option value="'+e._k+'"'+(e._k===s.e?' selected':'')+'>'+esc(e.n||'(unnamed)')+(e.t==='o'?' (group)':'')+'</option>'}).join('');
+  var R={'':'—',A:'A · friends, observed',B:'B · blind, unobserved',C:'C · reset test',O:'Other'},X={'':'—',first:'First escape game',some:'Some experience',many:'Many escape games'};
+  function L(t,h){return '<label><span>'+t+'</span>'+h+'</label>'}
+  return '<details class="plan ptcard" data-key="'+s._k+'"'+(openCards[s._k]?' open':'')+'><summary data-sum="s">'+esc(sessLabel(s))+'</summary><div class="ptform">'
+    +L('Who','<select data-f="e"><option value="">(not linked)</option>'+ents+'</select>')
+    +L('Round','<select data-f="r">'+opts(R,s.r||'')+'</select>')
+    +L('Date',inp('d',s.d,'date'))+L('Team size',inp('sz',s.sz,'number','min="1" step="1"'))
+    +L('Experience','<select data-f="ex">'+opts(X,s.ex||'')+'</select>')
+    +L('Start time',inp('t0',s.t0,'time'))+L('Finish time',inp('t1',s.t1,'time'))
+    +L('Hints used (which puzzles)',inp('h',s.h))
+    +L('Fun (1-10)',inp('fun',s.fun,'number','min="1" max="10" step="1"'))+L('Difficulty (1-10)',inp('dif',s.dif,'number','min="1" max="10" step="1"'))
+    +L('Gift (1-10)',inp('gift',s.gift,'number','min="1" max="10" step="1"'))+L('Would pay ($)',inp('pay',s.pay,'number','min="0" step="1"'))
+    +L('Best moment',inp('best',s.best))+L('Worst moment',inp('worst',s.worst))
+    +'<label class="wide"><span>Where they stalled, and per-envelope times</span>'+ta('stall',s.stall,3)+'</label>'
+    +'<label class="wide"><span>Notes and comments</span>'+ta('nt',s.nt,4)+'</label>'
+    +'<div class="wide"><button type="button" class="rowbtn" data-pt-del="'+s._k+'">Delete this play</button></div></div></details>'}
+function renderSessions(){
+  var ss=list('s');root.querySelector('#pt-sesslist').innerHTML=ss.length?ss.map(sessionCard).join(''):'<p class="meta">No plays recorded yet.</p>'}
+
+function renderChanges(){
+  var ss=list('s'),rows=list('c').map(function(c){
+    var so='<option value="">(other / not a play)</option>'+ss.map(function(s){return '<option value="'+s._k+'"'+(s._k===c.s?' selected':'')+'>'+esc(sessLabel(s))+'</option>'}).join('');
+    return '<tr data-key="'+c._k+'"><td>'+inp('n',c.n,'text','placeholder="What would change" aria-label="Change"')+'</td>'
+      +'<td><select data-f="st" aria-label="Status">'+opts(CS,c.st||'idea')+'</select></td>'
+      +'<td><select data-f="s" aria-label="Came from">'+so+'</select>'+inp('src',c.src,'text','placeholder="or type a source" aria-label="Source"')+'</td>'
+      +'<td>'+inp('rec',c.rec,'text','placeholder="PZ-013, Q-053" aria-label="Records"')+'</td>'
+      +'<td><textarea data-f="nt" rows="2" maxlength="1200" aria-label="Notes" placeholder="Notes">'+esc(c.nt)+'</textarea></td>'
+      +'<td><button type="button" class="rowbtn" data-pt-del="'+c._k+'" title="Delete">✕</button></td></tr>'}).join('');
+  root.querySelector('#pt-chlist tbody').innerHTML=rows||'<tr><td colspan="6" class="meta">No changes tracked yet.</td></tr>'}
+
+function renderSugg(){
+  var have={};list('e').concat(list('c')).forEach(function(o){if(o.sd)have[o.sd]=1});
+  function chips(sel,items,label,kind){var left=items.filter(function(i){return !have[kind+':'+i.id]});
+    root.querySelector(sel).innerHTML=left.length?'<span class="meta">'+label+'</span>'+left.map(function(i){
+      return '<button type="button" class="rowbtn" data-pt-seed="'+kind+':'+esc(i.id)+'">+ '+esc(i.n.length>46?i.n.slice(0,44)+'…':i.n)+'</button>'}).join(''):''}
+  chips('#pt-sugg-o',seeds.orgs,'Suggested from Q-064:','o');chips('#pt-sugg-c',seeds.changes,'From the records:','c')}
+
+function summary(){
+  var es=list('e'),ss=list('s'),cs=list('c'),done=es.filter(function(e){return e.x}).length,n=function(st){return cs.filter(function(c){return (c.st||'idea')===st}).length};
+  document.getElementById('pt-summary').textContent='Reached out: '+done+' of '+es.length+' · Plays recorded: '+ss.length
+    +' · Changes: '+n('idea')+' ideas, '+n('test')+' to test, '+n('adopted')+' adopted, '+n('dropped')+' dropped'}
+function renderAll(){renderPeople();renderSessions();renderChanges();renderSugg();summary()}
+/* Update labels in place, without rebuilding the form the person is typing in. */
+function refreshLabels(){
+  root.querySelectorAll('summary[data-sum="s"]').forEach(function(sm){var s=get(sm.parentNode.getAttribute('data-key'));if(s)sm.textContent=sessLabel(s)});
+  root.querySelectorAll('select[data-f="e"] option, #pt-chlist select[data-f="s"] option').forEach(function(o){
+    if(o.value.indexOf(PFX+'e:')===0){var e=get(o.value);if(e)o.textContent=(e.n||'(unnamed)')+(e.t==='o'?' (group)':'')}
+    if(o.value.indexOf(PFX+'s:')===0){var s=get(o.value);if(s)o.textContent=sessLabel(s)}});
+  summary()}
+
+root.addEventListener('toggle',function(e){var d=e.target;if(d.matches&&d.matches('details.ptcard'))openCards[d.getAttribute('data-key')]=d.open},true);
+function onEdit(e){var t=e.target,host=t.closest&&t.closest('[data-key]'),f=t.getAttribute&&t.getAttribute('data-f');if(!host||!f)return;
+  var k=host.getAttribute('data-key'),o=get(k);if(!o)return;
+  o[f]=t.type==='checkbox'?t.checked:t.value;
+  if(put(k,o)&&(e.type==='change'||f==='n'||f==='d'||f==='r'))refreshLabels()}
+root.addEventListener('input',onEdit);root.addEventListener('change',onEdit);
+function addSession(entKey){var o={c:Date.now(),e:entKey||'',d:new Date().toISOString().slice(0,10)},k=newId('s');
+  if(put(k,o)){openCards[k]=true;renderAll();var el=root.querySelector('[data-key="'+k+'"]');if(el)el.scrollIntoView({block:'center'})}}
+function addSeed(v){var a=v.split(':'),kind=a[0],id=a.slice(1).join(':');
+  if(kind==='o'){var s=seeds.orgs.filter(function(x){return x.id===id})[0];if(!s)return;put(newId('e'),{c:Date.now(),t:'o',n:s.n,nt:s.nt,sd:'o:'+id})}
+  else{var c=seeds.changes.filter(function(x){return x.id===id})[0];if(!c)return;put(newId('c'),{c:Date.now(),n:c.n,st:c.st,src:c.src,rec:c.rec,nt:c.nt,sd:'c:'+id})}
+  renderAll()}
+root.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('[data-pt-add],[data-pt-del],[data-pt-play],[data-pt-go],[data-pt-seed]');if(!b)return;
+  if(b.hasAttribute('data-pt-add')){var a=b.getAttribute('data-pt-add');
+    if(a==='s')addSession('');
+    else if(a==='c'){put(newId('c'),{c:Date.now(),n:'',st:'idea'});renderAll()}
+    else{put(newId('e'),{c:Date.now(),t:a,n:''});renderAll();var ins=root.querySelectorAll('#pt-people tbody tr[data-key] input[data-f="n"]');if(ins.length)ins[ins.length-1].focus()}}
+  else if(b.hasAttribute('data-pt-play'))addSession(b.getAttribute('data-pt-play'));
+  else if(b.hasAttribute('data-pt-go')){e.preventDefault();var k=b.getAttribute('data-pt-go');openCards[k]=true;renderSessions();
+    var el=root.querySelector('[data-key="'+k+'"]');if(el)el.scrollIntoView({block:'center'})}
+  else if(b.hasAttribute('data-pt-seed'))addSeed(b.getAttribute('data-pt-seed'));
+  else{var k2=b.getAttribute('data-pt-del'),o=get(k2),what=k2.indexOf(PFX+'e:')===0?'this person or group (their plays stay, unlinked)':k2.indexOf(PFX+'s:')===0?'this play':'this change';
+    if(!confirm('Delete '+what+(o&&o.n?' ('+o.n+')':'')+'? This cannot be undone.'))return;del(k2);renderAll()}});
+/* Shared copy: the same Studio store as the print costs, keys starting pt: */
+function sched(){clearTimeout(timer);status('Saving…');timer=setTimeout(push,700)}
+function offline(){status('Saved in this browser only (not signed in, or offline).')}
+function push(){var ks=Object.keys(dirty);if(!ks.length)return Promise.resolve();var set={},rm=[];
+  ks.forEach(function(k){if(k in saved)set[k]=String(saved[k]);else rm.push(k)});
+  return fetch(API,{method:'PATCH',credentials:'same-origin',redirect:'manual',headers:{'Content-Type':'application/json'},body:JSON.stringify({set:set,del:rm})})
+    .then(function(r){if(!r.ok)throw 0;
+      ks.forEach(function(k){var cur=(k in saved)?String(saved[k]):null,sent=(k in set)?set[k]:null;if(cur===sent)delete dirty[k]});
+      persist();status(Object.keys(dirty).length?'Saving…':'Saved for everyone signed in to the Studio.')}).catch(offline)}
+function pull(){lastPull=Date.now();
+  return fetch(API,{credentials:'same-origin',redirect:'manual'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
+    var remote=j.data||{},next={};Object.keys(remote).forEach(function(k){if(k.indexOf(PFX)===0)next[k]=remote[k]});
+    Object.keys(dirty).forEach(function(k){if(k in saved)next[k]=saved[k];else delete next[k]});
+    var changed=JSON.stringify(next)!==JSON.stringify(saved);saved=next;persist();
+    if(changed&&!root.contains(document.activeElement))renderAll();else if(changed)refreshLabels();
+    return push().then(function(){if(!Object.keys(dirty).length)status('Saved for everyone signed in to the Studio.')})}).catch(offline)}
+function again(){if(Date.now()-lastPull>15000)pull()}
+window.addEventListener('focus',again);document.addEventListener('visibilitychange',function(){if(!document.hidden)again()});
+renderAll();pull();
 })();
 </script><footer class="site-footer"><div class="container footer-inner"><span>Escape Backpack · Ottawa</span><div><a href="../../index.html">Home</a><a href="../../help/">Hints &amp; reset</a><a href="../../feedback.html">Feedback</a></div></div></footer>
 </body></html>
