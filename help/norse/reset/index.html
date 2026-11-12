@@ -7,11 +7,11 @@
 <script>try{var t=localStorage.getItem("ebp-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
 <title>Reset checklist</title>
 <!-- Player-facing reset checklist from backpack-kit (backpack.json: "publish_reset": true).
-     kit.py build inlines the style, helpers and data. One step per lock, last lock first, from the
-     puzzles' container / answer / reset_display and the props' found_in / after_game / ## Reset. -->
+     kit.py build inlines the style, helpers and data. One step per envelope (its code and what goes
+     back in it, from the props' envelope / after_game / ## Reset), then what goes loose in the box. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Symbols&family=Noto+Sans+Symbols+2&family=Noto+Sans+Runic&display=swap" rel="stylesheet">
 <style>
 /* Look follows escapepack.ca: light paper with forest headings and rust accents, plus a
    forest-green dark mode. Toggle and theme storage live in common.js (key "ebp-theme"). */
@@ -198,6 +198,48 @@ h2 .n { color: var(--muted); font: 12px var(--mono); letter-spacing: .08em; marg
 }
 .readiness{padding:12px 16px;border:1px solid var(--line);margin:12px 0}.readiness summary{cursor:pointer}.readiness li{margin:9px 0}.flow-scroll{overflow:auto;max-width:100%;margin-top:20px}.flow-scroll svg{font-family:var(--sans,Arial,sans-serif)}.flow-scroll svg a:focus rect{stroke:#fff;stroke-width:3}.reset-table{border-collapse:collapse;min-width:760px;width:100%;font-size:13px}.reset-table th,.reset-table td{border:1px solid var(--line);padding:14px;text-align:left;vertical-align:top}.reset-table td{min-width:130px}.reset-table p{margin:0 0 8px}
 
+/* envelopes + simplified board */
+.sym { font-family: "Noto Sans Symbols", "Noto Sans Symbols 2", "Noto Sans Runic", "Segoe UI Symbol", "Segoe UI Historic", "Apple Symbols", var(--sans);
+  letter-spacing: .12em; color: var(--brass-2); font-size: 1.15em; white-space: nowrap; }
+.sym.big { font-size: 2rem; letter-spacing: .18em; }
+header .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+a.btn { text-decoration: none; display: inline-block; }
+.chip { font: 11.5px var(--mono); border: 1px solid var(--line); border-radius: 2px; padding: 1px 7px; color: var(--cream-3); white-space: nowrap; }
+.opens { font: 11px var(--mono); letter-spacing: .06em; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; }
+.opens .sym { font-size: 18px; }
+.excerpt { color: var(--cream-3); font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
+.pills button { font: 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 99px;
+  border: 1px solid var(--line-strong); background: none; color: var(--cream-3); cursor: pointer; }
+.pills button[aria-pressed="true"] { background: var(--brass); border-color: var(--brass); color: var(--forest); }
+h3.group { font-size: 1.15rem; margin: 26px 0 12px; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+h3.group .n { color: var(--muted); font: 12px var(--mono); }
+.timeline { list-style: none; margin: 0 0 0 14px; padding: 0; border-left: 2px solid var(--line-strong); counter-reset: beat; }
+.timeline li { position: relative; padding: 0 0 22px 28px; counter-increment: beat; display: grid; gap: 8px; }
+.timeline li::before { content: counter(beat); position: absolute; left: -15px; top: 0; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--forest); border: 2px solid var(--rust); display: grid; place-items: center; font: 12px var(--mono); color: var(--rust-2); }
+.timeline .beat-h { gap: 4px 12px; }
+.timeline .beat-h h3 { font-size: 1.3rem; }
+.timeline .sub { color: var(--cream-3); font-size: 14.5px; }
+.timeline .ref .sym { font-size: 1em; }
+.thumb.wide { width: 100%; max-height: 170px; object-fit: cover; align-self: stretch; }
+details.warnbox { margin: 8px 0 20px; }
+details.warnbox summary { cursor: pointer; }
+.envelope { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; background: var(--forest-2); border: 1px solid var(--line);
+  border-radius: 2px; padding: 14px 18px; margin: 0 0 14px; }
+.envelope .arrow { font-size: 1.6rem; color: var(--muted); }
+.spoiler.big { font: 1.6rem var(--mono); letter-spacing: .12em; }
+.files { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.file { background: var(--forest-2); border: 1px solid var(--line); border-radius: 2px; padding: 6px; display: grid; gap: 4px; cursor: pointer; min-width: 0; }
+.file img, .file .ph { width: 100%; aspect-ratio: 3/2; object-fit: cover; border-radius: 2px; background: var(--forest-deep); }
+.file .ph { display: grid; place-items: center; font: 11px var(--mono); text-transform: uppercase; color: var(--muted); }
+.file .fname { font-size: 13px; }
+.file .rid { overflow-wrap: anywhere; }
+.question { border-left: 2px solid var(--s-answered); padding: 6px 0 6px 12px; margin: 8px 0; cursor: pointer; font-size: 14.5px; }
+.question.open { border-left-color: var(--s-open); }
+.question .answer { color: var(--cream-3); margin-top: 3px; }
+#drawer .sec .n { color: var(--muted); margin-left: 6px; }
+
 /* site chrome + theme toggle */
 .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--cream); text-decoration: none; font: 700 13px/1.05 var(--sans); }
 .brand:hover { color: var(--cream); }
@@ -230,8 +272,7 @@ main { max-width: 760px; }
 .step ul { margin: 6px 0 10px 20px; padding: 0; }
 .step li { margin: 2px 0; }
 .step .keep { color: var(--brass-2); }
-.step .lockline { border-left: 2px solid var(--brass); padding: 4px 0 4px 12px; margin: 10px 0 0; }
-.code { font-family: var(--mono); letter-spacing: .02em; color: var(--brass-2); white-space: nowrap; }
+.step h3 .sym { font-size: 1.7rem; margin-left: 6px; }
 .tick { display: flex; align-items: center; gap: 10px; margin-top: 14px; cursor: pointer; font: 12px var(--mono);
   letter-spacing: .1em; text-transform: uppercase; color: var(--cream-3); }
 .tick input { width: 20px; height: 20px; accent-color: var(--brass); }
@@ -241,7 +282,7 @@ main { max-width: 760px; }
 </head>
 <body>
 <div class="progress"><div class="in"><div class="count" id="count">0 / 0</div><div class="track"><div class="bar" id="bar"></div></div></div></div>
-<header><div><div class="eyebrow">Reset checklist</div><h1 id="proj">Backpack</h1><div class="sub"><a href="https://escapepack.ca">escapepack.ca</a></div></div></header>
+<header><div><div class="eyebrow">Reset checklist</div><h1 id="proj">Adventure</h1><div class="sub"><a href="https://escapepack.ca">escapepack.ca</a></div></div></header>
 <main id="view"></main>
 <script>
 // Shared by index.html (design board) and play.html (play-test).
@@ -326,40 +367,27 @@ function mdListItems(section) {
   document.body.prepend(bar);
 })();
 </script>
-<script>window.RESET = {"name": "Norse Backpack · The Raven Inheritance", "builtAt": "2026-10-10 10:33", "general": ["There are 22 postcards: each goes back with the lock it came from, as listed below."], "steps": [{"id": "PZ-013", "lock": 13, "lockType": "4-digit", "where": "Inside lockable pocket 2", "code": "1972", "display": "0000", "put": ["Plane ticket and letter"], "keep": ["Adventure medallion"], "notes": [], "nested": []}, {"id": "PZ-012", "lock": 12, "lockType": "4-digit", "where": "Large pouch, in the main compartment", "code": "2648", "display": "0000", "put": ["Postcard: Patara", "The three transition tickets (booking confirmations)", "Liv's journal", "Family logo and crest note"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-008", "lock": 11, "lockType": "3-digit", "where": "Small pouch, in the main compartment", "code": "253", "display": "000", "put": ["Postcard: Hedeby", "Postcard: Aci Castello, Sicily", "The raven's flights card"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-011", "lock": 10, "lockType": "3-digit", "where": "Large pouch, in the main compartment", "code": "104", "display": "000", "put": ["Postcard: Oslo", "Map: The Varangian Road", "Hnefatafl board and pieces", "Hnefatafl Museum ticket, Oslo"], "keep": [], "notes": ["Take every piece off the board and pack the pieces with the board."], "nested": []}, {"id": "PZ-007", "lock": 9, "lockType": "4-digit", "where": "Small pouch, in the main compartment", "code": "1486", "display": "0000", "put": ["Postcard: Bayeux", "Postcard: Winchester", "Postcard: Battle"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-010", "lock": 8, "lockType": "4-letter", "where": "Large pouch, in the main compartment", "code": "SOLE", "display": "LOCK", "put": ["Postcard: Rouen", "Map: The Granted Lands", "Musée Ducal de Rouen ticket"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-005", "lock": 7, "lockType": "4-digit", "where": "Inside lockable pocket 1", "code": "3212", "display": "0000", "put": ["Postcard: Dögurðarnes", "Postcard: Esjuberg", "Treasure tally (four-wheel counter)", "The coin hoard"], "keep": [], "notes": ["Turn all four wheels back to 0000.", "Put every coin back, not only the ones that made the treasure."], "nested": []}, {"id": "PZ-009", "lock": 6, "lockType": "3-digit", "where": "Large pouch, in the main compartment", "code": "562", "display": "000", "put": ["Postcard: Brattahlíð", "Viking Museum of Brattahlíð ticket", "Map: The Western Lands"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-006", "lock": 5, "lockType": "3-digit", "where": "Front right pocket", "code": "521", "display": "000", "put": ["Postcard: Châlus", "Postcard: Roumare Forest", "Postcard: Walcheren"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-004", "lock": 4, "lockType": "4-letter", "where": "Main compartment", "code": "MEAD", "display": "LOCK", "put": ["Postcard: Hvammur", "Architect's scale ruler", "Map: The Island Settlement", "Aud's Treasure Museum ticket"], "keep": [], "notes": [], "nested": [{"lock": 6, "where": "Large pouch, in the main compartment"}, {"lock": 8, "where": "Large pouch, in the main compartment"}, {"lock": 9, "where": "Small pouch, in the main compartment"}, {"lock": 10, "where": "Large pouch, in the main compartment"}, {"lock": 11, "where": "Small pouch, in the main compartment"}, {"lock": 12, "where": "Large pouch, in the main compartment"}]}, {"id": "PZ-003", "lock": 3, "lockType": "4-letter", "where": "Left pocket (seen from the front)", "code": "BOOK", "display": "LOCK", "put": ["Postcard: Staraya Ladoga", "Postcard: Kyiv", "Postcard: Constantinople"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-002", "lock": 2, "lockType": "4-digit", "where": "Locked pouch inside the front pocket", "code": "1576", "display": "0000", "put": ["Postcard: Bjarnarhöfn", "Aud's comb"], "keep": [], "notes": [], "nested": []}, {"id": "PZ-001", "lock": 1, "lockType": "4-digit", "where": "Front pocket", "code": "1021", "display": "0000", "put": ["Postcard: Battle Harbour (Markland)", "Postcard: Qikiqtarjuaq, Baffin Island (Helluland)", "Magnifier"], "keep": [], "notes": [], "nested": [{"lock": 2, "where": "Locked pouch inside the front pocket"}]}], "start": [{"where": "Open back pocket of the backpack", "put": ["Postcard: L'Anse aux Meadows"]}], "startNotes": [], "check": [{"name": "Luggage tags A and B", "where": "On the outside of the backpack"}]};</script>
+<script>window.RESET = {"name": "Norse Backpack · The Raven Inheritance", "builtAt": "2026-10-21 09:05", "general": ["There are 22 postcards: each goes back with the lock it came from, as listed below."], "steps": [{"id": "PZ-001", "n": 1, "code": "▲●■▲", "put": ["Postcard: Bjarnarhöfn", "Aud's comb"], "keep": [], "notes": []}, {"id": "PZ-003", "n": 2, "code": "", "put": ["Postcard: Battle Harbour (Markland)", "Postcard: Qikiqtarjuaq, Baffin Island (Helluland)", "Magnifier"], "keep": [], "notes": []}, {"id": "PZ-002", "n": 3, "code": "▲✚♥☾", "put": ["Postcard: Staraya Ladoga", "Postcard: Kyiv", "Postcard: Constantinople"], "keep": [], "notes": []}, {"id": "PZ-004", "n": 4, "code": "", "put": ["Postcard: Hvammur", "Map: The Island Settlement", "Aud's Treasure Museum ticket"], "keep": [], "notes": []}, {"id": "PZ-006", "n": 5, "code": "✚◆■", "put": ["Postcard: Châlus", "Postcard: Roumare Forest", "Postcard: Walcheren"], "keep": [], "notes": []}, {"id": "PZ-009", "n": 6, "code": "✚☾■", "put": ["Postcard: Brattahlíð", "Viking Museum of Brattahlíð ticket", "Map: The Western Lands"], "keep": [], "notes": []}, {"id": "PZ-005", "n": 7, "code": "★♣☾✚", "put": ["Postcard: Dögurðarnes", "Postcard: Esjuberg", "Treasure tally", "The coin hoard"], "keep": [], "notes": ["### 19 October 2026 compact paper version Designer found the eight-inch strips too tall and requested a smaller version while retaining readability. Created `Print/Print_Paper_Treasure_Tally_Compact.docx` (2 Letter pages) and `Print/Paper_Treasure_Tally_Illustrated_Instructions_Compact.docx` (3 pages). Earlier files retained for comparison. Build with `Props/SoleTally/build_paper_slider.py --compact`. Compact strips are **6 inches long (25% shorter)**. Digits are drawn **0.3 inches / 7.62 mm tall**, with 0.4 inch pitch. The sleeve and all rail pieces shrink to **6 × 2 inches**; windows are 0.58 × 0.38 inches. Strip width, channel width and end-tab width are unchanged; end tabs are 0.125 inches tall. The exact 0.075 inch end-tab clearance remains at both extreme settings. Use the two compact template pages together; the original taller sleeve cannot be used with the shorter strips. Heading remains 17 pt and instruction 11 pt. Geometry and rotation checks pass, including neighbour-digit exclusion. All five final Word pages exported and visually inspected. Standard renderer still unavailable (no LibreOffice); Microsoft Word export succeeded. QA at `C:\\EscapeBackpack\\output\\paper-tally-compact`. Physical readability, motion, clip grip and thinner-tab durability remain untested. Paper version: remove the four paper clips, set all four sliders to 0000, then reattach the clips and store flat. Earlier 3D version: turn all four wheels to 0000.", "Put every coin back, not only the ones that made the treasure."]}, {"id": "PZ-010", "n": 8, "code": "", "put": ["Postcard: Rouen", "Map: The Granted Lands", "Musée Ducal de Rouen ticket"], "keep": [], "notes": []}, {"id": "PZ-007", "n": 9, "code": "▲★♣☾", "put": ["Postcard: Bayeux", "Postcard: Winchester", "Postcard: Battle", "Architect's scale ruler"], "keep": [], "notes": []}, {"id": "PZ-011", "n": 10, "code": "▲■●", "put": ["Postcard: Oslo", "Map: The Varangian Road", "Hnefatafl board and pieces", "Hnefatafl Museum ticket, Oslo"], "keep": [], "notes": ["Take every piece off the board and pack the pieces with the board."]}, {"id": "PZ-008", "n": 11, "code": "■▲◆★", "put": ["Postcard: Hedeby", "Postcard: Aci Castello, Sicily", "The raven's flights card"], "keep": [], "notes": []}, {"id": "PZ-012", "n": 12, "code": "■☾★♣", "put": ["Postcard: Patara", "The travel tickets (18 hop tickets)"], "keep": [], "notes": []}, {"id": "PZ-013", "n": 13, "code": "▲♠♥■", "put": ["Plane ticket and letter"], "keep": ["Adventure medallion"], "notes": []}], "decoys": 0, "start": ["Postcard: L'Anse aux Meadows", "Rune cypher wheel and marked envelopes", "Liv's notes"], "startNotes": ["Put each envelope's contents back and re-seal it (unknown: how envelopes are sealed and re-sealed).", "Return to its envelope with L1. **15 Oct 2026 (designer):** added **Saga**: “an old Icelandic story about heroes and families, written down in the Middle Ages” (between Runestone and Spear). The words list is now eleven. Card rebuilt (`Props/LivNotes/build_liv_notes_pdf.py`, text ends at y 34 pt, border at 12 pt); checked in the PNG render only."]};</script>
 <script>
 "use strict";
 const R = window.RESET;
 const $ = s => document.querySelector(s);
-const KEY = "bp-reset:v1:" + R.name;
+const KEY = "bp-reset:v2:" + R.name;
 let done = {};
 try { done = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) {}
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {} };
-
-const letters = s => /[A-Za-z]/.test(s || "");
-const spaced = s => esc(String(s).split("").join(" "));
-function lockLine(st) {
-  const code = st.code ? ` (code <span class="code">${spaced(st.code)}</span>)` : "";
-  const show = st.display
-    ? `leave it showing <span class="code">${spaced(st.display)}</span>`
-    : `turn the ${letters(st.code) ? "letters" : "numbers"} away from the code`;
-  return `Close it with <b>lock ${st.lock}</b>${code} and ${show}.`;
-}
 const list = items => items.length ? `<ul>${items.map(i => `<li>${esc(i)}</li>`).join("")}</ul>` : "";
 
 function steps() {
-  const out = R.steps.map(st => ({ id: st.id, html: `<h3>Lock ${st.lock}</h3><div class="where">${esc(st.where || "Container not recorded")}</div>
-    ${st.put.length ? `<div>Put back inside:</div>${list(st.put)}` : st.nested.length ? "" : `<div>Nothing goes back in here.</div>`}
-    ${st.nested.length ? `<div>Also put in, already locked:</div>${list(st.nested.map(x => `Lock ${x.lock}: ${x.where}`))}` : ""}
+  const out = R.steps.map(st => ({ id: st.id, html: `<h3>Envelope${st.code ? `<span class="sym">${esc(st.code)}</span>` : ` ${st.n}`}</h3>
+    ${st.put.length ? `<div>Put back inside:</div>${list(st.put)}` : `<div>Nothing goes back in this one.</div>`}
     ${st.keep.length ? `<p class="keep">Yours to keep: ${esc(st.keep.join(", "))}.</p>` : ""}
     ${st.notes.map(n => `<p class="note">${inline(n)}</p>`).join("")}
-    <p class="lockline">${lockLine(st)}</p>` }));
-  if (R.start.length || R.startNotes.length)
-    out.push({ id: "start", html: `<h3>Starting position</h3><div class="where">What stays outside the locks for the next team</div>
-      ${R.start.map(g => `<div>${esc(g.where)}:</div>${list(g.put)}`).join("")}
-      ${R.startNotes.map(n => `<p class="note">${inline(n)}</p>`).join("")}` });
-  if (R.check.length)
-    out.push({ id: "check", html: `<h3>Last check</h3>${list(R.check.map(c => c.name + (c.where ? ": " + c.where.charAt(0).toLowerCase() + c.where.slice(1) : "")))}` });
+    <p class="note">Close the envelope and put it in the box.</p>` }));
+  out.push({ id: "box", html: `<h3>The box</h3>
+    ${R.start.length ? `<div>Put in loose, on top of the envelopes:</div>${list(R.start)}` : ""}
+    ${R.startNotes.map(n => `<p class="note">${inline(n)}</p>`).join("")}
+    <p class="note">Check that ${R.steps.length + R.decoys} envelopes are in the box${R.decoys ? `, including ${R.decoys} that are never opened` : ""}, then close the lid.</p>` });
   return out;
 }
 
@@ -367,13 +395,13 @@ function render() {
   const all = steps(), n = all.filter(s => done[s.id]).length;
   $("#count").textContent = `${n} / ${all.length}`;
   $("#bar").style.width = all.length ? (100 * n / all.length) + "%" : "0";
-  $("#view").innerHTML = `<div class="intro"><p>Thank you for packing the backpack back up for the next team!
-      Work from the top: the last lock comes first, so every pouch is locked before the pocket around it closes.</p>
+  $("#view").innerHTML = `<div class="intro"><p>Thank you for packing the adventure up for the next team!
+      Match each envelope by the symbols on its front, put its items back, and close it.</p>
       ${R.general.map(g => `<p class="note">${inline(g)}</p>`).join("")}</div>
     ${all.map(s => `<section class="step${done[s.id] ? " done" : ""}">${s.html}
       <label class="tick"><input type="checkbox" data-step="${esc(s.id)}"${done[s.id] ? " checked" : ""}> Done</label></section>`).join("")}
     <div class="finished"${n === all.length && all.length ? "" : " hidden"}><h2 style="margin-top:0">All packed!</h2>
-      <p>The backpack is ready for the next team. Thank you!</p><button class="btn" id="over">Start the checklist over</button></div>`;
+      <p>The box is ready for the next team. Thank you!</p><button class="btn" id="over">Start the checklist over</button></div>`;
 }
 
 document.addEventListener("change", e => {

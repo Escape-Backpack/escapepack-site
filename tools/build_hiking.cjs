@@ -1,8 +1,8 @@
 /* Package the Hiking online playtest's player files only. No tests or design record.
-   Run: node tools/build_hiking.cjs [path/to/EscapeBackpack/Hiking_Trip/Digital] */
+   Run: node tools/build_hiking.cjs [path/to/Hiking-Trip/Digital] */
 const fs = require('node:fs');
 const path = require('node:path');
-const source = path.resolve(process.argv[2] || path.join(__dirname, '../../EscapeBackpack/Hiking_Trip/Digital'));
+const source = path.resolve(process.argv[2] || path.join(__dirname, '../../Hiking-Trip/Digital'));
 const target = path.resolve(__dirname, '../play/hiking');
 const files = ['index.html', 'styles.css', 'clues.css', 'later.css', 'game-data.js', 'clues.js', 'later.js', 'game.js', 'experience.js', 'experience.css',
   // Lock 7's 3D Lego puzzles, loaded on first use (Three.js is pinned locally in vendor/three via the page's import map).
