@@ -192,7 +192,7 @@ a{color:var(--accent);text-underline-offset:3px}
 <p class="eyebrow">Behind the scenes</p>
 <div class="design-warning" role="note"><strong>Spoiler warning.</strong> Every puzzle, answer and solution of The Raven Inheritance is on this page. If you might play this backpack, turn back now.</div>
 <div class="top"><h1>Norse Backpack · The Raven Inheritance: the full adventure</h1>
-<p>Designer copy with spoilers. <b>Design:</b> envelope by envelope, what is inside, the puzzle that opens it, its logic, hints and solution (13 envelopes). <b>Production:</b> components, print costs, how it gets made. <b>Next steps:</b> quotes, launch plan. <b>Playtests:</b> who to ask, each play, changes to try. Built from the records, 2026-11-12 17:44.</p></div>
+<p>Designer copy with spoilers. <b>Design:</b> envelope by envelope, what is inside, the puzzle that opens it, its logic, hints and solution (13 envelopes). <b>Production:</b> components, print costs, how it gets made. <b>Next steps:</b> quotes, launch plan. <b>Playtests:</b> who to ask, each play, changes to try. Built from the records, 2026-11-12 18:00.</p></div>
 <div class="tabs" role="tablist"><button data-go="design" role="tab">Design</button><button data-go="production" role="tab">Production</button><button data-go="next" role="tab">Next steps</button><button data-go="playtests" role="tab">Playtests</button></div>
 <div class="bar" id="designbar"><button id="open">Open all hints and solutions</button><button id="close">Close all</button>
 <span class="mute" style="color:var(--mute);font-size:13px">Hints and solutions are folded until you open them.</span></div>
@@ -1051,7 +1051,8 @@ var saved={},dirty={},timer=0,lastPull=0,syncEl=document.getElementById('pt-sync
 try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{};dirty=JSON.parse(localStorage.getItem(KEY+':dirty')||'{}')||{}}catch(err){saved={};dirty={}}
 try{seeds=JSON.parse(document.getElementById('pt-seeds').textContent)}catch(err){}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(saved));localStorage.setItem(KEY+':dirty',JSON.stringify(dirty))}catch(err){}}
-function status(t){if(syncEl)syncEl.textContent=t}
+function status(t,link){if(!syncEl)return;syncEl.textContent=t+' ';
+  if(link){var a=document.createElement('a');a.href='/studio/';a.target='_blank';a.rel='noopener';a.textContent='Sign in to the Studio to share';syncEl.appendChild(a)}}
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function get(k){try{return JSON.parse(saved[k])}catch(err){return null}}
 function put(k,o){var c={};Object.keys(o).forEach(function(f){if(f!=='_k')c[f]=o[f]});var s=JSON.stringify(c);
@@ -1164,7 +1165,7 @@ root.addEventListener('click',function(e){
     if(!confirm('Delete '+what+(o&&o.n?' ('+o.n+')':'')+'? This cannot be undone.'))return;del(k2);renderAll()}});
 /* Shared copy: the same Studio store as the print costs, keys starting pt: */
 function sched(){clearTimeout(timer);status('Saving…');timer=setTimeout(push,700)}
-function offline(){status('Saved in this browser only (not signed in, or offline).')}
+function offline(){status('Saved in this browser only (not signed in, or offline).',true)}
 function push(){var ks=Object.keys(dirty);if(!ks.length)return Promise.resolve();var set={},rm=[];
   ks.forEach(function(k){if(k in saved)set[k]=String(saved[k]);else rm.push(k)});
   return fetch(API,{method:'PATCH',credentials:'same-origin',redirect:'manual',headers:{'Content-Type':'application/json'},body:JSON.stringify({set:set,del:rm})})
