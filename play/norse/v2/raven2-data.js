@@ -46,7 +46,7 @@
     // Liv's printed ruler card (PP-025): LONGSHIP scale along the top, SPEAR scale on the other edge.
     // Flip turns it half way round so the SPEAR edge is on top with its 0 at the left. Each face turns about its own 0 mark.
     ruler: { name: 'Liv’s ruler', kind: 'Ruler', faces: [V2('Ruler'), V2('Ruler_Spear')], faceNames: ['LONGSHIP edge up', 'SPEAR edge up'], freeRotate: true,
-      pivots: [[54.5 / 961, 8 / 253], [55.5 / 961, 9 / 253]], pivot: [54.5 / 961, 8 / 253], handles: [[0.985, 8 / 253], [0.985, 9 / 253]], handle: [0.985, 8 / 253], ...slot('ruler') },
+      pivots: [[46.5 / 900, 0.004], [47.5 / 900, 0.004]], pivot: [46.5 / 900, 0.004], handles: [[0.97, 0.004], [0.97, 0.004]], handle: [0.97, 0.004], ...slot('ruler') },
     H1: { name: 'Oslo', kind: 'Postcard', faces: postcard('H1_Oslo'), ...cardSlot(18) },
     haraldMap: { name: 'The Varangian Road', kind: 'Map', marker: true, faces: [V2('Map_Harald_Front'), V2('Map_Harald_Back')], ...mapSlot(4) },
     // The 11 × 11 board with its 19 dark pieces, 6 light pieces and the king in a tray below.
@@ -162,7 +162,7 @@
       'With love, Aunt Liv'],
     ending: ['You followed every stop I made and found the story that brought me here.',
       'I could use someone who notices what everyone else walks past, and I have a spare place on the dig.',
-      'Pack your bag. I’ll meet you in Norway.'],
+      'Pack your bag. I’ll meet you in Sweden.'],
     signature: 'Love, Aunt Liv'
   };
   const initial = ['L1', 'notes'];

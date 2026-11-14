@@ -158,7 +158,7 @@
       'With love, Aunt Liv'],
     ending: ['You followed every stop I made and found the story that brought me here.',
       'I could use someone who notices what everyone else walks past, and I have a spare place on the dig.',
-      'Pack your bag. I’ll meet you in Norway.'],
+      'Pack your bag. I’ll meet you in Sweden.'],
     signature: 'Love, Aunt Liv'
   };
   // The backpack's pockets, as drawn in the backpack panel; each lock names the pocket it closes.

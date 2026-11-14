@@ -11,7 +11,7 @@
   const table = { w: 64, h: 36.3 };
   // The game's table starts small and grows through these sizes (same shape) as props arrive.
   const sizes = [[27.1, 15.4], [35.7, 20.2], [45.5, 25.8], [54.2, 30.7], [64, 36.3]];
-  const mapSlot = n => ({ w: 8.5, h: 11, x: 0.5 + 8.9 * (n - 1), y: 0.5 });
+  const mapSlot = n => ({ w: 5.5, h: 8.5, x: 0.5 + 8.9 * (n - 1), y: 0.5 });
   const cardSlot = n => ({ w: 6, h: 4, x: 0.5 + 6.3 * ((n - 1) % 7), y: 12 + 4.3 * Math.floor((n - 1) / 7) });
   const fixed = {
     board: { w: 5, h: 6.3, est: true },

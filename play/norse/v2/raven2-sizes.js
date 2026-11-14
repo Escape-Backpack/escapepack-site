@@ -5,60 +5,60 @@
   6.0
  ],
  "Aud_Ticket_Front": [
-  3.5,
+  2.0,
   6.0
  ],
  "Aud_Ticket_Back": [
-  3.5,
+  2.0,
   6.0
  ],
  "Museum_Ticket_Front": [
-  3.5,
+  2.0,
   6.0
  ],
  "Museum_Ticket_Back": [
-  3.5,
+  2.0,
   6.0
  ],
  "Rouen_Ticket_Front": [
-  3.5,
-  5.5
+  2.0,
+  6.0
  ],
  "Rouen_Ticket_Back": [
-  3.5,
-  5.5
+  2.0,
+  6.0
  ],
  "Hnefatafl_Ticket_Front": [
-  2.6,
-  5.2
+  2.0,
+  6.0
  ],
  "Hnefatafl_Ticket_Back": [
-  2.6,
-  5.2
+  2.0,
+  6.0
  ],
  "Map_Leif": [
-  8.5,
-  11.0
+  5.507,
+  8.507
  ],
  "Map_Rollo": [
-  8.5,
-  11.0
+  5.507,
+  8.507
  ],
  "Map_Aud": [
-  8.5,
-  11.0
+  5.507,
+  8.507
  ],
  "Map_Harald_Front": [
-  8.5,
-  11.0
+  5.507,
+  8.507
  ],
  "Map_Harald_Back": [
-  8.5,
-  11.0
+  5.507,
+  8.507
  ],
  "Raven_Flights_Card": [
-  4.0,
-  3.0
+  3.5,
+  2.0
  ],
  "Flight_Booking_1": [
   5.4,
@@ -93,20 +93,20 @@
   2.9
  ],
  "Final_Letter": [
-  5.5,
-  8.5
+  4.0,
+  6.0
  ],
  "Ruler": [
-  6.407,
-  1.687
+  5.993,
+  1.993
  ],
  "Ruler_Spear": [
-  6.407,
-  1.687
+  5.993,
+  1.993
  ],
  "Hnefatafl_Ticket_Light": [
-  2.6,
-  5.2
+  2.0,
+  6.0
  ]
 };
   if (typeof module !== 'undefined' && module.exports) module.exports = sizes; else root.RavenSizes = sizes;
