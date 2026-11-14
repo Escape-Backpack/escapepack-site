@@ -49,7 +49,7 @@
       pivots: [[46.5 / 900, 0.004], [47.5 / 900, 0.004]], pivot: [46.5 / 900, 0.004], handles: [[0.97, 0.004], [0.97, 0.004]], handle: [0.97, 0.004], ...slot('ruler') },
     H1: { name: 'Oslo', kind: 'Postcard', faces: postcard('H1_Oslo'), ...cardSlot(18) },
     haraldMap: { name: 'The Varangian Road', kind: 'Map', marker: true, faces: [V2('Map_Harald_Front'), V2('Map_Harald_Back')], ...mapSlot(4) },
-    // The 11 × 11 board with its 19 dark pieces, 6 light pieces and the king in a tray below.
+    // The 11 × 11 board with its 14 dark pieces, 5 light pieces and the king in a tray below (trimmed set, 12 Nov 2026, PP-035).
     board: { name: 'Hnefatafl board', kind: 'Board', widget: 'tafl', ...slot('board') },
     // Its back holds columns I–K in mirror image; online it can also be held up to the light (PZ-008).
     osloTicket: { name: 'Hnefatafl Museum ticket', kind: 'Ticket', faces: [V2('Hnefatafl_Ticket_Front'), V2('Hnefatafl_Ticket_Back'), V2('Hnefatafl_Ticket_Light')], faceNames: ['front', 'back', 'held to the light'], ...slot('hnefataflTicket') },
@@ -57,14 +57,11 @@
     H5: { name: 'Sicily', kind: 'Postcard', faces: postcard('H5_Sicily'), ...cardSlot(17) },
     ravenCard: { name: 'Raven’s flights card', kind: 'Card', faces: [V2('Raven_Flights_Card')], ...slot('ravenFlights') },
     H6: { name: 'Patara', kind: 'Postcard', faces: postcard('H6_Patara'), ...cardSlot(22) },
-    // Envelope 12 (PP-039): one page of hop tickets per journey, and the three flight bookings between journeys.
+    // Envelope 12 (PP-039): one page of hop tickets per journey. The three flight bookings were dropped 20 Oct 2026 (the ticket dates give the journey order); removed here 14 Nov 2026.
     hopLeif: { name: 'Hop tickets · Leif’s journey', kind: 'Hop tickets', faces: [V2('Hop_Tickets_Leif')], ...slot('hopLeif') },
     hopRollo: { name: 'Hop tickets · Rollo’s journey', kind: 'Hop tickets', faces: [V2('Hop_Tickets_Rollo')], ...slot('hopRollo') },
     hopAud: { name: 'Hop tickets · Aud’s journey', kind: 'Hop tickets', faces: [V2('Hop_Tickets_Aud')], ...slot('hopAud') },
     hopHarald: { name: 'Hop tickets · Harald’s journey', kind: 'Hop tickets', faces: [V2('Hop_Tickets_Harald')], ...slot('hopHarald') },
-    flight1: { name: 'Booking confirmation', kind: 'Ticket', faces: [V2('Flight_Booking_1')], ...slot('flight1') },
-    flight2: { name: 'Booking confirmation', kind: 'Ticket', faces: [V2('Flight_Booking_2')], ...slot('flight2') },
-    flight3: { name: 'Booking confirmation', kind: 'Ticket', faces: [V2('Flight_Booking_3')], ...slot('flight3') },
     // Envelope 13: the plane ticket, Liv's last letter and the end-of-game keepsake (50 mm medallion).
     planeTicket: { name: 'Plane ticket', kind: 'Ticket', faces: [V2('Plane_Ticket')], ...slot('planeTicket') },
     finalLetter: { name: 'Liv’s last letter', kind: 'Letter', faces: [V2('Final_Letter'), V2('Final_Letter_Back')], ...slot('finalLetter') },
@@ -139,26 +136,26 @@
       'The king does not have to run to the top of the column. Try stopping after one square.',
       'F6 → H6 → H7 → K7 → K11, then measure each leg.'
     ], solution: 'Set out the starting position from Liv’s note, with columns I to K taken from the museum ticket. Then play: dark E1 → E6, king F6 → H6; dark H2 → H5, king H6 → H7; dark H10 → H11 (the attacker on the second-highest row steps up to the top row), king H7 → K7; dark K10 → I10 (the shield on Harald’s map is at I10, and moving the piece on K10 frees column K), king K7 → K11. The moves are 2, 1, 3 and 4 squares long: 2134.' },
-    { nudge: 'Two postcards (Hedeby and Sicily) and a card of raven flights.', name: 'Envelope 12', answer: '2648', releases: ['H6', 'hopLeif', 'hopRollo', 'hopAud', 'hopHarald', 'flight1', 'flight2', 'flight3'], message: 'The postcard from Patara, the hop tickets for the four journeys and three flight bookings.', hints: [
+    { nudge: 'Two postcards (Hedeby and Sicily) and a card of raven flights.', name: 'Envelope 12', answer: '2648', releases: ['H6', 'hopLeif', 'hopRollo', 'hopAud', 'hopHarald'], message: 'The postcard from Patara and the hop tickets for the four journeys.', hints: [
       'The underlined word on the Sicily postcard matters to the map’s unusual column labels.',
       'Read the columns R, A, V, E, N in that order. On Hedeby’s key, each stem’s left branches select the row; its right branches select the letter.',
       'Use the five decoded letters as perches on the raven’s flights card. Move directly from each letter to the next and read one digit from each flight. Do not add them.'
     ], solution: 'R6 → H, A10 → R, V9 → A, E3 → F, N2 → N: HRAFN. Then H → R = 2, R → A = 6, A → F = 4, F → N = 8: 2648.' },
     // The final riddle (PZ-013): filter the decoys, order each journey from its hop tickets, draw it on its map.
-    { nudge: 'The postcard from Patara, the hop tickets for the four journeys and three flight bookings.', name: 'Envelope 13', answer: '1972', releases: ['planeTicket', 'finalLetter', 'medallion'], message: 'A plane ticket, Liv’s last letter and a medallion. Liv finished her family tree: turn her last letter, her notes card and the maps of the Granted Lands and the Island Settlement over.', hints: [
+    { nudge: 'The postcard from Patara and the hop tickets for the four journeys.', name: 'Envelope 13', answer: '1972', releases: ['planeTicket', 'finalLetter', 'medallion'], message: 'A plane ticket, Liv’s last letter and a medallion. Liv finished her family tree: turn her last letter, her notes card and the maps of the Granted Lands and the Island Settlement over.', hints: [
       'Liv wrote to retrace only the steps that matter to your family’s history. Only the postcards with her small raven count. Four cards have no raven: set them aside.',
       'Each map shows the stamp of its journey. Put each postcard beside the map with the same stamp. The travel tickets show how Liv got from each stop to the next, so use them to put each journey’s stops in order.',
-      'On each map, join the raven stops in that order, skipping any stop without a raven. Each map draws one digit. The flight tickets between the journeys give the order to read the four maps.'
-    ], solution: 'Set aside the four postcards with no raven. Match the rest to the maps by their stamps. Chain each journey’s travel tickets to put its stops in order (skip any whose postcard has no raven). On each map, join the raven stops in that order: Leif’s map draws 1, Rollo’s 9, Aud’s 7 and Harald’s 2. The three flight tickets give the order Leif, Rollo, Aud, Harald: 1972.' }
+      'On each map, join the raven stops in that order, skipping any stop without a raven. Each map draws one digit. The dates on the travel tickets give the order to read the four maps.'
+    ], solution: 'Set aside the four postcards with no raven. Match the rest to the maps by their stamps. Chain each journey’s travel tickets to put its stops in order (skip any whose postcard has no raven). On each map, join the raven stops in that order: Leif’s map draws 1, Rollo’s 9, Aud’s 7 and Harald’s 2. The ticket dates put the journeys in order: Leif (September), Rollo (late September to mid October), Aud (late October), Harald (November to December): 1972.' }
   ];
   const MAX_ATTEMPTS = 30;
   /* Liv's handwritten notes for the online edition: the opening letter, one note per new trail
      and the closing letter (its last lines are the ones the physical ending uses). DRAFT copy,
      2 Oct 2026: swap in the printed letters once they are written. */
   const STORY = {
-    // The opening quotes postcard L1 word for word (Postcards/build_postcard_L1_pdf.py), so it sets the scene without adding to the story.
-    letter: ['Hello nephew!',
-      'I know you love puzzles, so I created an adventure for you! With a surprise at the end!',
+    // The opening quotes postcard L1's first lines word for word (Postcards/build_postcard_L1_pdf.py; updated 14 Nov 2026), so it sets the scene without adding to the story.
+    letter: ['Hello, my dear explorer!',
+      'I spent months travelling to explore our Norse heritage, and I turned it into an adventure for you, with a surprise at the end!',
       'With love, Aunt Liv'],
     ending: ['Congratulations! You followed every card, every map and every ticket, all the way to the end.',
       'I traced every descendant I could find. Most of those lines lead to other families, and only one famous Norse name leads to ours. I managed to build a good family tree.',
@@ -287,13 +284,15 @@
     return dx !== 0 || dy !== 0;
   }
   const lying = ([x, y], id) => ({ x, y, rot: 0, face: 0, stowed: false, ...(items[id]?.widget === 'tally' ? { wheels: [0, 0, 0, 0] } : {}), ...(items[id]?.widget === 'tafl' ? { tafl: taflSquares() } : {}) });
-  /* Hnefatafl pieces: 16 dark, 6 light, then the king. Each is on a square ('A1'–'K11') or in
-     the tray (null). Bad entries and second pieces on a square go back to the tray. */
+  /* Hnefatafl pieces: 14 dark, 5 light, then the king (Props/Hnefatafl/board_layout.py; 19 and 6 before 14 Nov 2026).
+     Each is on a square ('A1'–'K11') or in the tray (null). Bad entries and second pieces on a square go back to the
+     tray; so does a whole saved board from the larger set, whose piece order no longer matches. */
   // Wet-erase marker lines on a map: [x1, y1, x2, y2] as fractions of the map's width and height.
   const markLines = raw => (Array.isArray(raw) ? raw : []).filter(l => Array.isArray(l) && l.length === 4 && l.every(v => Number.isFinite(v) && v >= 0 && v <= 1)).slice(0, 300).map(l => l.map(v => Math.round(v * 1e5) / 1e5));
-  const TAFL = [...Array(19).fill('dark'), ...Array(6).fill('light'), 'king'];
+  const TAFL = [...Array(14).fill('dark'), ...Array(5).fill('light'), 'king'];
   function taflSquares(raw) {
     const seen = new Set();
+    if (Array.isArray(raw) && raw.length !== TAFL.length) raw = null;
     return TAFL.map((_, i) => { const sq = raw?.[i]; if (typeof sq !== 'string' || !/^[A-K](?:[1-9]|1[01])$/.test(sq) || seen.has(sq)) return null; seen.add(sq); return sq; });
   }
   // Which face is up. Saves before 1 Oct 2026 stored back: true/false instead.

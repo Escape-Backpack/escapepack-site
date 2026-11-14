@@ -890,7 +890,7 @@
   }
 
   /* Hnefatafl board (PR-08, PZ-01): 11 × 11 squares, columns A–K and rows 1–11 as on Liv's
-     sheet, corners and throne marked, with a tray of 16 dark pieces, 6 light pieces and the
+     sheet, corners and throne marked, with a tray of 14 dark pieces, 5 light pieces and the
      king below. Drag a piece onto a square; drag it off the board to put it back in the tray.
      No rules are enforced, as with the real board. */
   const TAFL_M = 18, TAFL_TRAY = 452;

@@ -21,7 +21,7 @@
     ravenFlights: { w: 4, h: 3 }
   };
   const printed = { notes: 'Notes_Card', audTicket: 'Aud_Ticket_Front', museumTicket: 'Museum_Ticket_Front', rouenTicket: 'Rouen_Ticket_Front',
-    hnefataflTicket: 'Hnefatafl_Ticket_Front', flight1: 'Flight_Booking_1', flight2: 'Flight_Booking_2', flight3: 'Flight_Booking_3',
+    hnefataflTicket: 'Hnefatafl_Ticket_Front',
     hopLeif: 'Hop_Tickets_Leif', hopRollo: 'Hop_Tickets_Rollo', hopAud: 'Hop_Tickets_Aud', hopHarald: 'Hop_Tickets_Harald',
     planeTicket: 'Plane_Ticket', finalLetter: 'Final_Letter', ruler: 'Ruler' };
   const sizeOf = {};
