@@ -4,6 +4,22 @@
   4.0,
   6.0
  ],
+ "Notes_Card_Back": [
+  4.0,
+  6.0
+ ],
+ "Final_Letter_Back": [
+  4.0,
+  6.0
+ ],
+ "Map_Aud_Back": [
+  5.503,
+  8.503
+ ],
+ "Map_Rollo_Back": [
+  5.503,
+  8.503
+ ],
  "Aud_Ticket_Front": [
   2.0,
   6.0

@@ -15,7 +15,7 @@
   const items = {
     // On top of the box from the start: L1 (it gives the first code as a worked example) and Liv's notes card.
     L1: { name: "L’Anse aux Meadows", kind: 'Postcard', faces: postcard('L1_LAnse'), ...cardSlot(1) },
-    notes: { name: 'Liv’s notes', kind: 'Card', faces: [V2('Notes_Card')], ...slot('notes') },
+    notes: { name: 'Liv’s notes', kind: 'Card', faces: [V2('Notes_Card'), V2('Notes_Card_Back')], ...slot('notes') },
     AD: { name: 'Bjarnarhöfn', kind: 'Postcard', faces: postcard('AD_Bjarnarhofn'), ...cardSlot(15) },
     // Aud's comb (PR-19): seats on AD's message side over the two printed ring-and-dots.
     comb: { name: 'Carved comb', kind: 'Comb', faces: ['./assets/Comb_Front.svg', './assets/Comb_Back.svg'], noSnap: true, ...slot('comb') },
@@ -25,7 +25,7 @@
     H3: { name: 'Kyiv', kind: 'Postcard', faces: postcard('H3_Kyiv'), ...cardSlot(20) },
     HD: { name: 'Constantinople', kind: 'Postcard', faces: postcard('HD_Constantinople'), ...cardSlot(21) },
     A2: { name: 'Hvammur', kind: 'Postcard', faces: postcard('A2_Hvammur'), ...cardSlot(13) },
-    audMap: { name: 'The Island Settlement', kind: 'Map', marker: true, faces: [V2('Map_Aud')], ...mapSlot(3) },
+    audMap: { name: 'The Island Settlement', kind: 'Map', marker: true, faces: [V2('Map_Aud'), V2('Map_Aud_Back')], ...mapSlot(3) },
     audTicket: { name: 'Aud’s Treasure Museum ticket', kind: 'Ticket', faces: [V2('Aud_Ticket_Front'), V2('Aud_Ticket_Back')], ...slot('audTicket') },
     R1: { name: 'Châlus', kind: 'Postcard', faces: postcard('R1_Chalus'), ...cardSlot(6) },
     R6: { name: 'Roumare Forest', kind: 'Postcard', faces: postcard('R6_Roumare_Forest'), ...cardSlot(7) },
@@ -38,7 +38,7 @@
     // The four-wheel treasure tally (PR-24): digits drawn like the printed seven-segment ring.
     tally: { name: 'Tally', kind: 'Tally', widget: 'tally', noSnap: true, ...slot('tally') },
     R2: { name: 'Rouen', kind: 'Postcard', faces: postcard('R2_Rouen'), ...cardSlot(5) },
-    rolloMap: { name: 'The Granted Lands', kind: 'Map', marker: true, faces: [V2('Map_Rollo')], ...mapSlot(2) },
+    rolloMap: { name: 'The Granted Lands', kind: 'Map', marker: true, faces: [V2('Map_Rollo'), V2('Map_Rollo_Back')], ...mapSlot(2) },
     rouenTicket: { name: 'Rouen museum ticket', kind: 'Ticket', faces: [V2('Rouen_Ticket_Front'), V2('Rouen_Ticket_Back')], ...slot('rouenTicket') },
     R3: { name: 'Bayeux', kind: 'Postcard', faces: postcard('R3_Bayeux'), ...cardSlot(9) },
     R4: { name: 'Winchester', kind: 'Postcard', faces: postcard('R4_Winchester'), ...cardSlot(10) },
@@ -67,7 +67,7 @@
     flight3: { name: 'Booking confirmation', kind: 'Ticket', faces: [V2('Flight_Booking_3')], ...slot('flight3') },
     // Envelope 13: the plane ticket, Liv's last letter and the end-of-game keepsake (50 mm medallion).
     planeTicket: { name: 'Plane ticket', kind: 'Ticket', faces: [V2('Plane_Ticket')], ...slot('planeTicket') },
-    finalLetter: { name: 'Liv’s last letter', kind: 'Letter', faces: [V2('Final_Letter')], ...slot('finalLetter') },
+    finalLetter: { name: 'Liv’s last letter', kind: 'Letter', faces: [V2('Final_Letter'), V2('Final_Letter_Back')], ...slot('finalLetter') },
     medallion: { name: 'Medallion', kind: 'Medallion', faces: ['./assets/Medallion_Front.webp', './assets/Medallion_Back.webp'], round: true, noSnap: true, ...slot('medallion') }
   };
   // The hoard (PZ-03): 12 loose coins, mixed so the three piles are not handed over sorted.
@@ -145,7 +145,7 @@
       'Use the five decoded letters as perches on the raven’s flights card. Move directly from each letter to the next and read one digit from each flight. Do not add them.'
     ], solution: 'R6 → H, A10 → R, V9 → A, E3 → F, N2 → N: HRAFN. Then H → R = 2, R → A = 6, A → F = 4, F → N = 8: 2648.' },
     // The final riddle (PZ-013): filter the decoys, order each journey from its hop tickets, draw it on its map.
-    { nudge: 'The postcard from Patara, the hop tickets for the four journeys and three flight bookings.', name: 'Envelope 13', answer: '1972', releases: ['planeTicket', 'finalLetter', 'medallion'], message: 'A plane ticket, Liv’s last letter and a medallion.', hints: [
+    { nudge: 'The postcard from Patara, the hop tickets for the four journeys and three flight bookings.', name: 'Envelope 13', answer: '1972', releases: ['planeTicket', 'finalLetter', 'medallion'], message: 'A plane ticket, Liv’s last letter and a medallion. Liv finished her family tree: turn her last letter, her notes card and the maps of the Granted Lands and the Island Settlement over.', hints: [
       'Liv wrote to retrace only the steps that matter to your family’s history. Only the postcards with her small raven count. Four cards have no raven: set them aside.',
       'Each map shows the stamp of its journey. Put each postcard beside the map with the same stamp. The travel tickets show how Liv got from each stop to the next, so use them to put each journey’s stops in order.',
       'On each map, join the raven stops in that order, skipping any stop without a raven. Each map draws one digit. The flight tickets between the journeys give the order to read the four maps.'
@@ -160,7 +160,8 @@
     letter: ['Hello nephew!',
       'I know you love puzzles, so I created an adventure for you! With a surprise at the end!',
       'With love, Aunt Liv'],
-    ending: ['You followed every stop I made and found the story that brought me here.',
+    ending: ['Congratulations! You followed every card, every map and every ticket, all the way to the end.',
+      'I traced every descendant I could find. Most of those lines lead to other families, and only one famous Norse name leads to ours. I managed to build a good family tree.',
       'I could use someone who notices what everyone else walks past, and I have a spare place on the dig.',
       'Pack your bag. I’ll meet you in Sweden.'],
     signature: 'Love, Aunt Liv'

@@ -25,3 +25,6 @@
 /play/norse/         /play/norse/v2/      302
 /designer/clues    /design/clues/    301
 /designer/clues/*  /design/clues/:splat  301
+# The first Norse online prototype was retired 14 Nov 2026; its link goes to the current game.
+/play/norse/leif   /play/norse/v2/   302
+/play/norse/leif/  /play/norse/v2/   302

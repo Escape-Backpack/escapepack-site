@@ -11,7 +11,7 @@ One domain, one Cloudflare Pages project (this repo). No per-backpack subdomains
 | Path | What | Who sees it | Source |
 |---|---|---|---|
 | `/adventures/<game>/` | Public page for each adventure (story, borrowing, reset) | everyone | hand-made, in this repo |
-| `/play/<game>/` | Digital versions of the games | everyone | packaged into this repo (as `play/norse/leif/` today) |
+| `/play/<game>/` | Digital versions of the games | everyone | packaged into this repo (as `play/norse/v2/` for Norse) |
 | `/design/<game>/` | Brainstorm boards (Space, Hockey, Canada...) and designer tools (`design/clues/`) | anyone with the link (`noindex`); Access login deferred | built from each backpack repo by `backpack-kit` |
 | `/help/<game>/` | Hint pages, the printed QR destination | everyone | hand-made or copied from the backpack build |
 
@@ -52,7 +52,7 @@ examples and a browser-local shortlist). It sits under `/design/`, which is publ
 |---|---|
 | `index.html` | Home: all adventures, how it works, player help |
 | `adventures/norse/` | The Raven Inheritance: public story, per-game contents/size tables, raven box-cover artwork, five paired postcard fronts/backs, cypher wheel, ruler, maps, museum tickets, comb, medallion and raven coin and V2 online playtest link. Gallery previews include puzzle clues and the opening wheel example; no solution sheets. |
-| `play/norse/leif/` | Norse online playtest (The Raven Inheritance): the whole game, 13 locks across four trails and the final route, with original prop artwork, hints, local saves, tablet support, optional shared rooms (“Play together”), sound, an ending with a shareable result and printable certificate, and built-in feedback. |
+| `play/norse/v2/` | Norse online playtest (The Raven Inheritance): the whole game, 13 locks across four trails and the final route, with original prop artwork, hints, local saves, tablet support, optional shared rooms (“Play together”), sound, an ending with a shareable result and printable certificate, and built-in feedback. |
 | `play/hiking/` | Hiking online playtest: all ten locks, laptop first, local saves. **Unlisted**: no homepage link while the physical backpack is lent out (it would give away every answer); `noindex`. |
 | `play/cold-call/` | The Cold Call online playtest (HVAC technician, furnace to heat pump, propane base case): six lines on a service call sheet, laptop first, local saves, calculator, built-in feedback (Formspree, `game: cold-call-online`, with per-line time, hints and wrong tries). **Unlisted**: no homepage link; `noindex`. Source: `Cold-Call/cold-call.html` (copy it here after each change, with `Cold-Call/coldcall_json/teaching.json` → `play/cold-call/coldcall_json/`, which the teaching cards load). Same game as the Energy Suite copy (`ottawavisuals.github.io/Energy/coldcall.html`), different branding. |
 | `hiking.html` | The Hiking Backpack: story, facts, borrowing, hints and reset links |
@@ -77,9 +77,9 @@ inspectable in JavaScript. The design record is the source page opened with `?de
 
 ## Norse online playtest
 
-`/play/norse/leif/` is packaged from the design repository's
-`NorseBackpack/Digital/Leif.html`, `leif.css`, `leif.js`, and `leif-data.js`.
-Edit those source files, then run `node tools/build_leif.cjs` from this repository.
+`/play/norse/v2/` is packaged from the design repository's
+`Digital/Raven_V2.html`, `leif.css`, `raven2.css`, `raven2.js`, `raven2-data.js` and the other V2 files.
+Edit those source files, then run `node tools/build_raven2.cjs` from this repository. (The first prototype at `/play/norse/leif/` was retired on 14 Nov 2026; that address now redirects here.)
 An optional argument supplies a different absolute path to the source `Digital`
 directory. The default assumes the current sibling checkout arrangement.
 
@@ -94,9 +94,9 @@ players can move progress using the save-copy controls. The homepage links to it
 
 - **Source files** now also include `leif-sound.js` (synthesised sound, no audio files),
   `leif-room.js` (Play together client) and `assets/Caveat-Medium.woff2` (Liv's handwriting,
-  SIL OFL, licence in `assets/Caveat-OFL.txt`). `tools/build_leif.cjs` packages them.
+  SIL OFL, licence in `assets/Caveat-OFL.txt`). `tools/build_raven2.cjs` packages them.
 - **Play together** needs the `escapepack-rooms` Worker (folder next to this repository):
-  `npx wrangler deploy` there, then put its `wss://` address in `Leif.html`'s
+  `npx wrangler deploy` there, then put its `wss://` address in `Raven_V2.html`'s
   `<meta name="rooms-server">` and rebuild. While that is empty the button stays hidden.
   To test on this computer: `npx wrangler dev` in that folder, then open
   `Leif.html?rooms=ws://localhost:8787` from a local server.
