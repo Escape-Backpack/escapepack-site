@@ -1,136 +1,158 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Escape Backpack brings puzzle adventures home. Explore the backpacks, borrow the Hiking Backpack, and find hints or reset instructions when you need them.">
-  <meta name="theme-color" content="#17372d">
-  <title>Escape Backpack · An escape room in a backpack</title>
-  <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="site.css?v=4"><link rel="stylesheet" href="site-dark.css?v=4">
-<script>try{var t=localStorage.getItem("ebp-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script><script src="/theme.js?v=4" defer></script></head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#542C3B">
+<title>The Cryptic Bureau · Puzzle adventures from your family</title>
+<meta name="description" content="Someone in your family was a member of the Cryptic Bureau. Now a package has arrived with your name on it. Cooperative puzzle adventures in a box, for 1 to 6 players.">
+<meta property="og:title" content="The Cryptic Bureau">
+<meta property="og:description" content="Someone in your family was a member. Now it's your turn.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://escapepack.ca/assets/bureau/bureau-logo-512.png">
+<link rel="icon" type="image/png" href="/assets/bureau/favicon-64.png">
+<link rel="apple-touch-icon" href="/assets/bureau/apple-touch-icon.png">
+<link rel="preload" href="/assets/bureau/cormorant-garamond-600.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/bureau.css?v=1">
+<script>try{var t=localStorage.getItem("ebp-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+<script src="/theme.js?v=4" defer></script>
+</head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="#top" aria-label="Escape Backpack home"><span class="brand-mark" aria-hidden="true"></span><span>Escape<br><strong>Backpack</strong></span></a>
-      <nav aria-label="Main navigation" class="main-nav">
-        <a href="#adventures">Adventures</a>
-        <a href="#how-it-works">How it works</a>
-        <a class="nav-help" href="help/">Hints &amp; reset <span aria-hidden="true">↗</span></a>
-        <a href="borrow.html">Borrow a backpack</a>
-      </nav>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="The Cryptic Bureau, home">
+      <img src="/assets/bureau/bureau-mark.png" alt="" width="240" height="164">
+      <span class="brand-text"><small>The</small><span>Cryptic Bureau</span></span>
+    </a>
+    <nav class="main-nav" aria-label="Main">
+      <a href="#story">The Bureau</a>
+      <a href="#adventures">Adventures</a>
+      <a href="#how">How it works</a>
+      <a href="/help/">Hints &amp; help</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Puzzle adventures in a box</p>
+        <h1>Someone in your family was a member. <em>Now it's your turn.</em></h1>
+        <p class="lead">For years, relatives you thought were ordinary have been sending out puzzle adventures. A package has arrived with your name on it. Open it, solve it, and find out what you've inherited.</p>
+        <p class="plain">Cooperative puzzle adventures for 1 to 6 players, played at home from a single box. No locks, no app.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="/adventures/norse/">Meet the first adventure</a>
+          <a class="btn btn-outline" href="#how">How it works</a>
+        </div>
+      </div>
+      <aside class="memo" aria-label="Sample dispatch">
+        <span class="kicker">Bureau dispatch</span>
+        <dl>
+          <dt>To</dt><dd>You</dd>
+          <dt>From</dt><dd>Aunt Liv</dd>
+          <dt>Re</dt><dd>The Raven Inheritance</dd>
+        </dl>
+        <p class="body">Aunt Liv left you something. The ravens know where.</p>
+        <span class="stamp">Invitation enclosed</span>
+      </aside>
     </div>
-  </header>
+  </section>
 
-  <main id="main">
-    <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> Puzzle adventures to take home</p>
-          <h1 id="hero-title">A whole adventure.<br><em>One backpack.</em></h1>
-          <p class="hero-lead">Open the bag, follow the clues, and solve your way through a story you can hold. Start with the Hiking Backpack, or see what’s coming next.</p>
-          <ul class="hero-facts" aria-label="Hiking Backpack quick facts"><li>1–4 players</li><li>About 1–2 hours</li><li>Ages 8+</li></ul>
-          <div class="actions">
-            <a class="button button-primary" href="borrow.html" data-track="borrow_started">Borrow the Hiking Backpack <span aria-hidden="true">↗</span></a>
-            <a class="text-link" href="#adventures">Explore all adventures <span aria-hidden="true">↓</span></a>
-          </div>
-          <p class="hero-location">Made in Ottawa · Play at your own pace</p>
-        </div>
-        <div class="hero-visual">
-          <img src="assets/hiking-cartoon.png" alt="Illustrated Hiking Backpack on a camping table with outdoor adventure gear." width="1024" height="1024">
-          <div class="visual-caption"><span>The Hiking Backpack<br><strong>Available to borrow</strong></span></div>
-        </div>
+  <section class="band" id="story">
+    <div class="wrap split story">
+      <div>
+        <p class="eyebrow">The Bureau</p>
+        <h2>A family tradition that began with a secret.</h2>
       </div>
-    </section>
-
-    <section class="quick-help" id="player-tools" aria-labelledby="help-title">
-      <div class="container help-layout">
-        <div class="help-intro">
-          <p class="eyebrow light">Already playing?</p>
-          <h2 id="help-title">Pick up where you are.</h2>
-          <p>Everything you need during and after the Hiking Backpack game is one tap away.</p>
-        </div>
-        <div class="help-actions">
-          <a class="help-card" href="help/hiking/hints/">
-            <span class="help-number">01 · DURING THE GAME</span>
-            <span class="help-title">Get a hint <span aria-hidden="true">↗</span></span>
-            <span class="help-detail">Open the Hiking hint companion when your team gets stuck.</span>
-          </a>
-          <a class="help-card" href="help/hiking/reset/">
-            <span class="help-number">02 · AFTER THE GAME</span>
-            <span class="help-title">Reset the backpack <span aria-hidden="true">↗</span></span>
-            <span class="help-detail">Follow the illustrated checklist before passing it on.</span>
-          </a>
-        </div>
+      <div>
+        <p class="pull">It began with Grandma, a secret signature and a package nobody was supposed to trace. Now the whole family sends them.</p>
+        <p>Sending a puzzle package is now an invitation. Solve it, and you're in.</p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="adventures section-pad" id="adventures" aria-labelledby="adventures-title">
-      <div class="container">
-        <div class="section-heading">
-          <div><p class="eyebrow">Choose a world</p><h2 id="adventures-title">Four stories to step into.</h2></div>
-          <p>Each backpack has its own setting and puzzles. The Hiking Backpack is ready to play; the others are taking shape.</p>
+  <section id="adventures">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Adventures</p>
+        <h2>Each package is a test to join.</h2>
+        <p>Every adventure is sent by a different relative and plays on its own. Start anywhere.</p>
+      </div>
+
+      <article class="featured">
+        <img src="/assets/bureau/raven-box-cover.jpg" alt="The Raven Inheritance box cover: postcards, kraft envelopes and a magnifying glass on a table by a fire" width="1400" height="1050">
+        <div class="body">
+          <span class="tag">Online playtest open</span>
+          <h3>The Raven Inheritance</h3>
+          <p>Aunt Liv left a trail of postcards across the Norse world. Follow her travels, piece together the clues and uncover a family secret.</p>
+          <ul class="facts"><li>Sent by Aunt Liv</li><li>1 to 6 players</li><li>About 90 minutes</li><li>No locks, no app</li></ul>
+          <div class="actions"><a class="btn btn-primary" href="/adventures/norse/">See the adventure</a><a class="btn btn-outline" href="/play/norse/v2/" data-track="playtest_started" data-game="norse">Try the online playtest</a></div>
         </div>
-        <div class="adventure-grid">
-          <article class="adventure-card">
-            <div class="card-image"><img src="assets/hiking-cartoon.png" loading="lazy" alt="Hiking Backpack on a camping table in an illustrated forest setting."></div>
-            <div class="card-content"><div class="card-top"><span class="tag tag-live">Available now</span><span class="card-index">01</span></div><h3>The Hiking Backpack</h3><p>Follow a trail of clues to recover the combinations and find Juno’s favourite plushy.</p><a class="card-link" href="hiking.html">Explore this adventure <span aria-hidden="true">↗</span></a></div>
-          </article>
-          <article class="adventure-card">
-            <div class="card-image"><img src="assets/norse-cover.png" loading="lazy" alt="Rugged backpack, postcards and map on an old wooden pub table near a Nordic fjord."></div>
-            <div class="card-content"><div class="card-top"><span class="tag">Online playtest</span><span class="card-index">02</span></div><h3>The Raven Inheritance</h3><p>Follow Aunt Liv’s postcards across the Norse world toward a family secret. Preview the artwork and try the online adventure.</p><a class="card-link" href="adventures/norse/">Explore this adventure <span aria-hidden="true">↗</span></a><span class="card-note">Desktop recommended · physical game in development</span></div>
-          </article>
-          <article class="adventure-card">
-            <div class="card-image"><img src="assets/aurora-cover.png" loading="lazy" alt="Orange maintenance backpack on a worktable aboard Space Station Aurora, with Earth visible through a window."></div>
-            <div class="card-content"><div class="card-top"><span class="tag">In development</span><span class="card-index">03</span></div><h3>Space Station Aurora</h3><p>The crew is stranded in their quarters. Explore the station and help bring its systems back online.</p><span class="card-note">Station adventure · coming later</span></div>
-          </article>
-          <article class="adventure-card">
-            <div class="card-image"><img src="assets/space-exploration-cover.png" loading="lazy" alt="Explorer backpack, telescope and star chart on a workshop table beneath a night sky."></div>
-            <div class="card-content"><div class="card-top"><span class="tag">Early concept</span><span class="card-index">04</span></div><h3>Space Exploration</h3><p>Explore the history of space discovery and uncover your uncle’s playful secret project.</p><span class="card-note">Working title · in concept</span></div>
-          </article>
+      </article>
+
+      <div class="files" aria-label="Other files in the Bureau archive">
+        <div class="file"><h3>Hockey</h3><p class="from">From Coach</p><span class="state">In the files</span></div>
+        <div class="file"><h3>Canada</h3><p class="from">From the retired parents</p><span class="state">In the files</span></div>
+        <div class="file"><h3>Folklore</h3><p class="from">From the relative who studied it</p><span class="state">In the files</span></div>
+        <div class="file"><h3>Space Station Aurora</h3><p class="from">A Bureau training exam</p><span class="state">In the files</span></div>
+        <div class="file sealed"><h3>Grandma's story</h3><p class="from">From <span class="redact" data-label="Redacted name. Select to reveal">Grandma</span> herself</p><span class="state">Sealed</span></div>
+      </div>
+
+      <h3 class="sub-head">From the Escape Backpack days</h3>
+      <article class="featured small">
+        <img src="/assets/bureau/hiking-cover.jpg" alt="Illustrated Hiking Backpack on a camping table with outdoor adventure gear" width="1200" height="800" loading="lazy">
+        <div class="body">
+          <span class="tag">Available to borrow · Ottawa</span>
+          <h3>The Hiking Backpack</h3>
+          <p>Juno's favourite plushy is locked inside. Follow the clues you left yourself, recover the combinations and find a way in.</p>
+          <ul class="facts"><li>1 to 4 players</li><li>About 1 to 2 hours</li><li>Ages 8+</li><li>A real backpack, with locks</li></ul>
+          <div class="actions"><a class="btn btn-primary" href="/adventures/hiking/">See the backpack</a><a class="btn btn-outline" href="/borrow.html" data-track="borrow_started" data-game="hiking">Borrow it</a></div>
         </div>
-        <div class="future-note"><div><strong>Curious about the next backpack?</strong><span>Choose “Notify me when others are ready” on the request form.</span></div><a href="borrow.html?intent=notify" data-track="update_started">Request an update <span aria-hidden="true">↗</span></a></div>
-      </div>
-    </section>
+      </article>
+    </div>
+  </section>
 
-    <section class="how-section section-pad" id="how-it-works" aria-labelledby="how-title">
-      <div class="container how-layout">
-        <div class="how-heading"><p class="eyebrow">The experience</p><h2 id="how-title">Bring the adventure to your table.</h2><p>Everything begins with a backpack full of physical clues and a story to unravel together.</p></div>
-        <ol class="steps">
-          <li><span>01</span><div><h3>Borrow</h3><p>Request the Hiking Backpack. Pickup and return are arranged in person in Ottawa.</p></div></li>
-          <li><span>02</span><div><h3>Explore</h3><p>Unpack the story, solve the puzzles, and use the hint companion if you need a nudge.</p></div></li>
-          <li><span>03</span><div><h3>Reset &amp; pass it on</h3><p>Use the reset checklist to put everything back in place for the next players.</p></div></li>
-        </ol>
+  <section class="band" id="how">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">How it works</p>
+        <h2>One box. A few envelopes. A family secret.</h2>
       </div>
-    </section>
+      <ol class="steps">
+        <li><strong>A package arrives</strong><span>One box per adventure, with sealed envelopes inside.</span></li>
+        <li><strong>Open, read, solve</strong><span>Cooperative puzzles for the whole table. No locks and no app.</span></li>
+        <li><strong>Stuck? Scan.</strong><span>A QR code in the box opens a free hint page.</span></li>
+        <li><strong>Reset and pass it on</strong><span>Nothing is single-use. A reset page makes it ready to lend to a friend.</span></li>
+      </ol>
+    </div>
+  </section>
 
-    <section class="faq-section section-pad" id="questions" aria-labelledby="faq-title">
-      <div class="container faq-layout">
-        <div class="faq-heading"><p class="eyebrow">Good to know</p><h2 id="faq-title">A few things before you start.</h2><p>Clear answers for planning, playing, and passing the backpack on.</p></div>
-        <div class="faq-list">
-          <details><summary>Which backpack can I borrow now?</summary><p>The Hiking Backpack is the one currently available. The Norse and Aurora adventures are in development; Space Exploration is an early concept.</p></details>
-          <details><summary>How does pickup work?</summary><p>Use the <a href="borrow.html">request form</a> to choose a preferred week. Pickup and return are arranged in person in Ottawa; the details are confirmed after your request.</p></details>
-          <details><summary>How many people can play?</summary><p>The Hiking Backpack is designed for 1–4 players, ages 8 and up. Most teams finish in about 1–2 hours.</p></details>
-          <details><summary>What if we get stuck?</summary><p>Open the <a href="help/hiking/hints/">Hiking hint companion</a> while you play. It lets you ask for help on the puzzle you’re working on.</p></details>
-          <details><summary>What do we do when we finish?</summary><p>Follow the <a href="help/hiking/reset/">illustrated reset checklist</a> so every prop is ready for the next group.</p></details>
-        </div>
+  <section class="closing" id="help">
+    <div class="wrap">
+      <p class="eyebrow">Already have a package?</p>
+      <h2>Hints, reset pages and borrowing.</h2>
+      <p>Scan the QR code in your box, or find your adventure's help page here.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="/help/">Find hints</a>
+        <a class="btn btn-outline" href="/borrow.html" data-track="borrow_started" data-game="hiking">Borrow a box</a>
+        <a class="btn btn-outline" href="/feedback.html">Send feedback</a>
       </div>
-    </section>
+    </div>
+  </section>
+</main>
 
-    <section class="closing section-pad" aria-labelledby="closing-title">
-      <div class="container closing-layout">
-        <div><p class="eyebrow light">Take the next step</p><h2 id="closing-title">Ready for your first escape?</h2><p>Start with the Hiking Backpack. Already played? Tell us what worked and what could be better.</p></div>
-        <div class="closing-actions"><a class="button button-cream" href="borrow.html" data-track="borrow_started">Borrow the Hiking Backpack <span aria-hidden="true">↗</span></a><a class="button button-outline" href="feedback.html" data-track="feedback_started">Share feedback <span aria-hidden="true">↗</span></a></div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer"><div class="container footer-inner"><span>Escape Backpack · Ottawa</span><div><a href="#adventures">Adventures</a><a href="#questions">Questions</a><a href="help/hiking/hints/">Hiking hints</a><a href="help/hiking/reset/">Reset checklist</a><a href="feedback.html">Feedback</a><a href="design/">Designers</a></div></div></footer>
-  <script src="analytics.js"></script>
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© The Cryptic Bureau · Formerly Escape Backpack · Ottawa</span>
+    <ul><li><a href="#story">The Bureau</a></li><li><a href="#adventures">Adventures</a></li><li><a href="/help/">Hints &amp; help</a></li><li><a href="/feedback.html">Feedback</a></li></ul>
+    <p class="file-note">File note, for members: <code>VROYH LW DQG BRX'UH LQ</code>
+      <details><summary>Need the key?</summary> The Bureau's oldest trick: move each letter three places back.</details></p>
+  </div>
+</footer>
+<script src="/analytics.js"></script>
+<script src="/bureau.js?v=1"></script>
 </body>
 </html>

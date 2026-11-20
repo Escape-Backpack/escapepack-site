@@ -1,8 +1,19 @@
 # escapepack.ca
 
-The public Escape Backpack site. Files live here on GitHub; Cloudflare Pages serves
-them (no build step, output directory `/`). The design is Codex's site draft,
-promoted from `escape-backpack-games/draft/` on 2026-09-27.
+The public site, now branded **The Cryptic Bureau** (redesign 2026-11-20, from
+`Cryptic-Bureau/site-poc/`). Files live here on GitHub; Cloudflare Pages serves
+them (no build step, output directory `/`). The earlier Escape Backpack design was Codex's site
+draft, promoted from `escape-backpack-games/draft/` on 2026-09-27; it still styles the
+legacy pages, the laser-files page and the design boards.
+
+**Bureau style:** `bureau.css` (shared look, fonts in `assets/bureau/`, light and dark),
+`bureau.js` (redaction bars on the home page), `theme.js` (light/dark toggle, key `ebp-theme`).
+The generated hint and reset pages keep their own CSS and get `bureau-skin.css` plus a thin
+Bureau bar from `python tools/apply_bureau_skin.py` (run it after copying a kit-built Norse
+page into `help/norse/`; `tools/build_help.py` runs it for Hiking). Domain plan: one Pages
+project serves both escapepack.ca and crypticbureau.com (decided 2026-11-20; crypticbureau.com
+not connected yet). Before connecting it: the hint pages log runs to
+`https://escapepack.ca/api`, so the stats Worker must accept requests from the new origin.
 
 ## Planned structure (agreed 2026-09-30, not built yet)
 
@@ -34,7 +45,7 @@ How it will work:
 
 Migration checklist:
 - [x] `build.sh` + `backpacks.txt`, tested locally (Claude)
-- [ ] Move public pages to `/adventures/<game>/` and add redirects (Claude)
+- [x] Move public pages to `/adventures/<game>/` and add redirects (Claude, 2026-11-20: Norse and Hiking)
 - [x] Cloudflare: build command `bash build.sh`, deploy hook (designer). `GITHUB_TOKEN` only needed once a backpack repo is private.
 - [ ] (deferred) Cloudflare Access on `/design/*` with both designers' emails (designer)
 - [x] Deploy-hook Action in `Space-Exploration` (`rebuild-site.yml`, org secret `SITE_DEPLOY_HOOK`)
@@ -50,20 +61,21 @@ examples and a browser-local shortlist). It sits under `/design/`, which is publ
 
 | Path | What |
 |---|---|
-| `index.html` | Home: all adventures, how it works, player help |
-| `adventures/norse/` | The Raven Inheritance: public story, per-game contents/size tables, raven box-cover artwork, five paired postcard fronts/backs, cypher wheel, ruler, maps, museum tickets, comb, medallion and raven coin and V2 online playtest link. Gallery previews include puzzle clues and the opening wheel example; no solution sheets. |
+| `index.html` | Cryptic Bureau home: the Bureau story, The Raven Inheritance, the "In the files" teasers (one redaction bar on the sealed card), the Hiking Backpack under "From the Escape Backpack days", how it works, player help. Footer file note: a Caesar-shift line (`SOLVE IT AND YOU'RE IN`, shift 3) with its key behind a "Need the key?" toggle. |
+| `adventures/norse/` | The Raven Inheritance (Bureau style, from the POC): story, Liv's dispatch, three postcard pairs, wheel, map, medallion and ruler (images from `play/norse/v2/assets/`), the draft contents list, laser-files link, playtest, feedback and update links. Gallery previews include puzzle clues; no solution sheets. |
+| `adventures/hiking/` | The Hiking Backpack (Bureau style): story, facts, borrowing steps, hint and reset links. Replaces `hiking.html`, which is now a redirect stub. |
 | `adventures/norse/laser-files/` | `noindex`, linked from a note under the contents tables on the Norse page: download page for the premium wood option's laser SVGs (comb, medallion front and back, seven coins and a test sheet). Source: `Props/Comb`, `Props/Medallion`, `Props/Coins` in the Norse repo (`export_laser_svg.py` in each); copy the SVGs here after any change. Added 2026-11-14. |
 | `play/norse/v2/` | Norse online playtest (The Raven Inheritance): the whole game, 13 locks across four trails and the final route, with original prop artwork, hints, local saves, tablet support, optional shared rooms (“Play together”), sound, an ending with a shareable result and printable certificate, and built-in feedback. |
 | `play/hiking/` | Hiking online playtest: all ten locks, laptop first, local saves. **Unlisted**: no homepage link while the physical backpack is lent out (it would give away every answer); `noindex`. |
 | `play/cold-call/` | The Cold Call online playtest (HVAC technician, furnace to heat pump, propane base case): six lines on a service call sheet, laptop first, local saves, calculator, built-in feedback (Formspree, `game: cold-call-online`, with per-line time, hints and wrong tries). **Unlisted**: no homepage link; `noindex`. Source: `Cold-Call/cold-call.html` (copy it here after each change, with `Cold-Call/coldcall_json/teaching.json` → `play/cold-call/coldcall_json/`, which the teaching cards load). Same game as the Energy Suite copy (`ottawavisuals.github.io/Energy/coldcall.html`), different branding. |
-| `hiking.html` | The Hiking Backpack: story, facts, borrowing, hints and reset links |
-| `borrow.html`, `feedback.html` | Forms (Formspree). `forms.js` shows success only after Formspree confirms. |
-| `help/` | Player help. `help/<game>/` is the **stable QR destination** for each game. |
-| `site.css`, `site-pages.css` | Styles for the pages above |
+| `hiking.html` | Redirect stub to `/adventures/hiking/` (also in `_redirects`) |
+| `borrow.html`, `feedback.html`, `feedback/norse/` | Forms (Formspree), Bureau style. `forms.js` shows success only after Formspree confirms; `feedback/norse/` adds the puzzle-by-puzzle stepper. |
+| `help/` | Player help hub (Bureau style). `help/<game>/` is the **stable QR destination** for each game. |
+| `site.css`, `site-pages.css`, `site-dark.css` | Escape Backpack styles, now only for `adventures/norse/laser-files/` and other older pages |
 | `styles.css` | The older stylesheet, still used by the legacy pages below |
 | `norse-hints.html`, `hiking-hints.html`, `hiking-reset.html`, `hiking-old.html`, `Harold.html` | Legacy pages, kept so existing links keep working |
 | `_redirects` | Cloudflare redirects. QR paths under `/help/` must never be removed once printed. |
-| `404.html` | Shown for any unknown address. Cloudflare serves it at that address, so its links are root-relative (`/site.css`). |
+| `404.html` | Shown for any unknown address. Cloudflare serves it at that address, so its links are root-relative (`/bureau.css`). |
 
 ## Hiking online playtest
 
@@ -142,6 +154,7 @@ lock under 3 min drops only that lock's time) is decided when stats are read, in
 `backpacks.txt` yet because its records live in a subfolder of the design repository. The old
 `norse-hints.html` redirects to it. `help/norse/reset/` is the kit-built reset checklist
 (`publish_reset` in `backpack.json`; copy `site/reset/index.html` here after a rebuild).
+After copying either page, run `python tools/apply_bureau_skin.py` to put the Bureau look back.
 
 ## Space Exploration
 `/help/space/` redirects to the kit-generated hint page at

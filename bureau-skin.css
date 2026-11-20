@@ -1,0 +1,67 @@
+/* Cryptic Bureau skin for the generated hint and reset pages (Norse: backpack-kit build;
+   Hiking: tools/build_help.py). Those pages keep their own CSS; this file only remaps their
+   colour and font variables and adds the thin Bureau bar. tools/apply_bureau_skin.py links it.
+   Selectors mirror the kit's own (:root, the dark media query, [data-theme]) so that, loaded
+   last, each one wins over its kit twin. Variable names keep the kit's meaning:
+   --forest = page, --forest-2 = card, --cream = text, --brass = headings/links, --rust = accent. */
+@font-face{font-family:"Bureau Cormorant";src:url("/assets/bureau/cormorant-garamond-600.woff") format("woff");font-weight:400 700;font-display:swap}
+@font-face{font-family:"Bureau Source Sans";src:url("/assets/bureau/source-sans-3-400.woff") format("woff");font-weight:300 500;font-display:swap}
+@font-face{font-family:"Bureau Source Sans";src:url("/assets/bureau/source-sans-3-600.woff") format("woff");font-weight:600 800;font-display:swap}
+
+:root{
+  --forest:#F4EBDD; --forest-2:#fcf8f1; --forest-deep:#eaded3;
+  --cream:#3b2730; --cream-2:#4d3841; --cream-3:#5d4650; --muted:#69545c;
+  --ink:#3b2730; --ink-soft:#4d3841;
+  --brass:#542C3B; --brass-2:#8a4f2e; --brass-dim:#8a4f2e;
+  --rust:#B87650; --rust-2:#8a4f2e; --on-rust:#fff;
+  --line:rgba(84,44,59,.16); --line-strong:rgba(84,44,59,.32);
+  --nav-bg:rgba(244,235,221,.95); --glow-1:transparent; --glow-2:transparent;
+  --serif:"Bureau Cormorant",Georgia,serif; --sans:"Bureau Source Sans",Arial,sans-serif;
+  --bureau-bar:#542C3B; --bureau-bar-text:#F4EBDD;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --forest:#20191d; --forest-2:#2c2329; --forest-deep:#1a1418;
+    --cream:#f4ebdd; --cream-2:#e4d7cf; --cream-3:#d6c6c0; --muted:#c9b9b9;
+    --ink:#f4ebdd; --ink-soft:#e4d7cf;
+    --brass:#e7bdc9; --brass-2:#d29a75; --brass-dim:#d29a75;
+    --rust:#d29a75; --rust-2:#e0ad8b; --on-rust:#20191d;
+    --line:rgba(244,235,221,.14); --line-strong:rgba(244,235,221,.28);
+    --nav-bg:rgba(32,25,29,.95);
+    --bureau-bar:#2c2329; --bureau-bar-text:#e7bdc9;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --forest:#20191d; --forest-2:#2c2329; --forest-deep:#1a1418;
+  --cream:#f4ebdd; --cream-2:#e4d7cf; --cream-3:#d6c6c0; --muted:#c9b9b9;
+  --ink:#f4ebdd; --ink-soft:#e4d7cf;
+  --brass:#e7bdc9; --brass-2:#d29a75; --brass-dim:#d29a75;
+  --rust:#d29a75; --rust-2:#e0ad8b; --on-rust:#20191d;
+  --line:rgba(244,235,221,.14); --line-strong:rgba(244,235,221,.28);
+  --nav-bg:rgba(32,25,29,.95);
+  --bureau-bar:#2c2329; --bureau-bar-text:#e7bdc9;
+  color-scheme:dark;
+}
+html,body{background:var(--forest);color:var(--cream)}
+body{background-image:none!important}
+h1,h2,h3,h4{font-weight:600}
+
+/* thin Bureau bar at the top (inserted by tools/apply_bureau_skin.py) */
+.bureau-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:7px clamp(12px,4vw,24px);background:var(--bureau-bar);color:var(--bureau-bar-text);font:600 12px/1.2 var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.bureau-bar a{color:inherit;text-decoration:none}
+.bureau-bar a:hover{text-decoration:underline;color:inherit}
+.bureau-bar .bb-brand{font:600 15px/1 var(--serif);letter-spacing:.08em}
+
+/* Kit pages: the kit's own "Escape Backpack" site bar gives way to the Bureau bar; its theme
+   toggle moves into the Bureau bar's right end. The header's escapepack.ca line is dropped. */
+.sitebar .brand{display:none!important}
+.sitebar{position:absolute!important;top:3px;right:clamp(8px,3vw,18px);padding:0!important;margin:0!important;border:0!important;background:none!important;box-shadow:none!important;z-index:6}
+.sitebar .theme-toggle{width:28px;height:28px;color:var(--bureau-bar-text);border-color:transparent;background:none}
+body:has(> .sitebar) .bureau-bar{padding-right:calc(clamp(8px,3vw,18px) + 40px)}
+.sitebar ~ header .sub{display:none}
+
+/* Hiking pages (legacy.css): the old green nav gives way to the Bureau bar. */
+body > nav.nav{display:none}
+.modal-backdrop{background:rgba(32,25,29,.9)!important}

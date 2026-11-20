@@ -1,15 +1,37 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#17372d">
-  <meta name="description" content="Request the Hiking Backpack in Ottawa or ask for news about future Escape Backpack adventures."><title>Borrow a backpack · Escape Backpack</title>
-  <link rel="icon" type="image/png" href="assets/logo.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="site.css?v=4"><link rel="stylesheet" href="site-pages.css?v=4"><link rel="stylesheet" href="site-dark.css?v=4">
-<script>try{var t=localStorage.getItem("ebp-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script><script src="/theme.js?v=4" defer></script></head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#542C3B">
+<title>Borrow · The Cryptic Bureau</title>
+<meta name="description" content="Request the Hiking Backpack for an Ottawa pickup, or ask to hear when The Raven Inheritance is ready.">
+<link rel="icon" type="image/png" href="/assets/bureau/favicon-64.png">
+<link rel="apple-touch-icon" href="/assets/bureau/apple-touch-icon.png">
+<link rel="preload" href="/assets/bureau/cormorant-garamond-600.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/bureau.css?v=1">
+<script>try{var t=localStorage.getItem("ebp-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+<script src="/theme.js?v=4" defer></script>
+</head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header"><div class="container header-inner"><a class="brand" href="index.html" aria-label="Escape Backpack home"><span class="brand-mark" aria-hidden="true"></span><span>Escape<br><strong>Backpack</strong></span></a><nav class="main-nav" aria-label="Main navigation"><a href="index.html#adventures">Adventures</a><a href="index.html#how-it-works">How it works</a><a class="nav-help" href="help/">Hints &amp; reset ↗</a><a href="borrow.html" aria-current="page">Borrow a backpack</a></nav></div></header>
-  <main id="main" class="form-page"><div class="container"><div class="breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Borrow</span></div><div class="form-layout"><div><div class="form-intro"><p class="eyebrow">Ottawa · in-person pickup</p><h1>Bring the Hiking Backpack home.</h1><p>Request a preferred week and we’ll confirm the handoff. You can also ask to hear when another adventure is ready.</p></div><div class="form-card"><h2>Send a request</h2><p>The Hiking Backpack is the only adventure available to borrow right now.</p>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="The Cryptic Bureau, home">
+      <img src="/assets/bureau/bureau-mark.png" alt="" width="240" height="164">
+      <span class="brand-text"><small>The</small><span>Cryptic Bureau</span></span>
+    </a>
+    <nav class="main-nav" aria-label="Main">
+      <a href="/#story">The Bureau</a>
+      <a href="/#adventures">Adventures</a>
+      <a href="/#how">How it works</a>
+      <a href="/help/">Hints &amp; help</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="page"><div class="wrap"><p class="crumb"><a href="/">Home</a> <span aria-hidden="true">/</span> Borrow</p><div class="form-layout"><div><div class="form-intro"><p class="eyebrow">Ottawa · in-person pickup</p><h1>Bring the Hiking Backpack home.</h1><p>Request a preferred week and we’ll confirm the handoff. You can also ask to hear when another adventure is ready.</p></div><div class="form-card"><h2>Send a request</h2><p>The Hiking Backpack is the only adventure available to borrow right now.</p>
     <form class="form-stack" id="borrow-form" action="https://formspree.io/f/xwvayowz" method="POST" data-async-form="borrow" data-success-target="borrow-success">
       <div class="form-row"><div class="field"><label for="borrow-name">Your name <span aria-hidden="true">*</span></label><input id="borrow-name" name="name" autocomplete="name" required maxlength="100"></div><div class="field"><label for="borrow-email">Email <span aria-hidden="true">*</span></label><input id="borrow-email" name="email" type="email" autocomplete="email" required maxlength="254"></div></div>
       <div class="field"><label for="intent">What would you like to do?</label><select id="intent" name="intent"><option value="borrow">Borrow the Hiking Backpack</option><option value="notify">Hear when another backpack is ready</option></select></div>
@@ -21,8 +43,14 @@
       <button class="button button-primary" type="submit">Send request ↗</button>
     </form>
     <div class="form-success" id="borrow-success" role="status" tabindex="-1" hidden><h2>Request sent.</h2><p>Thanks. Watch your email for a reply about pickup or future backpacks.</p></div>
-  </div></div><aside class="aside-card"><h2>Before you request</h2><ul><li>Only the Hiking Backpack is available now.</li><li>It’s designed for 1–4 players, ages 8+, and takes about 1–2 hours.</li><li>Pickup and return are arranged in person in Ottawa.</li></ul><p>Already playing? Go straight to <a href="help/">hints and reset</a>.</p></aside></div></div></main>
-  <footer class="site-footer"><div class="container footer-inner"><span>Escape Backpack · Ottawa</span><div><a href="index.html">Home</a><a href="hiking.html">Hiking Backpack</a><a href="help/">Hints &amp; reset</a><a href="feedback.html">Feedback</a></div></div></footer>
-  <script src="analytics.js"></script><script src="forms.js"></script>
+  </div></div><aside class="aside-card"><h2>Before you request</h2><ul><li>Only the Hiking Backpack is available now.</li><li>It’s designed for 1–4 players, ages 8+, and takes about 1–2 hours.</li><li>Pickup and return are arranged in person in Ottawa.</li></ul><p>Already playing? Go straight to <a href="/help/">hints and reset</a>.</p></aside></div></div></main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© The Cryptic Bureau · Formerly Escape Backpack · Ottawa</span>
+    <ul><li><a href="/">Home</a></li><li><a href="/adventures/hiking/">Hiking Backpack</a></li><li><a href="/help/">Hints &amp; help</a></li><li><a href="/feedback.html">Feedback</a></li></ul>
+  </div>
+</footer>
+<script src="/analytics.js"></script><script src="/forms.js"></script>
 </body>
 </html>

@@ -106,6 +106,9 @@ def main() -> None:
     ):
         before, after, count = build(source, destination, kind)
         print(f"{kind}: HTML {before:,} -> {after:,} bytes; {count} external images")
+    # Cryptic Bureau colours and top bar (Nov 2026 redesign).
+    from apply_bureau_skin import main as apply_bureau_skin
+    apply_bureau_skin()
 
 
 if __name__ == "__main__":
