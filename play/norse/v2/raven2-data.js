@@ -482,7 +482,7 @@
   function shareText(state) {
     const used = state.hints.reduce((a, b) => a + b, 0);
     const marks = locks.map((_, i) => i >= state.stage ? '▫️' : state.hints[i] > locks[i].hints.length ? '🔓' : state.hints[i] ? '💡' : '🗝️').join('');
-    return `The Raven Inheritance · ${state.stage}/${locks.length} envelopes · ${duration(state.played)} · ${used} hint${used === 1 ? '' : 's'}\n${marks}\nescapepack.ca/play/norse/`;
+    return `The Raven Inheritance · ${state.stage}/${locks.length} envelopes · ${duration(state.played)} · ${used} hint${used === 1 ? '' : 's'}\n${marks}\ncrypticbureau.com/play/norse/`;
   }
     /* Aud's comb seats the way the real one does: comb face up, AD message side up, both
      square to each other, and both holes over both printed ring-and-dots (card points from
