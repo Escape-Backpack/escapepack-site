@@ -377,7 +377,7 @@ body.narrow .tbtn span{display:none}
 // backpack-kit's viewer/sync.js. Teammates join a run with its game code. Off the live site, add
 // ?api=http://127.0.0.1:8787/api to the address to test against `wrangler dev`.
 const BACKPACK_NAME = 'Hiking Backpack';
-const STATS_API = location.hostname === 'escapepack.ca' ? '/api' : (new URLSearchParams(location.search).get('api') || '');
+const STATS_API = location.hostname === 'escapepack.ca' ? '/api' : (location.hostname.endsWith('crypticbureau.com') ? 'https://escapepack.ca/api' : (new URLSearchParams(location.search).get('api') || ''));
 const LOCK_THEMES   = ['blue','blue','blue','blue','blue','orange','orange','orange','orange','purple'];
 const HINT_LEVELS   = [
   {label:'💡 Hint #1',cls:'c1'},{label:'💡 Hint #2',cls:'c2'},

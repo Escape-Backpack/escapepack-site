@@ -11,8 +11,8 @@ routes = [
 ]
 
 [vars]
-# Pages that may call the API from another address (local previews). escapepack.ca itself is same-origin.
-ALLOWED_ORIGINS = "http://localhost:8742,http://127.0.0.1:8742,http://localhost:8741,http://127.0.0.1:8741"
+# Pages that may call the API from another address (local previews). escapepack.ca itself is same-origin; crypticbureau.com calls it cross-origin.
+ALLOWED_ORIGINS = "https://crypticbureau.com,https://www.crypticbureau.com,http://localhost:8742,http://127.0.0.1:8742,http://localhost:8741,http://127.0.0.1:8741"
 
 [[d1_databases]]
 binding = "DB"
