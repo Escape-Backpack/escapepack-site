@@ -178,8 +178,9 @@ No page loads Google Fonts. `fonts-local.css` holds the self-hosted latin subset
 (Young Serif, Inter Tight, JetBrains Mono, Orbitron, Quantico, Share Tech Mono; the Bureau fonts are in
 `bureau.css`, Noto Sans Runic in `bureau-skin.css`). `tools/apply_bureau_skin.py` handles the committed
 Norse and Hiking hint and reset pages; `tools/self_host_fonts.py` (run by `build.sh`) handles the generated
-`help/<slug>/hints/` pages. Still on Google Fonts: the game pages `play/hiking` and `play/cold-call` (built from
-their own repos) and the design boards under `design/`.
+`help/<slug>/hints/` pages. The game pages `play/hiking` (`tools/build_hiking.cjs` swaps the links on every build) and
+`play/cold-call` (edited by hand; the source in `Cold-Call/` still has the Google links) use it too
+(Architects Daughter, Caveat, B612 Mono, Barlow, Barlow Condensed added). Still on Google Fonts: the design boards under `design/`.
 
 ## Analytics
 Cloudflare Web Analytics counts page views once enabled on the Pages project.

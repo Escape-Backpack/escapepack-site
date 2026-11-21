@@ -34,6 +34,10 @@ for (const filename of files) {
     if (!text.includes(brand)) throw new Error('index.html: brand line not found; update the home link in build_hiking.cjs');
     text = text.replace(brand, brand.replace('<div class="brand">', '<a class="brand" href="/" style="color:inherit;text-decoration:none">').replace(/<\/div>$/, '</a>'));
     if (!text.includes('name="robots" content="noindex"')) throw new Error('index.html: noindex missing');
+    // Fonts come from this site (fonts-local.css), not Google Fonts.
+    const googleFonts = /<link[^>]*href="https:\/\/fonts\.(?:googleapis|gstatic)\.com[^>]*>\s*/g;
+    if (!text.match(googleFonts)) throw new Error('index.html: Google Fonts links not found; update build_hiking.cjs');
+    text = text.replace(googleFonts, '').replace('</head>', '<link rel=\"stylesheet\" href=\"/fonts-local.css\">\n</head>');
   }
   fs.writeFileSync(path.join(target, filename), text);
 }
