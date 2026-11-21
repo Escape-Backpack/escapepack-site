@@ -29,3 +29,19 @@ CREATE TABLE IF NOT EXISTS runs (
 );
 
 CREATE INDEX IF NOT EXISTS runs_by_game ON runs (backpack, version);
+
+-- Feedback and request forms from every page and game (borrow, feedback, Norse feedback, online playtests).
+-- One row per submission. `data` holds the other answers as JSON. Rows from local previews are status 'test'.
+CREATE TABLE IF NOT EXISTS feedback (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  created_at  TEXT NOT NULL,      -- ISO 8601 UTC
+  form        TEXT NOT NULL,      -- feedback | norse-feedback | norse-online | hiking-online | borrow
+  game        TEXT,
+  rating      INTEGER,            -- 1 to 5, optional
+  email       TEXT,               -- optional (required on borrow); used only to reply; delete on request
+  message     TEXT,
+  data        TEXT NOT NULL,      -- JSON object of the other fields
+  origin      TEXT,               -- page address the form was sent from
+  status      TEXT NOT NULL DEFAULT 'new'   -- new | read | replied | test
+);
+CREATE INDEX IF NOT EXISTS feedback_by_date ON feedback (created_at);

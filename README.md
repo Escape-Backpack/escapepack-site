@@ -69,7 +69,7 @@ examples and a browser-local shortlist). It sits under `/design/`, which is publ
 | `play/hiking/` | Hiking online playtest: all ten locks, laptop first, local saves. **Unlisted**: no homepage link while the physical backpack is lent out (it would give away every answer); `noindex`. |
 | `play/cold-call/` | The Cold Call online playtest (HVAC technician, furnace to heat pump, propane base case): six lines on a service call sheet, laptop first, local saves, calculator, built-in feedback (Formspree, `game: cold-call-online`, with per-line time, hints and wrong tries). **Unlisted**: no homepage link; `noindex`. Source: `Cold-Call/cold-call.html` (copy it here after each change, with `Cold-Call/coldcall_json/teaching.json` → `play/cold-call/coldcall_json/`, which the teaching cards load). Same game as the Energy Suite copy (`ottawavisuals.github.io/Energy/coldcall.html`), different branding. |
 | `hiking.html` | Redirect stub to `/adventures/hiking/` (also in `_redirects`) |
-| `borrow.html`, `feedback.html`, `feedback/norse/` | Forms (Formspree), Bureau style. `forms.js` shows success only after Formspree confirms; `feedback/norse/` adds the puzzle-by-puzzle stepper. |
+| `borrow.html`, `feedback.html`, `feedback/norse/` | Forms (stored by the stats Worker, see Feedback storage), Bureau style. `forms.js` shows success only after the Worker confirms; `feedback/norse/` adds the puzzle-by-puzzle stepper. |
 | `help/` | Player help hub (Bureau style). `help/<game>/` is the **stable QR destination** for each game. |
 | `site.css`, `site-pages.css`, `site-dark.css` | Escape Backpack styles, now only for `adventures/norse/laser-files/` and other older pages |
 | `styles.css` | The older stylesheet, still used by the legacy pages below |
@@ -159,6 +159,15 @@ After copying either page, run `python tools/apply_bureau_skin.py` to put the Bu
 ## Space Exploration
 `/help/space/` redirects to the kit-generated hint page at
 `https://space-design.escapepack.ca/hints/` (see `_redirects`).
+
+## Feedback storage
+All forms (borrow, feedback, Norse feedback, the Norse, Hiking and Cold Call online dialogs) post to
+`https://escapepack.ca/api/feedback` (stats Worker, `workers/stats/src/feedback.js`) and land in the D1
+table `feedback` (`db/schema.sql`). Local previews are stored with `status = 'test'` and send no email.
+Each new row emails an alert through Email Routing: set the Worker secret `NOTIFY_TO` (`npx wrangler secret put NOTIFY_TO`; a
+verified destination address) and enable Email Routing on crypticbureau.com (`NOTIFY_FROM`).
+Read rows: D1 console, or `npx wrangler d1 execute escapepack-stats --remote --command "SELECT * FROM feedback ORDER BY id DESC"`.
+Formspree is no longer used. Privacy line under each email field uses hello@crypticbureau.com (must exist as an alias).
 
 ## Analytics
 Cloudflare Web Analytics counts page views once enabled on the Pages project.

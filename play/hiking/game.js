@@ -661,7 +661,7 @@
   renderItemNotes(); markNotes();
 
   /* ---------- The ending and feedback (sent to the same Formspree form as the site's feedback page) ---------- */
-  const FORMSPREE = 'https://formspree.io/f/xaqavoan';
+  const FORMSPREE = 'https://escapepack.ca/api/feedback';
   const totalHints = () => state.hints.reduce((a, b) => a + b, 0), totalTries = () => state.attempts.reduce((a, l) => a + l.length, 0);
   const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
   function renderEnding() {

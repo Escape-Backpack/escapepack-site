@@ -6,7 +6,9 @@
 //   GET  /api/stats?backpack=&version=[&session=]       -> comparison numbers
 // Actions carry `ago` (ms since they happened on the phone), so a queue sent late, or from a
 // phone with a wrong clock, still lands at the right moment on the server's timer.
+//   POST /api/feedback           store a feedback / borrow form (JSON or form data), email an alert
 import { parse, summarise } from "./rules.js";
+import { normalise, alertText, alertSubject, buildMime } from "./feedback.js";
 
 const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0/O, 1/I
 const MAX_BODY = 32_000;
@@ -18,7 +20,7 @@ class HttpError extends Error {
 const fail = (status, message) => { throw new HttpError(status, message); };
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const cors = corsHeaders(request.headers.get("Origin"), env);
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     try {
@@ -28,6 +30,7 @@ export default {
       if (path === "/runs" && request.method === "POST") return json(await createRun(env, await readBody(request)), cors);
       if ((m = path.match(/^\/runs\/([A-Z2-9]{5})$/)) && request.method === "GET") return json(state(await load(env, m[1])), cors);
       if ((m = path.match(/^\/runs\/([A-Z2-9]{5})\/ops$/)) && request.method === "POST") return json(await applyOps(env, m[1], await readBody(request)), cors);
+      if (path === "/feedback" && request.method === "POST") return json(await saveFeedback(env, ctx, request), cors);
       if (path === "/stats" && request.method === "GET") return json(await stats(env, url.searchParams), cors, 200, "public, max-age=60");
       fail(404, "not found");
     } catch (e) {
@@ -53,6 +56,55 @@ async function readBody(request) {
   const text = await request.text();
   if (text.length > MAX_BODY) fail(413, "too large");
   try { return JSON.parse(text || "{}"); } catch { fail(400, "bad json"); }
+}
+
+const MAX_FEEDBACK = 100_000;
+const FEEDBACK_PER_HOUR = 200; // flood guard for the whole site, not per person
+
+async function readSubmission(request) {
+  const type = request.headers.get("Content-Type") || "";
+  const length = Number(request.headers.get("Content-Length") || 0);
+  if (length > MAX_FEEDBACK) fail(413, "too large");
+  if (type.includes("application/json")) {
+    const text = await request.text();
+    if (text.length > MAX_FEEDBACK) fail(413, "too large");
+    try { return JSON.parse(text || "{}"); } catch { fail(400, "bad json"); }
+  }
+  let form;
+  try { form = await request.formData(); } catch { fail(400, "bad form"); }
+  const out = {};
+  for (const [k, v] of form.entries()) {
+    if (typeof v !== "string") continue;
+    out[k] = k in out ? [].concat(out[k], v) : v;
+  }
+  return out;
+}
+
+async function saveFeedback(env, ctx, request) {
+  const result = normalise(await readSubmission(request), request.headers.get("Origin"));
+  if (result.ignore) return { ok: true };
+  if (result.error) fail(400, result.error);
+  const row = result.row;
+
+  const recent = await env.DB.prepare("SELECT COUNT(*) AS n FROM feedback WHERE created_at > ?")
+    .bind(new Date(Date.now() - 3600_000).toISOString()).first();
+  if ((recent?.n ?? 0) >= FEEDBACK_PER_HOUR) fail(429, "too many submissions");
+
+  const res = await env.DB.prepare(
+    "INSERT INTO feedback (created_at, form, game, rating, email, message, data, origin, status) VALUES (?,?,?,?,?,?,?,?,?)"
+  ).bind(new Date().toISOString(), row.form, row.game, row.rating, row.email, row.message, row.data, row.origin, row.status).run();
+  const id = res.meta?.last_row_id ?? null;
+
+  if (row.status === "new") ctx.waitUntil(sendAlert(env, row, id).catch(e => console.error("alert email failed", e)));
+  return { ok: true };
+}
+
+// Email alert through Cloudflare Email Routing. Skipped quietly until NOTIFY_TO and the MAIL binding exist.
+async function sendAlert(env, row, id) {
+  if (!env.MAIL || !env.NOTIFY_TO || !env.NOTIFY_FROM) return;
+  const { EmailMessage } = await import("cloudflare:email");
+  const raw = buildMime({ from: env.NOTIFY_FROM, to: env.NOTIFY_TO, subject: alertSubject(row), text: alertText(row, id), replyTo: row.email });
+  await env.MAIL.send(new EmailMessage(env.NOTIFY_FROM, env.NOTIFY_TO, raw));
 }
 
 const str = (v, max) => (typeof v === "string" ? v.trim().slice(0, max) : "") || null;

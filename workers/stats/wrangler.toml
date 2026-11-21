@@ -11,6 +11,7 @@ routes = [
 ]
 
 [vars]
+NOTIFY_FROM = "alerts@crypticbureau.com"
 # Pages that may call the API from another address (local previews). escapepack.ca itself is same-origin; crypticbureau.com calls it cross-origin.
 ALLOWED_ORIGINS = "https://crypticbureau.com,https://www.crypticbureau.com,http://localhost:8742,http://127.0.0.1:8742,http://localhost:8741,http://127.0.0.1:8741"
 
@@ -18,3 +19,8 @@ ALLOWED_ORIGINS = "https://crypticbureau.com,https://www.crypticbureau.com,http:
 binding = "DB"
 database_name = "escapepack-stats"
 database_id = "9a709a1e-c269-43f2-96df-6b3087e18953"
+
+# Email alert for each new feedback form. Needs Email Routing on crypticbureau.com and NOTIFY_TO verified
+# as a destination address in Cloudflare. NOTIFY_TO is a Worker secret (npx wrangler secret put NOTIFY_TO), kept out of the repo; without it no email is sent (the row is still stored).
+[[send_email]]
+name = "MAIL"

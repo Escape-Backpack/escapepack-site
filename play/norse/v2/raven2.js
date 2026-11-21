@@ -3,7 +3,7 @@
   const G = window.LeifGame;
   const $ = id => document.getElementById(id);
   const KEY = 'escape-backpack.raven2.v1', ROOM_KEY = 'escape-backpack.raven2.room', NAME_KEY = 'escape-backpack.name', TIPS_KEY = 'escape-backpack.tips';
-  const FORMSPREE = 'https://formspree.io/f/xaqavoan'; // the site's feedback form
+  const FORMSPREE = 'https://escapepack.ca/api/feedback'; // the site's feedback API (stats Worker)
   const SNAP = 12; // screen pixels: edges this close pull together while dragging (Alt turns it off)
   let state = G.fresh(), hadSave = false, storageOK = true;
   try { const saved = localStorage.getItem(KEY); if (saved) { state = G.restore(JSON.parse(saved)); hadSave = true; } } catch (_) { storageOK = false; }

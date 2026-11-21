@@ -32,13 +32,14 @@
 </header>
 
 <main id="main" class="page"><div class="wrap"><p class="crumb"><a href="/">Home</a> <span aria-hidden="true">/</span> Feedback</p><div class="form-layout"><div><div class="form-intro"><p class="eyebrow">Help shape the next game</p><h1>What did you think?</h1><p>Tell us what delighted you, what felt confusing, or what was missing. A short note is useful; an email is optional.</p></div><div class="form-card"><h2>Your feedback</h2><p>No account is needed.</p>
-    <form class="form-stack" id="feedback-form" action="https://formspree.io/f/xaqavoan" method="POST" data-async-form="feedback" data-success-target="feedback-success">
+    <form class="form-stack" id="feedback-form" action="https://escapepack.ca/api/feedback" method="POST" data-async-form="feedback" data-success-target="feedback-success">
       <div class="field"><label for="feedback-game">Adventure</label><select id="feedback-game" name="game"><option value="hiking">The Hiking Backpack</option><option value="general">General website or future-game idea</option></select></div>
       <div class="field"><label for="rating">Overall experience <span>(optional)</span></label><select id="rating" name="rating"><option value="">Choose a rating if you like</option><option value="5">5 — Loved it</option><option value="4">4 — Enjoyed it</option><option value="3">3 — Mixed</option><option value="2">2 — Frustrating</option><option value="1">1 — Needs work</option></select></div>
       <div class="field"><label for="message">Your thoughts <span aria-hidden="true">*</span></label><textarea id="message" name="message" required maxlength="4000" placeholder="What worked? Where did you get stuck? What would you change?"></textarea></div>
-      <div class="field"><label for="feedback-email">Email <span>(optional)</span></label><input id="feedback-email" name="email" type="email" autocomplete="email" maxlength="254"><small>Only include this if you would like a reply.</small></div>
+      <div class="field"><label for="feedback-email">Email <span>(optional)</span></label><input id="feedback-email" name="email" type="email" autocomplete="email" maxlength="254"><small>Used only to reply to you. To have it deleted, email hello@crypticbureau.com.</small></div>
+      <input type="hidden" name="form" value="feedback">
       <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="honeypot">
-      <p class="form-note">This form is processed by Formspree. An email is only needed if you’d like a reply.</p>
+      <p class="form-note">Your email is optional. Add it only if you’d like a reply.</p>
       <p class="form-error" data-form-error role="alert" tabindex="-1" hidden></p>
       <button class="button button-primary" type="submit">Send feedback ↗</button>
     </form>
