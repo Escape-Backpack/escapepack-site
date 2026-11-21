@@ -655,7 +655,7 @@ function updateCode(){
 
 async function joinGame(){
   const msg=document.getElementById('join-msg');
-  if(!SYNC){msg.textContent='Joining needs a connection to escapepack.ca.';return;}
+  if(!SYNC){msg.textContent='Joining needs an internet connection.';return;}
   msg.textContent='Joining…';
   try{ const s=await SYNC.join(document.getElementById('inp-code').value); activeHint=-1; msg.textContent=''; fromServer(s); }
   catch(e){ msg.textContent=e.status===404?"No game with that code. Check the code on your teammate's screen.":"Couldn't connect. Check your connection and try again."; }
