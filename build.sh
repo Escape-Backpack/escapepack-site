@@ -51,6 +51,9 @@ while read -r slug repo kitref _; do
 "
 done < backpacks.txt
 
+# The kit pages load Google Fonts; use the site's own copies instead (no visitor addresses sent to Google).
+"$PY" tools/self_host_fonts.py
+
 # design/index.html: the committed template with one card per backpack.
 printf '%s' "$boards" | "$PY" -c '
 import html, sys

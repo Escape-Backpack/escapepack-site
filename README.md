@@ -167,7 +167,19 @@ table `feedback` (`db/schema.sql`). Local previews are stored with `status = 'te
 Each new row emails an alert through Email Routing: set the Worker secret `NOTIFY_TO` (`npx wrangler secret put NOTIFY_TO`; a
 verified destination address) and enable Email Routing on crypticbureau.com (`NOTIFY_FROM`).
 Read rows: D1 console, or `npx wrangler d1 execute escapepack-stats --remote --command "SELECT * FROM feedback ORDER BY id DESC"`.
+Read feedback at `https://escapepack.ca/studio/feedback/` (inbox with filters, mark read or replied,
+archive, delete; behind the same Cloudflare Access login as the Studio). The Studio Worker reads the
+stats database through a second D1 binding (`STATS_DB` in `workers/studio/wrangler.toml`), so deploy it
+with `cd workers/studio && npx wrangler deploy`. Rows from local previews show under the Test tab.
 Formspree is no longer used. Privacy line under each email field uses hello@crypticbureau.com (must exist as an alias).
+
+## Fonts
+No page loads Google Fonts. `fonts-local.css` holds the self-hosted latin subsets in `assets/bureau/`
+(Young Serif, Inter Tight, JetBrains Mono, Orbitron, Quantico, Share Tech Mono; the Bureau fonts are in
+`bureau.css`, Noto Sans Runic in `bureau-skin.css`). `tools/apply_bureau_skin.py` handles the committed
+Norse and Hiking hint and reset pages; `tools/self_host_fonts.py` (run by `build.sh`) handles the generated
+`help/<slug>/hints/` pages. Still on Google Fonts: the game pages `play/hiking` and `play/cold-call` (built from
+their own repos) and the design boards under `design/`.
 
 ## Analytics
 Cloudflare Web Analytics counts page views once enabled on the Pages project.

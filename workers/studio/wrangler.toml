@@ -32,6 +32,12 @@ binding = "DB"
 database_name = "escapepack-studio"
 database_id = "defbb418-0747-4ce2-97b5-63cbe9621535"
 
+# The feedback inbox (/studio/feedback/) reads the forms' rows from the stats database.
+[[d1_databases]]
+binding = "STATS_DB"
+database_name = "escapepack-stats"
+database_id = "9a709a1e-c269-43f2-96df-6b3087e18953"
+
 [[r2_buckets]]
 binding = "FILES"
 bucket_name = "escapepack-studio-files"

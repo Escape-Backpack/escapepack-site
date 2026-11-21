@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<script>try{var t=localStorage.getItem("ebp-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+<title>Feedback inbox</title>
+<!-- Feedback inbox: reads the forms' rows through /studio/api/feedback (workers/studio/src/index.js), behind
+     Cloudflare Access like the rest of the Studio. System fonts only. Everything from the forms is shown as
+     plain text (textContent), never as HTML. -->
+<style>
+:root {
+  --bg: #f3eadb; --surface: #fbf7ee; --sunk: #e9ddca;
+  --ink: #20392e; --muted: #65776b; --head: #17372d; --accent: #b95b3d; --on-accent: #fff;
+  --line: rgba(32,57,46,.17); --new: #a87424; --ok: #4a7f38;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #17372d; --surface: #214b3d; --sunk: #10291f; --ink: #f7f1e6; --muted: #9db0a2; --head: #e8c28a;
+  --accent: #e0805e; --on-accent: #10291f; --line: rgba(244,237,224,.16); --new: #d4a668; --ok: #9cc98a; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #17372d; --surface: #214b3d; --sunk: #10291f; --ink: #f7f1e6; --muted: #9db0a2; --head: #e8c28a;
+  --accent: #e0805e; --on-accent: #10291f; --line: rgba(244,237,224,.16); --new: #d4a668; --ok: #9cc98a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 -apple-system, "Segoe UI", system-ui, sans-serif; }
+main { max-width: 860px; margin: 0 auto; padding: 20px 16px 60px; }
+h1 { font: 600 1.5rem/1.2 Georgia, serif; color: var(--head); margin: 0 0 4px; }
+.sub { color: var(--muted); margin: 0 0 16px; font-size: .9rem; }
+.sub a { color: inherit; }
+.bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+.tab, select, button { font: inherit; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+.tab[aria-pressed="true"] { background: var(--head); color: var(--bg); border-color: var(--head); }
+.tab b { font-weight: 600; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; margin-bottom: 10px; }
+.card.new { border-left: 4px solid var(--new); }
+.head { display: block; width: 100%; text-align: left; background: none; border: 0; padding: 12px 14px; cursor: pointer; color: inherit; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: .8rem; color: var(--muted); }
+.pill { border: 1px solid var(--line); border-radius: 999px; padding: 0 8px; }
+.snip { margin-top: 4px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.body { padding: 0 14px 14px; border-top: 1px solid var(--line); }
+.msg { white-space: pre-wrap; overflow-wrap: anywhere; margin: 12px 0; }
+dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 12px; margin: 10px 0; font-size: .88rem; }
+dt { color: var(--muted); } dd { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.acts a { text-decoration: none; }
+.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.danger { color: var(--accent); }
+.empty, .err { color: var(--muted); padding: 24px 0; }
+.err { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Feedback inbox</h1>
+  <p class="sub">Everything sent through the site's forms and online games. New feedback also arrives by email. <a href="/studio/">Studio</a></p>
+  <div class="bar" id="tabs" role="group" aria-label="Show"></div>
+  <div class="bar"><label for="form">Form</label><select id="form"><option value="">All forms</option></select></div>
+  <p class="err" id="err" role="alert" hidden></p>
+  <div id="list" aria-live="polite"></div>
+</main>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const TABS = [["inbox", "Inbox"], ["replied", "Replied"], ["archived", "Archived"], ["all", "All"], ["test", "Test"]];
+  let status = "inbox", form = "", data = null, open = new Set();
+  const API = "/studio/api/feedback";
+
+  function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  const when = iso => { const d = new Date(iso); return isNaN(d) ? iso : d.toLocaleString([], { dateStyle: "medium", timeStyle: "short" }); };
+  function fail(msg) { $("err").textContent = msg; $("err").hidden = !msg; }
+
+  async function api(path, opts) {
+    const res = await fetch(API + path, { cache: "no-store", ...opts, headers: opts?.body ? { "Content-Type": "application/json" } : undefined });
+    if (res.status === 401 || res.status === 403) throw new Error("You are not signed in. Reload the page to log in.");
+    const j = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(j.error || "Something went wrong (" + res.status + ").");
+    return j;
+  }
+
+  async function load() {
+    fail("");
+    try {
+      data = await api("?status=" + encodeURIComponent(status) + (form ? "&form=" + encodeURIComponent(form) : ""));
+      render();
+    } catch (e) { fail(e.message); }
+  }
+
+  function renderTabs() {
+    const c = data.counts || {}, num = s => s === "inbox" ? (c.new || 0) + (c.read || 0) : s === "all" ? Object.entries(c).filter(([k]) => k !== "test").reduce((a, [, n]) => a + n, 0) : (c[s] || 0);
+    $("tabs").replaceChildren(...TABS.map(([s, label]) => {
+      const b = el("button", "tab"); b.type = "button"; b.setAttribute("aria-pressed", String(s === status));
+      b.append(label + " ", el("b", "", String(num(s)) + (s === "inbox" && c.new ? " (" + c.new + " new)" : "")));
+      b.onclick = () => { status = s; load(); };
+      return b;
+    }));
+    const sel = $("form"), have = new Set([...sel.options].map(o => o.value));
+    for (const f of data.forms) if (!have.has(f)) sel.append(new Option(f, f));
+    sel.value = form;
+  }
+
+  function card(r) {
+    const c = el("article", "card" + (r.status === "new" ? " new" : ""));
+    const head = el("button", "head"); head.type = "button"; head.setAttribute("aria-expanded", String(open.has(r.id)));
+    const meta = el("div", "meta");
+    meta.append(el("span", "pill", r.form + (r.game && r.game !== r.form ? " · " + r.game : "")), el("span", "", when(r.created_at)));
+    if (r.rating) meta.append(el("span", "", "★".repeat(r.rating) + "☆".repeat(5 - r.rating)));
+    meta.append(el("span", "", r.email || "no email"));
+    if (r.status !== "new") meta.append(el("span", "pill", r.status));
+    head.append(meta, el("div", "snip", (r.message || Object.values(r.data).join(" · ") || "(no text)").slice(0, 180)));
+    head.onclick = () => { open.has(r.id) ? open.delete(r.id) : open.add(r.id); render(); };
+    c.append(head);
+    if (!open.has(r.id)) return c;
+
+    const body = el("div", "body");
+    if (r.message) body.append(el("p", "msg", r.message));
+    const keys = Object.keys(r.data);
+    if (keys.length) { const dl = el("dl"); for (const k of keys) dl.append(el("dt", "", k), el("dd", "", r.data[k])); body.append(dl); }
+    const acts = el("div", "acts");
+    if (r.email) {
+      const a = el("a", "tab primary", "Reply by email");
+      a.href = "mailto:" + encodeURIComponent(r.email).replace(/%40/g, "@") + "?subject=" + encodeURIComponent("Re: your feedback on The Cryptic Bureau");
+      acts.append(a);
+    }
+    const set = (label, s, cls) => { const b = el("button", cls || "tab", label); b.type = "button"; b.onclick = () => change(r.id, () => api("/" + r.id, { method: "PATCH", body: JSON.stringify({ status: s }) })); acts.append(b); };
+    if (r.status !== "read" && r.status !== "replied") set("Mark read", "read");
+    if (r.status !== "replied") set("Mark replied", "replied");
+    if (r.status !== "archived") set("Archive", "archived");
+    if (r.status === "archived" || r.status === "read" || r.status === "replied") set("Back to new", "new");
+    const del = el("button", "tab danger", "Delete"); del.type = "button";
+    del.onclick = () => { if (confirm("Delete this feedback permanently? This cannot be undone.")) change(r.id, () => api("/" + r.id, { method: "DELETE" })); };
+    acts.append(del);
+    body.append(acts);
+    c.append(body);
+    return c;
+  }
+
+  async function change(id, call) {
+    try { await call(); open.delete(id); await load(); } catch (e) { fail(e.message); }
+  }
+
+  function render() {
+    renderTabs();
+    const list = $("list");
+    if (!data.rows.length) { list.replaceChildren(el("p", "empty", "Nothing here.")); return; }
+    list.replaceChildren(...data.rows.map(card));
+  }
+
+  $("form").onchange = e => { form = e.target.value; load(); };
+  load();
+})();
+</script>
+</body>
+</html>

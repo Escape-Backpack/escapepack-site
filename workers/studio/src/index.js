@@ -10,6 +10,8 @@
 //   GET/POST /me                         who you are / set your display name
 //   GET  /adventures, POST /adventures   list / import one from GitHub {bp, repo}
 //   GET  /bureau                         the series roadmap and bible, read from BUREAU_REPO
+//   GET  /feedback?status=&form=         form submissions (stats database), counts + newest 200
+//   PATCH /feedback/:id {status}         new | read | replied | archived;  DELETE /feedback/:id
 //   GET  /a/:bp/state                    everything the page needs
 //   GET  /a/:bp/changes?since=&viewing=  what changed since seq (also reports who's here)
 //   POST /a/:bp/records                  new record {type, title, set}
@@ -69,6 +71,44 @@ async function nameOf(env, who) {
   return row?.name || null;
 }
 
+const FB_STATUS = ["new", "read", "replied", "archived"];
+async function feedbackRoute(env, url, method, id, request) {
+  if (!env.STATS_DB) fail(500, "the feedback database is not connected");
+  if (id === null && method === "GET") {
+    const p = url.searchParams, where = [], args = [];
+    const status = p.get("status") || "inbox";
+    if (status === "inbox") where.push("status IN ('new','read')");
+    else if (status === "all") where.push("status != 'test'");
+    else if ([...FB_STATUS, "test"].includes(status)) { where.push("status = ?"); args.push(status); }
+    else fail(400, "bad status");
+    const form = p.get("form");
+    if (form) { if (!/^[a-z0-9-]{1,40}$/.test(form)) fail(400, "bad form"); where.push("form = ?"); args.push(form); }
+    const rows = await env.STATS_DB.prepare(
+      `SELECT id, created_at, form, game, rating, email, message, data, origin, status FROM feedback WHERE ${where.join(" AND ")} ORDER BY id DESC LIMIT 200`
+    ).bind(...args).all();
+    const counts = await env.STATS_DB.prepare("SELECT status, COUNT(*) AS n FROM feedback GROUP BY status").all();
+    const forms = await env.STATS_DB.prepare("SELECT DISTINCT form FROM feedback WHERE status != 'test' ORDER BY form").all();
+    return json({
+      rows: rows.results.map(r => ({ ...r, data: JSON.parse(r.data || "{}") })),
+      counts: Object.fromEntries(counts.results.map(r => [r.status, r.n])),
+      forms: forms.results.map(r => r.form),
+    });
+  }
+  if (id !== null && method === "PATCH") {
+    const status = String((await body(request)).status || "");
+    if (!FB_STATUS.includes(status)) fail(400, "bad status");
+    const res = await env.STATS_DB.prepare("UPDATE feedback SET status = ? WHERE id = ?").bind(status, id).run();
+    if (!res.meta.changes) fail(404, "not found");
+    return json({ ok: true });
+  }
+  if (id !== null && method === "DELETE") {
+    const res = await env.STATS_DB.prepare("DELETE FROM feedback WHERE id = ?").bind(id).run();
+    if (!res.meta.changes) fail(404, "not found");
+    return json({ ok: true });
+  }
+  fail(405, "method not allowed");
+}
+
 async function route(request, env, url, who) {
   const path = url.pathname.slice("/studio/api".length);
   const method = request.method;
@@ -105,6 +145,11 @@ async function route(request, env, url, who) {
     }
     fail(405, "method not allowed");
   }
+
+  // Feedback inbox: the forms' rows live in the stats database (STATS_DB). Signed-in people only (Access),
+  // no Studio display name needed.
+  const fb = path.match(/^\/feedback(?:\/(\d+))?$/);
+  if (fb) return feedbackRoute(env, url, method, fb[1] ? Number(fb[1]) : null, request);
 
   const name = await nameOf(env, who);
   if (!name) fail(403, "name needed", { needName: true });
