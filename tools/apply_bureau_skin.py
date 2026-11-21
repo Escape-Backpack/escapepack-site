@@ -20,7 +20,7 @@ PAGES = [
     ROOT / "help" / "hiking" / "hints" / "index.html",
     ROOT / "help" / "hiking" / "reset" / "index.html",
 ]
-VERSION = "1"
+VERSION = "2"
 # The theme line applies the visitor's saved light/dark choice (kit pages already do; Hiking's don't).
 HEAD = (f'<!--bureau-skin--><link rel="stylesheet" href="/bureau-skin.css?v={VERSION}">'
         '<link rel="icon" type="image/png" href="/assets/bureau/favicon-64.png">'
@@ -38,6 +38,13 @@ def apply(path: Path) -> bool:
     html = re.sub(r"\n?<!--bureau-bar-->.*?<!--/bureau-bar-->", "", html, flags=re.S)
     if "</head>" not in html or not re.search(r"<body[^>]*>", html):
         raise ValueError(f"{path}: no </head> or <body> to attach to")
+    # The kit's own bar and header link home to escapepack.ca (hidden by the skin, but still in the
+    # page): point them at the Bureau's address instead.
+    html = html.replace('href="https://escapepack.ca"', 'href="https://crypticbureau.com"')
+    html = html.replace('>escapepack.ca</a></div></div></header>', '>crypticbureau.com</a></div></div></header>')
+    # Fonts are self-hosted (bureau-skin.css): drop the kit's Google Fonts links so visitors' addresses
+    # are not sent to Google.
+    html = re.sub(r'<link[^>]*href="https://fonts\.(?:googleapis|gstatic)\.com[^>]*>\n?', "", html)
     # Last thing in <head>, so it wins over the page's own <style> blocks.
     html = html.replace("</head>", HEAD + "\n</head>", 1)
     html = re.sub(r"(<body[^>]*>)", lambda m: m.group(1) + "\n" + BAR, html, count=1)
