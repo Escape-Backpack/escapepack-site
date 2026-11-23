@@ -129,6 +129,42 @@ dialog.sheet[open] { display: flex; flex-direction: column; animation: up .3s ea
 .pack.ghost { flex: none; background: transparent; color: var(--ink); border: 2px solid var(--rule); padding: 12px 16px; }
 .pack:active { transform: scale(.98); }
 
+/* ---------- prototype box check (builder view, #prototype) ---------- */
+.toplink { display: inline-block; margin-top: 4px; color: var(--gold); font-size: .88rem; }
+.pg { margin-top: 18px; display: grid; gap: 10px; }
+.pg .row { display: flex; justify-content: space-between; align-items: baseline; font-size: .9rem; color: #cdd8d2; }
+.pg strong { color: var(--paper); }
+.pgroup { margin-top: 14px; background: #24362f; border: 1px solid #3a5148; border-radius: 12px; overflow: hidden; }
+.pgroup > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 12px 14px; min-height: 52px; }
+.pgroup > summary::-webkit-details-marker { display: none; }
+.pgroup > summary::after { content: "\25BE"; margin-left: auto; color: var(--gold); transition: transform .2s; }
+.pgroup[open] > summary::after { transform: rotate(180deg); }
+.pgroup summary img { width: 72px; border-radius: 4px; flex: none; }
+.pgroup .gname { font-family: "Cinzel", Georgia, serif; letter-spacing: .04em; }
+.pgroup .gcount { font-size: .82rem; color: #cdd8d2; }
+.pgroup.complete { border-color: var(--ok); }
+.pgroup.complete .gcount { color: #9fd3ab; }
+.pitems { padding: 0 10px 10px; display: grid; gap: 10px; }
+.pitem { background: var(--paper); color: var(--ink); border-radius: 10px; padding: 10px 12px; }
+.pitem.inbox { background: #e8f2ea; }
+.ptop { display: flex; gap: 10px; align-items: flex-start; }
+.ptitle { flex: 1; min-width: 0; font-weight: 600; }
+.chip { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 99px; background: #e4e0d2; font-size: .72rem; font-weight: 500; color: var(--ink-soft); vertical-align: 1px; }
+.boxbtn { all: unset; flex: none; cursor: pointer; padding: 8px 12px; min-height: 40px; display: flex; align-items: center; gap: 6px; border: 2px solid var(--ink-soft); border-radius: 10px; font-size: .85rem; font-weight: 600; color: var(--ink); background: #fff; }
+.boxbtn[aria-pressed="true"] { background: var(--ok); border-color: var(--ok); color: #fff; }
+.boxbtn:focus-visible, .pc input:focus-visible { outline: 3px solid var(--rust); outline-offset: 2px; }
+.pcs { list-style: none; margin: 8px 0 0; padding: 0; }
+.pc { border-top: 1px solid var(--rule); }
+.pc label { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0 4px; cursor: pointer; }
+.pc input { flex: none; width: 24px; height: 24px; margin-top: 1px; accent-color: var(--ok); }
+.pc .pn { flex: 1; min-width: 0; font-size: .93rem; }
+.pc .opt { font-size: .72rem; color: var(--rust); margin-left: 4px; }
+.pc details { margin: 0 0 8px 36px; font-size: .84rem; color: var(--ink-soft); }
+.pc summary { cursor: pointer; color: var(--rust); font-size: .82rem; padding: 2px 0; }
+.pc code { font-size: .78rem; background: #ebe8dc; padding: 1px 5px; border-radius: 4px; word-break: break-all; }
+.pc .note { margin: 4px 0 0; }
+.pc .fl { display: block; margin-top: 4px; }
+
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
@@ -137,6 +173,7 @@ noscript p { background: var(--paper); color: var(--ink); padding: 12px; border-
 </head>
 <body>
 <div class="wrap">
+  <div id="player">
   <header>
     <p class="kicker">The Cryptic Bureau</p>
     <h1>Repacking helper</h1>
@@ -170,6 +207,8 @@ noscript p { background: var(--paper); color: var(--ink); padding: 12px; border-
     <h2>Box ready</h2>
     <p>Everything is back in its envelope. Close the lid. Thank you for playing.</p>
   </div>
+  </div>
+  <div id="proto" hidden></div>
 </div>
 
 <dialog class="sheet" id="sheet" aria-labelledby="sheet-title">
@@ -296,6 +335,112 @@ noscript p { background: var(--paper); color: var(--ink); padding: 12px; border-
 
   if (!DATA.length) { grid.innerHTML = '<li style="color:#fff">Envelope data did not load (repack/data.js).</li>'; return; }
   build();
+
+  /* ---------- prototype box check: only shown at #prototype, data loaded on demand ---------- */
+  var PKEY = 'norse-proto-v1';
+  var pstate = { p: {}, b: {} };            // p: piece id -> made/printed ; b: item id -> in the box
+  try { var ps = JSON.parse(localStorage.getItem(PKEY) || 'null'); if (ps && ps.p) pstate = ps; } catch (e) {}
+  function psave() { try { localStorage.setItem(PKEY, JSON.stringify(pstate)); } catch (e) {} }
+  var protoEl = $('proto'), protoBuilt = false, protoLoading = false;
+
+  function counted(item) { return item.pieces.filter(function (p) { return !p.optional; }); }
+  function totals() {
+    var pieces = 0, made = 0, items = 0, inbox = 0;
+    window.PROTO.forEach(function (g) { g.items.forEach(function (it) {
+      items++; if (pstate.b[it.id]) inbox++;
+      counted(it).forEach(function (p) { pieces++; if (pstate.p[p.id]) made++; });
+    }); });
+    return { pieces: pieces, made: made, items: items, inbox: inbox };
+  }
+  function pRefresh() {
+    var t = totals();
+    $('p-made').textContent = t.made + ' of ' + t.pieces;
+    $('p-box').textContent = t.inbox + ' of ' + t.items;
+    $('p-bar1').style.width = (t.made / t.pieces * 100) + '%';
+    $('p-bar2').style.width = (t.inbox / t.items * 100) + '%';
+    window.PROTO.forEach(function (g) {
+      var el = protoEl.querySelector('[data-g="' + g.id + '"]'); if (!el) return;
+      var n = g.items.filter(function (it) { return pstate.b[it.id]; }).length;
+      var made = g.items.every(function (it) { return counted(it).every(function (p) { return pstate.p[p.id]; }); });
+      el.querySelector('.gcount').textContent = n + ' of ' + g.items.length + ' in the box' + (made ? '' : ' · some not made yet');
+      el.classList.toggle('complete', n === g.items.length && made);
+    });
+  }
+  function mk(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  function buildProto() {
+    protoBuilt = true;
+    var head = mk('header'); head.style.paddingBottom = '0';
+    head.appendChild(mk('p', 'kicker', 'For the builder · not for players'));
+    head.appendChild(mk('h1', null, 'Prototype box check'));
+    head.appendChild(mk('p', 'lede', 'Tick each piece when it is printed or made, then tick the item when it is in the box. Item titles are the prop records; print files and notes are from the Print list.'));
+    var back = mk('a', 'toplink', '← Back to the repacking view'); back.href = '#'; head.appendChild(back);
+    protoEl.appendChild(head);
+
+    var pg = mk('div', 'progress'); pg.setAttribute('aria-live', 'polite');
+    pg.innerHTML = '<div class="pg">' +
+      '<div><div class="row"><span>Printed or made: <strong id="p-made"></strong> pieces</span></div><div class="bar"><i id="p-bar1"></i></div></div>' +
+      '<div><div class="row"><span>In the box: <strong id="p-box"></strong> items</span><button id="p-reset" type="button" style="all:unset;cursor:pointer;text-decoration:underline;font-size:.82rem">Start over</button></div><div class="bar"><i id="p-bar2"></i></div></div></div>';
+    protoEl.appendChild(pg);
+
+    window.PROTO.forEach(function (g) {
+      var d = mk('details', 'pgroup'); d.dataset.g = g.id; if (g.id === 'top') d.open = true;
+      var s = mk('summary');
+      if (g.n) { var im = mk('img'); im.alt = ''; im.src = DATA[g.n - 1].sticker; s.appendChild(im); }
+      var t = mk('div'); t.appendChild(mk('div', 'gname', g.label)); t.appendChild(mk('div', 'gcount'));
+      s.appendChild(t); d.appendChild(s);
+      var wrap = mk('div', 'pitems');
+      g.items.forEach(function (it) {
+        var card = mk('div', 'pitem'), top = mk('div', 'ptop');
+        var ti = mk('div', 'ptitle', it.title); if (it.source) ti.appendChild(mk('span', 'chip', it.source));
+        var bb = mk('button', 'boxbtn'); bb.type = 'button'; bb.innerHTML = '<span>✓</span> In box';
+        bb.setAttribute('aria-pressed', !!pstate.b[it.id]); card.classList.toggle('inbox', !!pstate.b[it.id]);
+        bb.addEventListener('click', function () {
+          var on = !pstate.b[it.id]; if (on) pstate.b[it.id] = true; else delete pstate.b[it.id];
+          bb.setAttribute('aria-pressed', on); card.classList.toggle('inbox', on); psave(); pRefresh();
+        });
+        top.appendChild(ti); top.appendChild(bb); card.appendChild(top);
+        var ul = mk('ul', 'pcs');
+        it.pieces.forEach(function (p) {
+          var li = mk('li', 'pc'), lab = mk('label'), cb = mk('input'); cb.type = 'checkbox'; cb.checked = !!pstate.p[p.id];
+          cb.addEventListener('change', function () { if (cb.checked) pstate.p[p.id] = true; else delete pstate.p[p.id]; psave(); pRefresh(); });
+          var pn = mk('span', 'pn', p.make ? p.name + (p.name === 'Buy' || p.name === '3D print' || p.name === 'Make by hand' ? ': have it' : '') : p.name);
+          if (p.optional) pn.appendChild(mk('span', 'opt', '(alternative, not counted)'));
+          lab.appendChild(cb); lab.appendChild(pn); li.appendChild(lab);
+          if (p.files.length || p.note) {
+            var det = mk('details'); det.appendChild(mk('summary', null, 'How to print'));
+            p.files.forEach(function (f) { var c = mk('code', null, f), w = mk('span', 'fl'); w.appendChild(c); det.appendChild(w); });
+            if (p.note) det.appendChild(mk('p', 'note', p.note));
+            li.appendChild(det);
+          }
+          ul.appendChild(li);
+        });
+        card.appendChild(ul); wrap.appendChild(card);
+      });
+      d.appendChild(wrap); protoEl.appendChild(d);
+    });
+    $('p-reset').addEventListener('click', function () {
+      if (!confirm('Clear every tick on this checklist?')) return;
+      pstate = { p: {}, b: {} }; psave(); protoEl.innerHTML = ''; buildProto();
+    });
+    pRefresh();
+  }
+
+  function route() {
+    var on = location.hash === '#prototype';
+    $('player').hidden = on; protoEl.hidden = !on;
+    document.title = on ? 'Prototype box check · The Raven Inheritance' : 'Repacking Helper · The Raven Inheritance';
+    if (on) window.scrollTo(0, 0);
+    if (on && !protoBuilt && !protoLoading) {
+      protoLoading = true;
+      var s = document.createElement('script'); s.src = 'proto.js';
+      s.onload = function () { buildProto(); };
+      s.onerror = function () { protoEl.textContent = 'Checklist data did not load (repack/proto.js).'; protoLoading = false; };
+      document.head.appendChild(s);
+    }
+  }
+  window.addEventListener('hashchange', route);
+  route();
 })();
 </script>
 </body>
