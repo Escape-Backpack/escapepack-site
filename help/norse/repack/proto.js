@@ -12,9 +12,9 @@ window.PROTO = [
       "id": "PP-001.0",
       "name": "Print",
       "files": [
-       "PrintTest_L1_L2.docx"
+       "Postcards_Sheet_1_L1_L2_L3_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards L1 and L2.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds L1, L2, L3). Print the PDF.",
       "optional": false
      }
     ]
@@ -42,16 +42,17 @@ window.PROTO = [
       "id": "PP-047.0",
       "name": "Rune cypher wheel, 140 mm (current), with the rune table card",
       "files": [
-       "Print_CypherWheel_And_Table_140mm.docx"
+       "Cypher_Wheel_And_Table_140mm_Print.pdf",
+       "Rune_Table_And_Envelope_Labels_Letter_Print.pdf"
       ],
-      "note": "6 Letter pages, cardstock: wheel and arm, wheels II to IV, the 6 × 4 in table card (the table is an unadopted alternative: use the wheel or the table), the envelope rune labels, and two designer key pages that are not packed.",
+      "note": "Two PDFs. The 6-page file is the full set. If you use the table instead of the wheel, print the one-sheet file (Rune_Table_And_Envelope_Labels: table card plus the small 36 × 11 mm stickers, 13 labels and 2 decoys) instead of pages 3 and 4. The 6-page file is 6 Letter pages, cardstock: wheel and arm, wheels II to IV, the 6 × 4 in table card (the table is an unadopted alternative: use the wheel or the table), the envelope rune labels, and two designer key pages that are not packed.",
       "optional": false
      },
      {
       "id": "PP-047.1",
       "name": "Envelope rune stickers, small (17 Nov 2026)",
       "files": [
-       "Print_EnvelopeRuneStickers.docx"
+       "Envelope_Rune_Stickers_Print.pdf"
       ],
       "note": "Two Letter pages for a home sticker machine: the 13 envelope rune labels plus two decoy labels: the large decoy envelope (ᛜ ᛗ ᛃ ᚨ, runes the wheel never shows; the thank-you card tells players to open it to repack) and the small decoy envelope (ᛗ ᛜ ᛊ ᚱ, two off-wheel runes so no code can show it), 36 × 11 mm, dark green, runes at 14 pt. Page 1 has gold runes, page 2 white: print the one that reads better. Same runes as the larger labels in the wheel file.",
       "optional": false
@@ -67,9 +68,10 @@ window.PROTO = [
       "id": "PP-048.0",
       "name": "Liv's notes card",
       "files": [
-       "Print_LivNotesCard.docx"
+       "Liv_Notes_Card_Letter_Print.pdf",
+       "Liv_Notes_Card_Print.pdf"
       ],
-      "note": "4 × 6 in, two-sided (family tree on the back), cream paper.",
+      "note": "4 × 6 in, two-sided (family tree on the back), cream paper. Print the Letter sheet; the other PDF is the card at exact size.",
       "optional": false
      }
     ]
@@ -83,7 +85,7 @@ window.PROTO = [
       "id": "PP-049.0",
       "name": "Prototype feedback slip (temporary)",
       "files": [
-       "Print_PlaytestThankYou.docx"
+       "Playtest_Thank_You_Slip_Letter_Print.pdf"
       ],
       "note": "4 × 6 in, one side; one slip on a Letter page with crop marks. Loose on top of the box, prototype only.",
       "optional": false
@@ -92,9 +94,18 @@ window.PROTO = [
       "id": "PP-049.1",
       "name": "Liv's notes card and the feedback slip on one sheet",
       "files": [
-       "Print_BoxCards_LivNotes_ThankYou.docx"
+       "Box_Cards_LivNotes_ThankYou_Letter_Print.pdf"
       ],
       "note": "Two Letter pages, both cards turned sideways: page 1 has Liv's notes card (top) and the slip, page 2 the card's back, duplex long edge. An alternative to printing the card from its own file below.",
+      "optional": true
+     },
+     {
+      "id": "PP-049.2",
+      "name": "Liv's last note and the feedback slip on one sheet",
+      "files": [
+       "Liv_Final_Memo_And_Thank_You_Slip_Letter_Print.pdf"
+      ],
+      "note": "Two Letter pages, both cards turned sideways: page 1 has Liv's last note (top) and the slip, page 2 the note's family-tree back, duplex long edge (back shifted 0.6 cm left for the Brother). White paper. An alternative to printing the note from its own file under PP-043.",
       "optional": true
      }
     ]
@@ -115,9 +126,9 @@ window.PROTO = [
       "id": "PP-015.0",
       "name": "Print",
       "files": [
-       "PrintTest_AD_H1.docx"
+       "Postcards_Sheet_5_A2_A3_AD_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards AD and H1.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds A2, A3, AD). Print the PDF.",
       "optional": false
      }
     ]
@@ -129,11 +140,11 @@ window.PROTO = [
     "pieces": [
      {
       "id": "PP-028.0",
-      "name": "Aud's comb (paper version, shares a sheet with the ruler)",
+      "name": "Aud's comb (paper version, shares a sheet with the ruler and the coins)",
       "files": [
-       "Print_CombAndRuler.docx"
+       "Comb_Ruler_Coins_Letter_Print.pdf"
       ],
-      "note": "One Letter page, heavy paper.",
+      "note": "One Letter page, one side, heavy paper: comb, 12 coins and ruler. Cut each out; punch the comb's two 2 mm holes.",
       "optional": false
      }
     ]
@@ -154,9 +165,9 @@ window.PROTO = [
       "id": "PP-002.0",
       "name": "Print",
       "files": [
-       "PrintTest_L1_L2.docx"
+       "Postcards_Sheet_1_L1_L2_L3_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards L1 and L2.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds L1, L2, L3). Print the PDF.",
       "optional": false
      }
     ]
@@ -170,9 +181,9 @@ window.PROTO = [
       "id": "PP-003.0",
       "name": "Print",
       "files": [
-       "PrintTest_L3_LD.docx"
+       "Postcards_Sheet_1_L1_L2_L3_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards L3 and LD.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds L1, L2, L3). Print the PDF.",
       "optional": false
      }
     ]
@@ -207,9 +218,9 @@ window.PROTO = [
       "id": "PP-017.0",
       "name": "Print",
       "files": [
-       "PrintTest_H2_H3.docx"
+       "Postcards_Sheet_6_H1_H2_H3_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards H2 and H3.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds H1, H2, H3). Print the PDF.",
       "optional": false
      }
     ]
@@ -223,9 +234,9 @@ window.PROTO = [
       "id": "PP-018.0",
       "name": "Print",
       "files": [
-       "PrintTest_H2_H3.docx"
+       "Postcards_Sheet_6_H1_H2_H3_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards H2 and H3.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds H1, H2, H3). Print the PDF.",
       "optional": false
      }
     ]
@@ -239,9 +250,9 @@ window.PROTO = [
       "id": "PP-022.0",
       "name": "Print",
       "files": [
-       "PrintTest_H6_HD.docx"
+       "Postcards_Sheet_8_HD_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards H6 and HD.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds HD). Print the PDF.",
       "optional": false
      }
     ]
@@ -262,9 +273,9 @@ window.PROTO = [
       "id": "PP-013.0",
       "name": "Print",
       "files": [
-       "PrintTest_A2_A3.docx"
+       "Postcards_Sheet_5_A2_A3_AD_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards A2 and A3.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds A2, A3, AD). Print the PDF.",
       "optional": false
      }
     ]
@@ -278,9 +289,10 @@ window.PROTO = [
       "id": "PP-030.0",
       "name": "Trail map",
       "files": [
-       "Norse_Trail_Maps_Print.docx"
+       "Trail_Map_3_Aud_Letter_Print.pdf",
+       "Trail_Map_3_Aud_Print.pdf"
       ],
-      "note": "Half-Letter, 5.5 × 8.5 in. The Word file holds all four maps and their backs (7 pages).",
+      "note": "Print the Letter sheet, then cut on the ticks to 5.5 × 8.5 in (half-Letter). Rollo, Aud and Harald have a back page: print page 1, flip on the long edge, print page 2. The other PDF is the map at exact size with bleed.",
       "optional": false
      }
     ]
@@ -294,10 +306,10 @@ window.PROTO = [
       "id": "PP-031.0",
       "name": "Aud's Treasure Museum ticket",
       "files": [
-       "Print_Museums_Aud_Rouen_2x6.docx",
-       "Print_Museum_Aud_2x6.docx"
+       "Museums_All_2x6_Letter_Print.pdf",
+       "Aud_Ticket_Letter_Print.pdf"
       ],
-      "note": "2 × 6 in, two-sided, tan paper. Each Word sheet prints one ticket of each of its two museums.",
+      "note": "2 × 6 in, two-sided, tan paper, on a Letter sheet. The first PDF is one sheet with one ticket of each of the four museums (print it once); the other PDF prints two of this museum's ticket, for spares.",
       "optional": false
      }
     ]
@@ -318,9 +330,9 @@ window.PROTO = [
       "id": "PP-005.0",
       "name": "Print",
       "files": [
-       "PrintTest_R1_R2.docx"
+       "Postcards_Sheet_2_LD_R1_R2_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards R1 and R2.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds LD, R1, R2). Print the PDF.",
       "optional": false
      }
     ]
@@ -334,9 +346,9 @@ window.PROTO = [
       "id": "PP-010.0",
       "name": "Print",
       "files": [
-       "PrintTest_R5_R6.docx"
+       "Postcards_Sheet_4_R6_RD_A1_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards R5 and R6.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds R6, RD, A1). Print the PDF.",
       "optional": false
      }
     ]
@@ -350,9 +362,9 @@ window.PROTO = [
       "id": "PP-011.0",
       "name": "Print",
       "files": [
-       "PrintTest_RD_A1.docx"
+       "Postcards_Sheet_4_R6_RD_A1_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards RD and A1.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds R6, RD, A1). Print the PDF.",
       "optional": false
      }
     ]
@@ -373,9 +385,9 @@ window.PROTO = [
       "id": "PP-004.0",
       "name": "Print",
       "files": [
-       "PrintTest_L3_LD.docx"
+       "Postcards_Sheet_2_LD_R1_R2_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards L3 and LD.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds LD, R1, R2). Print the PDF.",
       "optional": false
      }
     ]
@@ -389,10 +401,10 @@ window.PROTO = [
       "id": "PP-024.0",
       "name": "Viking Museum of Brattahlíð ticket",
       "files": [
-       "Print_Museums_Oslo_Brattahlid_2x6.docx",
-       "Print_Museum_Brattahlid_2x6.docx"
+       "Museums_All_2x6_Letter_Print.pdf",
+       "Museum_Ticket_Letter_Print.pdf"
       ],
-      "note": "2 × 6 in, two-sided, tan paper. Each Word sheet prints one ticket of each of its two museums.",
+      "note": "2 × 6 in, two-sided, tan paper, on a Letter sheet. The first PDF is one sheet with one ticket of each of the four museums (print it once); the other PDF prints two of this museum's ticket, for spares.",
       "optional": false
      }
     ]
@@ -406,9 +418,10 @@ window.PROTO = [
       "id": "PP-029.0",
       "name": "Trail map",
       "files": [
-       "Norse_Trail_Maps_Print.docx"
+       "Trail_Map_1_Leif_Letter_Print.pdf",
+       "Trail_Map_1_Leif_Print.pdf"
       ],
-      "note": "Half-Letter, 5.5 × 8.5 in. The Word file holds all four maps and their backs (7 pages).",
+      "note": "Print the Letter sheet, then cut on the ticks to 5.5 × 8.5 in (half-Letter). Rollo, Aud and Harald have a back page: print page 1, flip on the long edge, print page 2. The other PDF is the map at exact size with bleed.",
       "optional": false
      }
     ]
@@ -429,9 +442,9 @@ window.PROTO = [
       "id": "PP-012.0",
       "name": "Print",
       "files": [
-       "PrintTest_RD_A1.docx"
+       "Postcards_Sheet_4_R6_RD_A1_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards RD and A1.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds R6, RD, A1). Print the PDF.",
       "optional": false
      }
     ]
@@ -445,9 +458,9 @@ window.PROTO = [
       "id": "PP-014.0",
       "name": "Print",
       "files": [
-       "PrintTest_A2_A3.docx"
+       "Postcards_Sheet_5_A2_A3_AD_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards A2 and A3.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds A2, A3, AD). Print the PDF.",
       "optional": false
      }
     ]
@@ -461,9 +474,11 @@ window.PROTO = [
       "id": "PP-026.0",
       "name": "Treasure tally",
       "files": [
-       "Print_Paper_Treasure_Tally_Compact_4x6_Envelope.docx"
+       "Nordic_Air_Raven_Card_Letter_Print.pdf",
+       "Northway_Buses_Tally_Sliders_Letter_Print.pdf",
+       "Treasure_Tally_Compact_Letter_Print.pdf"
       ],
-      "note": "Paper slider, 4 × 6 in when stored.",
+      "note": "Paper slider, 4 × 6 in when stored. It is printed on the ticket sheets: front, backing and ten rails are on the sage Nordic Air sheet (with the raven's flights card), and the four sliders are on the golden-yellow Northway Buses sheet, turned sideways. The third PDF is the same two tally pages on their own, as a fallback.",
       "optional": false
      },
      {
@@ -486,9 +501,9 @@ window.PROTO = [
       "id": "PP-037.0",
       "name": "Coin hoard, paper version (prototype, 16 Nov 2026)",
       "files": [
-       "Print_Paper_Coin_Sheet.docx"
+       "Comb_Ruler_Coins_Letter_Print.pdf"
       ],
-      "note": "One Letter page, heavy paper, 100%: 12 coins at 28 mm, fronts only. Cut each out on the thin outline.",
+      "note": "Same sheet as the comb and the ruler: 12 coins at 28 mm, fronts only, 100%, heavy paper. Cut each out on the thin outline.",
       "optional": false
      }
     ]
@@ -509,9 +524,9 @@ window.PROTO = [
       "id": "PP-006.0",
       "name": "Print",
       "files": [
-       "PrintTest_R1_R2.docx"
+       "Postcards_Sheet_2_LD_R1_R2_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards R1 and R2.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds LD, R1, R2). Print the PDF.",
       "optional": false
      }
     ]
@@ -525,9 +540,10 @@ window.PROTO = [
       "id": "PP-032.0",
       "name": "Trail map",
       "files": [
-       "Norse_Trail_Maps_Print.docx"
+       "Trail_Map_2_Rollo_Letter_Print.pdf",
+       "Trail_Map_2_Rollo_Print.pdf"
       ],
-      "note": "Half-Letter, 5.5 × 8.5 in. The Word file holds all four maps and their backs (7 pages).",
+      "note": "Print the Letter sheet, then cut on the ticks to 5.5 × 8.5 in (half-Letter). Rollo, Aud and Harald have a back page: print page 1, flip on the long edge, print page 2. The other PDF is the map at exact size with bleed.",
       "optional": false
      }
     ]
@@ -541,10 +557,10 @@ window.PROTO = [
       "id": "PP-033.0",
       "name": "Musée Ducal de Rouen ticket",
       "files": [
-       "Print_Museums_Aud_Rouen_2x6.docx",
-       "Print_Museum_Rouen_2x6.docx"
+       "Museums_All_2x6_Letter_Print.pdf",
+       "Rouen_Ticket_Letter_Print.pdf"
       ],
-      "note": "2 × 6 in, two-sided, tan paper. Each Word sheet prints one ticket of each of its two museums.",
+      "note": "2 × 6 in, two-sided, tan paper, on a Letter sheet. The first PDF is one sheet with one ticket of each of the four museums (print it once); the other PDF prints two of this museum's ticket, for spares.",
       "optional": false
      }
     ]
@@ -565,9 +581,9 @@ window.PROTO = [
       "id": "PP-007.0",
       "name": "Print",
       "files": [
-       "PrintTest_R3_R4.docx"
+       "Postcards_Sheet_3_R3_R4_R5_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards R3 and R4.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds R3, R4, R5). Print the PDF.",
       "optional": false
      }
     ]
@@ -581,9 +597,9 @@ window.PROTO = [
       "id": "PP-008.0",
       "name": "Print",
       "files": [
-       "PrintTest_R3_R4.docx"
+       "Postcards_Sheet_3_R3_R4_R5_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards R3 and R4.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds R3, R4, R5). Print the PDF.",
       "optional": false
      }
     ]
@@ -597,9 +613,9 @@ window.PROTO = [
       "id": "PP-009.0",
       "name": "Print",
       "files": [
-       "PrintTest_R5_R6.docx"
+       "Postcards_Sheet_3_R3_R4_R5_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards R5 and R6.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds R3, R4, R5). Print the PDF.",
       "optional": false
      }
     ]
@@ -611,9 +627,9 @@ window.PROTO = [
     "pieces": [
      {
       "id": "PP-025.0",
-      "name": "Liv's ruler (same sheet as the comb)",
+      "name": "Liv's ruler (same sheet as the comb and the coins)",
       "files": [
-       "Print_CombAndRuler.docx"
+       "Comb_Ruler_Coins_Letter_Print.pdf"
       ],
       "note": "One Letter page, heavy paper.",
       "optional": false
@@ -622,7 +638,8 @@ window.PROTO = [
       "id": "PP-025.1",
       "name": "Liv's ruler on its own",
       "files": [
-       "Print_LivRuler.docx"
+       "Liv_Ruler_Print.pdf",
+       "Liv_Ruler_2x6_PrintShop.pdf"
       ],
       "note": "2 × 6 in ruler for the half-Letter maps. The PrintShop PDF is the ruler alone with bleed.",
       "optional": true
@@ -645,9 +662,9 @@ window.PROTO = [
       "id": "PP-016.0",
       "name": "Print",
       "files": [
-       "PrintTest_AD_H1.docx"
+       "Postcards_Sheet_6_H1_H2_H3_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards AD and H1.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds H1, H2, H3). Print the PDF.",
       "optional": false
      }
     ]
@@ -661,9 +678,10 @@ window.PROTO = [
       "id": "PP-034.0",
       "name": "Trail map",
       "files": [
-       "Norse_Trail_Maps_Print.docx"
+       "Trail_Map_4_Harald_Letter_Print.pdf",
+       "Trail_Map_4_Harald_Print.pdf"
       ],
-      "note": "Half-Letter, 5.5 × 8.5 in. The Word file holds all four maps and their backs (7 pages).",
+      "note": "Print the Letter sheet, then cut on the ticks to 5.5 × 8.5 in (half-Letter). Rollo, Aud and Harald have a back page: print page 1, flip on the long edge, print page 2. The other PDF is the map at exact size with bleed.",
       "optional": false
      }
     ]
@@ -677,7 +695,7 @@ window.PROTO = [
       "id": "PP-035.0",
       "name": "Hnefatafl board setup insert",
       "files": [
-       "Print_HnefataflBoardSetupInsert.docx"
+       "Hnefatafl_Board_Setup_Insert.pdf"
       ],
       "note": "The same setup is on the back of Harald's map. The board and pieces are not printed.",
       "optional": false
@@ -686,7 +704,7 @@ window.PROTO = [
       "id": "PP-035.1",
       "name": "Hnefatafl playing board, paper (prototype, 16 Nov 2026)",
       "files": [
-       "Print_HnefataflBoard.docx"
+       "Hnefatafl_Board_Print.pdf"
       ],
       "note": "Letter page, heavy paper, 100%. Cut along the crop marks to a 5.5 × 8.5 in (half-Letter) board. Parchment and knotwork gift version, no text. Blank 11 × 11 grid, 11 mm squares, for pieces with a base under 10 mm.",
       "optional": false
@@ -702,10 +720,10 @@ window.PROTO = [
       "id": "PP-036.0",
       "name": "Hnefatafl Museum ticket, Oslo",
       "files": [
-       "Print_Museums_Oslo_Brattahlid_2x6.docx",
-       "Print_Museum_Oslo_2x6.docx"
+       "Museums_All_2x6_Letter_Print.pdf",
+       "Hnefatafl_Ticket_Letter_Print.pdf"
       ],
-      "note": "2 × 6 in, two-sided, tan paper. Each Word sheet prints one ticket of each of its two museums.",
+      "note": "2 × 6 in, two-sided, tan paper, on a Letter sheet. The first PDF is one sheet with one ticket of each of the four museums (print it once); the other PDF prints two of this museum's ticket, for spares.",
       "optional": false
      }
     ]
@@ -726,9 +744,9 @@ window.PROTO = [
       "id": "PP-019.0",
       "name": "Print",
       "files": [
-       "PrintTest_H4_H5.docx"
+       "Postcards_Sheet_7_H4_H5_H6_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards H4 and H5.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds H4, H5, H6). Print the PDF.",
       "optional": false
      }
     ]
@@ -742,9 +760,9 @@ window.PROTO = [
       "id": "PP-020.0",
       "name": "Print",
       "files": [
-       "PrintTest_H4_H5.docx"
+       "Postcards_Sheet_7_H4_H5_H6_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards H4 and H5.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds H4, H5, H6). Print the PDF.",
       "optional": false
      }
     ]
@@ -756,11 +774,11 @@ window.PROTO = [
     "pieces": [
      {
       "id": "PP-038.0",
-      "name": "The raven's flights card",
+      "name": "The raven's flights card (shares a sheet with the Nordic Air tickets)",
       "files": [
-       "Print_RavenFlights_Card.docx"
+       "Nordic_Air_Raven_Card_Letter_Print.pdf"
       ],
-      "note": "3.5 × 2 in, one side.",
+      "note": "One Letter sheet, one side, sage paper: the four Nordic Air tickets on top, the 3.5 × 2 in raven's flights card below. Cut the card on its corner marks.",
       "optional": false
      }
     ]
@@ -781,9 +799,9 @@ window.PROTO = [
       "id": "PP-021.0",
       "name": "Print",
       "files": [
-       "PrintTest_H6_HD.docx"
+       "Postcards_Sheet_7_H4_H5_H6_Letter_Print.pdf"
       ],
-      "note": "6 × 4 in card, two-sided. The Word sheet holds cards H6 and HD.",
+      "note": "Three cards per Letter sheet, two-sided (the sheet holds H4, H5, H6). Print the PDF.",
       "optional": false
      }
     ]
@@ -797,16 +815,16 @@ window.PROTO = [
       "id": "PP-039.0",
       "name": "Travel tickets: Nordic Air",
       "files": [
-       "Print_NordicAir_Flights_Sage_Paper.docx"
+       "Nordic_Air_Raven_Card_Letter_Print.pdf"
       ],
-      "note": "One Letter sheet, one side, sage paper. Tickets are 3.5 × 2 in.",
+      "note": "One Letter sheet, one side, sage paper. Tickets are 3.5 × 2 in. The raven's flights card and the tally front, backing and rails are on the same sheet.",
       "optional": false
      },
      {
       "id": "PP-039.1",
       "name": "Travel tickets: Nordmark Rail",
       "files": [
-       "Print_NordmarkRail_Trains_Coral_Paper.docx"
+       "Nordmark_Rail_Letter_Print.pdf"
       ],
       "note": "One Letter sheet, one side, coral paper. Tickets are 3.5 × 2 in.",
       "optional": false
@@ -815,16 +833,16 @@ window.PROTO = [
       "id": "PP-039.2",
       "name": "Travel tickets: Northway Buses",
       "files": [
-       "Print_NorthwayBuses_Yellow_Paper.docx"
+       "Northway_Buses_Tally_Sliders_Letter_Print.pdf"
       ],
-      "note": "One Letter sheet, one side, golden yellow paper. Tickets are 3.5 × 2 in.",
+      "note": "One Letter sheet, one side, golden yellow paper. Tickets are 3.5 × 2 in. The tally's four sliders are on the same sheet.",
       "optional": false
      },
      {
       "id": "PP-039.3",
       "name": "Travel tickets: Longship Ferries",
       "files": [
-       "Print_LongshipFerries_Green_Paper.docx"
+       "Longship_Ferries_Letter_Print.pdf"
       ],
       "note": "One Letter sheet, one side, dark green paper. Tickets are 3.5 × 2 in.",
       "optional": false
@@ -847,7 +865,7 @@ window.PROTO = [
       "id": "PP-043.0",
       "name": "Plane ticket",
       "files": [
-       "Print_PlaneTicket.docx"
+       "Plane_Ticket_Print.pdf"
       ],
       "note": "Still the 7 × 2.9 in version; the 3.5 × 2 in production size is not built.",
       "optional": false
@@ -856,9 +874,10 @@ window.PROTO = [
       "id": "PP-043.1",
       "name": "Liv's last note",
       "files": [
-       "Print_LivFinalMemo_4x6.docx"
+       "Liv_Final_Memo_4x6_Letter_Print.pdf",
+       "Liv_Final_Memo_4x6_Print.pdf"
       ],
-      "note": "4 × 6 in, two-sided (family tree on the back), white paper.",
+      "note": "4 × 6 in, two-sided (family tree on the back), white paper. Print the Letter sheet; the other PDF is the card at exact size. In the prototype, use Liv_Final_Memo_And_Thank_You_Slip_Letter_Print (PP-049), which has the feedback slip on the same sheet.",
       "optional": false
      }
     ]
@@ -886,7 +905,7 @@ window.PROTO = [
       "id": "PP-050.0",
       "name": "Thank-you card (real game)",
       "files": [
-       "Print_ThanksCard.docx"
+       "Thanks_Card_Letter_Print.pdf"
       ],
       "note": "3.5 × 2 in, one side; 10 cards on one Letter page, cut on the crop marks. Goes in envelope 13.",
       "optional": false
@@ -923,7 +942,7 @@ window.PROTO = [
       "id": "X1.0",
       "name": "Print",
       "files": [
-       "Print_RepackingFlyer_5.5x8.5.docx"
+       "Raven_Inheritance_Repacking_Flyer_Letter_Print.pdf"
       ],
       "note": "5.5 × 8.5 in, one side, on a Letter page with crop marks; text list with the envelope runes. Goes in the large decoy envelope (6 × 9 in), no folding."
      }
@@ -945,7 +964,7 @@ window.PROTO = [
       "id": "X-env.1",
       "name": "Rune stickers: the 13 labels on the sticker sheet",
       "files": [
-       "Print_EnvelopeRuneStickers.docx"
+       "Envelope_Rune_Stickers_Print.pdf"
       ],
       "note": "Two Letter pages for a home sticker machine: the 13 envelope rune labels plus two decoy labels: the large decoy envelope (ᛜ ᛗ ᛃ ᚨ, runes the wheel never shows; the thank-you card tells players to open it to repack) and the small decoy envelope (ᛗ ᛜ ᛊ ᚱ, two off-wheel runes so no code can show it), 36 × 11 mm, dark green, runes at 14 pt. Page 1 has gold runes, page 2 white: print the one that reads better. Same runes as the larger labels in the wheel file."
      }
