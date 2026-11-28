@@ -5,8 +5,8 @@ window.REPACK = [
   "items": [
    {
     "kind": "postcard",
-    "img": "media/Postcard_AD_Bjarnarhofn_Front.webp",
-    "caption": "Postcard AD · Bjarnarhöfn"
+    "name": "BJARNARHÖFN",
+    "caption": "Postcard AD"
    },
    {
     "kind": "prop",
@@ -21,13 +21,13 @@ window.REPACK = [
   "items": [
    {
     "kind": "postcard",
-    "img": "media/Postcard_L2_Battle_Harbour_Front.webp",
-    "caption": "Postcard L2 · Battle Harbour"
+    "name": "BATTLE HARBOUR",
+    "caption": "Postcard L2"
    },
    {
     "kind": "postcard",
-    "img": "media/Postcard_L3_Baffin_Island_Front.webp",
-    "caption": "Postcard L3 · Baffin Island"
+    "name": "QIKIQTARJUAQ",
+    "caption": "Postcard L3"
    },
    {
     "kind": "icon",
@@ -42,18 +42,18 @@ window.REPACK = [
   "items": [
    {
     "kind": "postcard",
-    "img": "media/Postcard_H2_Staraya_Ladoga_Front.webp",
-    "caption": "Postcard H2 · Staraya Ladoga"
+    "name": "STARAYA LADOGA",
+    "caption": "Postcard H2"
    },
    {
     "kind": "postcard",
-    "img": "media/Postcard_H3_Kyiv_Front.webp",
-    "caption": "Postcard H3 · Kyiv"
+    "name": "KYIV",
+    "caption": "Postcard H3"
    },
    {
     "kind": "postcard",
-    "img": "media/Postcard_HD_Constantinople_Front.webp",
-    "caption": "Postcard HD · Constantinople"
+    "name": "CONSTANTINOPLE",
+    "caption": "Postcard HD"
    }
   ]
  },
@@ -63,8 +63,8 @@ window.REPACK = [
   "items": [
    {
     "kind": "postcard",
-    "img": "media/Postcard_A2_Hvammur_Front.webp",
-    "caption": "Postcard A2 · Hvammur"
+    "name": "HVAMMUR",
+    "caption": "Postcard A2"
    },
    {
     "kind": "map",
@@ -85,18 +85,18 @@ window.REPACK = [
   "items": [
    {
     "kind": "postcard",
-    "img": "media/Postcard_R1_Chalus_Front.webp",
-    "caption": "Postcard R1 · Châlus"
+    "name": "CHÂLUS",
+    "caption": "Postcard R1"
    },
    {
     "kind": "postcard",
-    "img": "media/Postcard_R6_Roumare_Forest_Front.webp",
-    "caption": "Postcard R6 · Roumare Forest"
+    "name": "ROUMARE FOREST",
+    "caption": "Postcard R6"
    },
    {
     "kind": "postcard",
-    "img": "media/Postcard_RD_Walcheren_Front.webp",
-    "caption": "Postcard RD · Walcheren"
+    "name": "WALCHEREN",
+    "caption": "Postcard RD"
    }
   ]
  },
@@ -106,8 +106,8 @@ window.REPACK = [
   "items": [
    {
     "kind": "postcard",
-    "img": "media/Postcard_LD_Brattahlid_Front.webp",
-    "caption": "Postcard LD · Brattahlíð"
+    "name": "BRATTAHLÍÐ",
+    "caption": "Postcard LD"
    },
    {
     "kind": "map",
@@ -128,13 +128,13 @@ window.REPACK = [
   "items": [
    {
     "kind": "postcard",
-    "img": "media/Postcard_A1_Dogurdarnes_Front.webp",
-    "caption": "Postcard A1 · Dögurðarnes"
+    "name": "DÖGURÐARNES",
+    "caption": "Postcard A1"
    },
    {
     "kind": "postcard",
-    "img": "media/Postcard_A3_Esjuberg_Front.webp",
-    "caption": "Postcard A3 · Esjuberg"
+    "name": "ESJUBERG",
+    "caption": "Postcard A3"
    },
    {
     "kind": "prop",
@@ -154,8 +154,8 @@ window.REPACK = [
   "items": [
    {
     "kind": "postcard",
-    "img": "media/Postcard_R2_Rouen_Front.webp",
-    "caption": "Postcard R2 · Rouen"
+    "name": "ROUEN",
+    "caption": "Postcard R2"
    },
    {
     "kind": "map",
@@ -176,18 +176,18 @@ window.REPACK = [
   "items": [
    {
     "kind": "postcard",
-    "img": "media/Postcard_R3_Bayeux_Front.webp",
-    "caption": "Postcard R3 · Bayeux"
+    "name": "BAYEUX",
+    "caption": "Postcard R3"
    },
    {
     "kind": "postcard",
-    "img": "media/Postcard_R4_Winchester_Front.webp",
-    "caption": "Postcard R4 · Winchester"
+    "name": "WINCHESTER",
+    "caption": "Postcard R4"
    },
    {
     "kind": "postcard",
-    "img": "media/Postcard_R5_Battle_Front.webp",
-    "caption": "Postcard R5 · Battle"
+    "name": "BATTLE",
+    "caption": "Postcard R5"
    },
    {
     "kind": "prop",
@@ -202,8 +202,8 @@ window.REPACK = [
   "items": [
    {
     "kind": "postcard",
-    "img": "media/Postcard_H1_Oslo_Front.webp",
-    "caption": "Postcard H1 · Oslo"
+    "name": "OSLO",
+    "caption": "Postcard H1"
    },
    {
     "kind": "map",
@@ -229,13 +229,13 @@ window.REPACK = [
   "items": [
    {
     "kind": "postcard",
-    "img": "media/Postcard_H4_Hedeby_Front.webp",
-    "caption": "Postcard H4 · Hedeby"
+    "name": "HEDEBY",
+    "caption": "Postcard H4"
    },
    {
     "kind": "postcard",
-    "img": "media/Postcard_H5_Sicily_Front.webp",
-    "caption": "Postcard H5 · Aci Castello, Sicily"
+    "name": "SICILY",
+    "caption": "Postcard H5"
    },
    {
     "kind": "prop",
@@ -250,8 +250,8 @@ window.REPACK = [
   "items": [
    {
     "kind": "postcard",
-    "img": "media/Postcard_H6_Patara_Front.webp",
-    "caption": "Postcard H6 · Patara"
+    "name": "PATARA",
+    "caption": "Postcard H6"
    },
    {
     "kind": "prop",

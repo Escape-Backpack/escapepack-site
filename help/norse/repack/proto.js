@@ -45,7 +45,7 @@ window.PROTO = [
        "Cypher_Wheel_And_Table_140mm_Print.pdf",
        "Rune_Table_And_Envelope_Labels_Letter_Print.pdf"
       ],
-      "note": "Two PDFs. The 6-page file is the full set. If you use the table instead of the wheel, print the one-sheet file (Rune_Table_And_Envelope_Labels: table card plus the small 36 × 11 mm stickers, 13 labels and 2 decoys) instead of pages 3 and 4. The 6-page file is 6 Letter pages, cardstock: wheel and arm, wheels II to IV, the 6 × 4 in table card (the table is an unadopted alternative: use the wheel or the table), the envelope rune labels, and two designer key pages that are not packed.",
+      "note": "Two PDFs. The 6-page file is the full set. If you use the table instead of the wheel, print the one-sheet file (Rune_Table_And_Envelope_Labels: table card plus the small 36 × 11 mm stickers, 13 labels and the large envelope's label) instead of pages 3 and 4. The 6-page file is 6 Letter pages, cardstock: wheel and arm, wheels II to IV, the 6 × 4 in table card (the table is an unadopted alternative: use the wheel or the table), the envelope rune labels, and two designer key pages that are not packed.",
       "optional": false
      },
      {
@@ -54,7 +54,7 @@ window.PROTO = [
       "files": [
        "Envelope_Rune_Stickers_Print.pdf"
       ],
-      "note": "Two Letter pages for a home sticker machine: the 13 envelope rune labels plus two decoy labels: the large decoy envelope (ᛜ ᛗ ᛃ ᚨ, runes the wheel never shows; the thank-you card tells players to open it to repack) and the small decoy envelope (ᛗ ᛜ ᛊ ᚱ, two off-wheel runes so no code can show it), 36 × 11 mm, dark green, runes at 14 pt. Page 1 has gold runes, page 2 white: print the one that reads better. Same runes as the larger labels in the wheel file.",
+      "note": "Two Letter pages for a home sticker machine: the 13 envelope rune labels plus one for the large envelope (ᛇ ᛒ ᛚ ᛖ, which is SEAL on the cypher wheel; the thank-you card tells players to open it to repack), 36 × 11 mm, dark green, runes at 14 pt. Page 1 has gold runes, page 2 white: print the one that reads better. Same runes as the larger labels in the wheel file.",
       "optional": false
      }
     ]
@@ -907,7 +907,7 @@ window.PROTO = [
       "files": [
        "Thanks_Card_Letter_Print.pdf"
       ],
-      "note": "3.5 × 2 in, one side; 10 cards on one Letter page, cut on the crop marks. Goes in envelope 13.",
+      "note": "3.5 × 2 in, one side (raven, Cryptic Bureau icon, thanks, feedback QR, and the SEAL sticker for the large repack envelope); 10 cards on one Letter page, cut on the crop marks. Goes in envelope 13.",
       "optional": false
      }
     ]
@@ -944,7 +944,7 @@ window.PROTO = [
       "files": [
        "Raven_Inheritance_Repacking_Flyer_Letter_Print.pdf"
       ],
-      "note": "5.5 × 8.5 in, one side, on a Letter page with crop marks; text list with the envelope runes. Goes in the large decoy envelope (6 × 9 in), no folding."
+      "note": "5.5 × 8.5 in, one side, on a Letter page with crop marks; text list with the envelope runes and, at the top, a QR code to the phone version (Web/Repack.html; text only since 28 Nov 2026). Goes in the large decoy envelope (6 × 9 in), no folding."
      }
     ]
    },
@@ -966,34 +966,20 @@ window.PROTO = [
       "files": [
        "Envelope_Rune_Stickers_Print.pdf"
       ],
-      "note": "Two Letter pages for a home sticker machine: the 13 envelope rune labels plus two decoy labels: the large decoy envelope (ᛜ ᛗ ᛃ ᚨ, runes the wheel never shows; the thank-you card tells players to open it to repack) and the small decoy envelope (ᛗ ᛜ ᛊ ᚱ, two off-wheel runes so no code can show it), 36 × 11 mm, dark green, runes at 14 pt. Page 1 has gold runes, page 2 white: print the one that reads better. Same runes as the larger labels in the wheel file."
+      "note": "Two Letter pages for a home sticker machine: the 13 envelope rune labels plus one for the large envelope (ᛇ ᛒ ᛚ ᛖ, which is SEAL on the cypher wheel; the thank-you card tells players to open it to repack), 36 × 11 mm, dark green, runes at 14 pt. Page 1 has gold runes, page 2 white: print the one that reads better. Same runes as the larger labels in the wheel file."
      }
     ]
    },
    {
     "id": "X-dec1",
-    "title": "Large decoy envelope, 6 × 9 in",
+    "title": "Large envelope, 6 × 9 in",
     "source": "",
     "pieces": [
      {
       "id": "X-dec1.0",
-      "name": "Envelope with its sticker (the first of the two decoy labels). Holds the repacking flyer.",
+      "name": "Envelope with its sticker (the 14th label on the sticker sheet). Holds the repacking flyer.",
       "files": [],
-      "note": "See Q-050.",
-      "make": true
-     }
-    ]
-   },
-   {
-    "id": "X-dec2",
-    "title": "Small decoy envelope",
-    "source": "",
-    "pieces": [
-     {
-      "id": "X-dec2.0",
-      "name": "Envelope with its sticker (the second decoy label). Contents are undecided.",
-      "files": [],
-      "note": "See Q-050.",
+      "note": "See Q-050. The only decoy envelope.",
       "make": true
      }
     ]

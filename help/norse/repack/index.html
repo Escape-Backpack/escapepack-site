@@ -7,6 +7,7 @@
 <title>Repacking Helper · The Raven Inheritance</title>
 <style>
 @font-face { font-family: "Cinzel"; src: url("cinzel.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Cinzel"; font-weight: 800; src: url("cinzel-extrabold.ttf") format("truetype"); font-display: swap; }
 :root {
   --ink: #283b34; --ink-soft: #4b5f57; --bg: #1d2b26; --paper: #f4f1e8; --rule: #d7d5ca;
   --rust: #985626; --gold: #e0b44c; --ok: #3f7a4f;
@@ -118,6 +119,8 @@ dialog.sheet[open] { display: flex; flex-direction: column; animation: up .3s ea
 .items { list-style: none; margin: 0; padding: 8px 14px; overflow: auto; overscroll-behavior: contain; flex: 1; }
 .item { display: flex; gap: 14px; align-items: center; width: 100%; padding: 10px; margin: 8px 0; background: #fff; border: 2px solid var(--rule); border-radius: 12px; cursor: pointer; text-align: left; font: inherit; color: inherit; }
 .item .pic { flex: none; width: 44%; max-width: 230px; display: grid; place-items: center; background: #ebe8dc; border-radius: 6px; min-height: 80px; padding: 4px; }
+.item .pic.pcpic { width: 54%; max-width: none; padding: 0; background: none; }
+.pcname { display: grid; place-items: center; width: 100%; box-sizing: border-box; min-height: 52px; padding: 8px 6px; background: #0F3049; color: #EFE3C4; border-radius: 4px; text-align: center; font-family: "Cinzel", Georgia, serif; font-weight: 800; font-size: .85rem; letter-spacing: .05em; line-height: 1.2; }
 .item .pic img { display: block; max-width: 100%; max-height: 150px; object-fit: contain; border-radius: 3px; }
 .item .pic svg { width: 64px; height: 64px; }
 .item .cap { flex: 1; font-size: .98rem; }
@@ -197,9 +200,9 @@ noscript p { background: var(--paper); color: var(--ink); padding: 12px; border-
   <section class="closeup" aria-labelledby="cu">
     <h2 id="cu">Close up</h2>
     <ul class="checks" id="checks">
-      <li><label><input type="checkbox" data-c="0"><span>Close every envelope. Put both decoy envelopes back in the box.</span></label></li>
+      <li><label><input type="checkbox" data-c="0"><span>Close every envelope.</span></label></li>
       <li><label><input type="checkbox" data-c="1"><span>On top, lay the <b>L'Anse aux Meadows</b> postcard, the cypher wheel and <b>Liv's notes card</b>.</span></label></li>
-      <li><label><input type="checkbox" data-c="2"><span>Slide the packing slip into the <b>large decoy envelope</b> and close it.</span></label></li>
+      <li><label><input type="checkbox" data-c="2"><span>Slide the printed sheet into the <b>last envelope</b> and close it.</span></label></li>
     </ul>
   </section>
 
@@ -284,9 +287,12 @@ noscript p { background: var(--paper); color: var(--ink); padding: 12px; border-
       b.setAttribute('aria-pressed', !!state.items[env.n + '-' + i]);
       var pic = it.kind === 'icon'
         ? MAGNIFIER
+        : it.kind === 'postcard'
+        ? '<span class="pcname"></span>'
         : '<img loading="lazy" alt="" src="' + it.img + '"' + (it.frame ? ' style="outline:3px solid ' + it.frame + ';outline-offset:-3px"' : '') + '>';
-      b.innerHTML = '<span class="pic">' + pic + '</span><span class="cap"></span><span class="box">&#10003;</span>';
+      b.innerHTML = '<span class="pic' + (it.kind === 'postcard' ? ' pcpic' : '') + '">' + pic + '</span><span class="cap"></span><span class="box">&#10003;</span>';
       b.querySelector('.cap').textContent = it.caption;
+      if (it.kind === 'postcard') b.querySelector('.pcname').textContent = it.name;
       b.addEventListener('click', function () {
         var k = env.n + '-' + i, on = !state.items[k];
         if (on) state.items[k] = true; else delete state.items[k];
