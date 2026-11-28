@@ -12,6 +12,7 @@
 //   GET  /bureau                         the series roadmap and bible, read from BUREAU_REPO
 //   GET  /feedback?status=&form=         form submissions (stats database), counts + newest 200
 //   PATCH /feedback/:id {status}         new | read | replied | archived;  DELETE /feedback/:id
+//   GET  /signups, /signups.csv          launch-list emails (stats database); DELETE /signups/:id
 //   GET  /a/:bp/state                    everything the page needs
 //   GET  /a/:bp/changes?since=&viewing=  what changed since seq (also reports who's here)
 //   POST /a/:bp/records                  new record {type, title, set}
@@ -69,6 +70,27 @@ async function nameOf(env, who) {
   if (who.service) return "Claude";
   const row = await env.DB.prepare("SELECT name FROM people WHERE email = ?").bind(who.email).first();
   return row?.name || null;
+}
+
+const csvCell = v => { const t = String(v ?? ""); return /[",\n]/.test(t) || /^[=+\-@]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; };
+async function signupsRoute(env, method, tail) {
+  if (!env.STATS_DB) fail(500, "the feedback database is not connected");
+  if (method === "GET" && tail === "") {
+    const rows = await env.STATS_DB.prepare("SELECT id, created_at, email, interest, playtest, consent, status FROM signups WHERE status != 'test' ORDER BY id DESC LIMIT 2000").all();
+    const counts = await env.STATS_DB.prepare("SELECT status, COUNT(*) AS n FROM signups GROUP BY status").all();
+    return json({ rows: rows.results, counts: Object.fromEntries(counts.results.map(r => [r.status, r.n])) });
+  }
+  if (method === "GET" && tail === ".csv") {
+    const { results } = await env.STATS_DB.prepare("SELECT email, interest, playtest, created_at FROM signups WHERE status = 'active' ORDER BY id").all();
+    const lines = ["email,interest,playtest,signed_up", ...results.map(r => [r.email, r.interest || "", r.playtest ? "yes" : "", r.created_at].map(csvCell).join(","))];
+    return new Response(lines.join("\r\n") + "\r\n", { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": 'attachment; filename="launch-list.csv"', "Cache-Control": "no-store" } });
+  }
+  if (method === "DELETE" && tail.startsWith("/")) {
+    const res = await env.STATS_DB.prepare("DELETE FROM signups WHERE id = ?").bind(Number(tail.slice(1))).run();
+    if (!res.meta.changes) fail(404, "not found");
+    return json({ ok: true });
+  }
+  fail(405, "method not allowed");
 }
 
 const FB_STATUS = ["new", "read", "replied", "archived"];
@@ -148,6 +170,8 @@ async function route(request, env, url, who) {
 
   // Feedback inbox: the forms' rows live in the stats database (STATS_DB). Signed-in people only (Access),
   // no Studio display name needed.
+  const su = path.match(/^\/signups(\.csv|\/\d+)?$/);
+  if (su) return signupsRoute(env, method, su[1] || "");
   const fb = path.match(/^\/feedback(?:\/(\d+))?$/);
   if (fb) return feedbackRoute(env, url, method, fb[1] ? Number(fb[1]) : null, request);
 

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<script>try{var t=localStorage.getItem("ebp-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+<title>Launch list</title>
+<!-- Launch-list sign-ups from /updates (stored in the stats database). Behind Cloudflare Access like the Studio.
+     System fonts only; values are shown as text, never as HTML. -->
+<style>
+:root { --bg:#f3eadb; --surface:#fbf7ee; --ink:#20392e; --muted:#65776b; --head:#17372d; --accent:#b95b3d; --on-accent:#fff; --line:rgba(32,57,46,.17); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#17372d; --surface:#214b3d; --ink:#f7f1e6; --muted:#9db0a2; --head:#e8c28a; --accent:#e0805e; --on-accent:#10291f; --line:rgba(244,237,224,.16); color-scheme:dark; } }
+:root[data-theme="dark"] { --bg:#17372d; --surface:#214b3d; --ink:#f7f1e6; --muted:#9db0a2; --head:#e8c28a; --accent:#e0805e; --on-accent:#10291f; --line:rgba(244,237,224,.16); color-scheme:dark; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 -apple-system,"Segoe UI",system-ui,sans-serif; }
+main { max-width:860px; margin:0 auto; padding:20px 16px 60px; }
+h1 { font:600 1.5rem/1.2 Georgia,serif; color:var(--head); margin:0 0 4px; }
+.sub { color:var(--muted); margin:0 0 16px; font-size:.9rem; } .sub a { color:inherit; }
+.bar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:14px; }
+.btn { font:inherit; border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:8px; padding:6px 12px; cursor:pointer; text-decoration:none; }
+.primary { background:var(--accent); color:var(--on-accent); border-color:var(--accent); }
+.danger { color:var(--accent); }
+:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+table { width:100%; border-collapse:collapse; background:var(--surface); border:1px solid var(--line); }
+th,td { text-align:left; padding:8px 12px; border-bottom:1px solid var(--line); font-size:.9rem; overflow-wrap:anywhere; }
+th { color:var(--muted); font-weight:600; }
+.err { color:var(--accent); } .empty { color:var(--muted); padding:20px 0; }
+@media (max-width:560px) { .hide-s { display:none; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Launch list</h1>
+  <p class="sub">People who asked for one email when the campaign launches. <a href="/studio/feedback/">Feedback inbox</a> · <a href="/studio/">Studio</a></p>
+  <div class="bar"><span id="count"></span><a class="btn primary" href="/studio/api/signups.csv">Download CSV (active addresses)</a></div>
+  <p class="err" id="err" role="alert" hidden></p>
+  <div id="list"></div>
+</main>
+<script>
+(() => {
+  const $ = id => document.getElementById(id), API = "/studio/api/signups";
+  const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
+  const day = iso => { const d = new Date(iso); return isNaN(d) ? iso : d.toLocaleDateString([], { dateStyle: "medium" }); };
+  async function load() {
+    $("err").hidden = true;
+    try {
+      const res = await fetch(API, { cache: "no-store" });
+      if (res.status === 401 || res.status === 403) throw new Error("You are not signed in. Reload the page to log in.");
+      const d = await res.json(); if (!res.ok) throw new Error(d.error || "Something went wrong.");
+      const c = d.counts || {};
+      $("count").textContent = (c.active || 0) + " on the list" + (c.test ? " (+" + c.test + " test)" : "");
+      if (!d.rows.length) { $("list").replaceChildren(el("p", "empty", "Nobody yet.")); return; }
+      const t = el("table"), head = el("tr");
+      for (const h of ["Email", "Interest", "Playtest", "Joined", ""]) head.append(el("th", h === "Interest" || h === "Playtest" ? "hide-s" : "", h));
+      t.append(head);
+      for (const r of d.rows) {
+        const tr = el("tr");
+        tr.append(el("td", "", r.email), el("td", "hide-s", r.interest || ""), el("td", "hide-s", r.playtest ? "yes" : ""), el("td", "", day(r.created_at)));
+        const td = el("td"), b = el("button", "btn danger", "Delete"); b.type = "button";
+        b.onclick = async () => {
+          if (!confirm("Delete " + r.email + " permanently?")) return;
+          const x = await fetch(API + "/" + r.id, { method: "DELETE" });
+          if (x.ok) load(); else { $("err").textContent = "Could not delete."; $("err").hidden = false; }
+        };
+        td.append(b); tr.append(td); t.append(tr);
+      }
+      $("list").replaceChildren(t);
+    } catch (e) { $("err").textContent = e.message; $("err").hidden = false; }
+  }
+  load();
+})();
+</script>
+</body>
+</html>

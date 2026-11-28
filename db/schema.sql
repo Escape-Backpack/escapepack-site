@@ -45,3 +45,17 @@ CREATE TABLE IF NOT EXISTS feedback (
   status      TEXT NOT NULL DEFAULT 'new'   -- new | read | replied | test
 );
 CREATE INDEX IF NOT EXISTS feedback_by_date ON feedback (created_at);
+
+-- Launch-list sign-ups (the "tell me when the campaign launches" form at /updates). One row per email.
+-- Used only to send the launch note; delete on request. No email is sent from this database: at launch the
+-- active addresses are exported (Studio > /studio/signups/) into a mailing service that handles unsubscribes.
+CREATE TABLE IF NOT EXISTS signups (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  created_at  TEXT NOT NULL,         -- ISO 8601 UTC (first sign-up)
+  email       TEXT NOT NULL UNIQUE,  -- stored lower-case
+  interest    TEXT,                  -- norse | hiking | any
+  playtest    INTEGER NOT NULL DEFAULT 0,  -- 1 = also happy to playtest
+  consent     TEXT NOT NULL,         -- the wording they agreed to, with its version
+  origin      TEXT,
+  status      TEXT NOT NULL DEFAULT 'active'  -- active | removed | test
+);

@@ -44,7 +44,9 @@ document.querySelectorAll("form[data-async-form]").forEach(form => {
       });
       if (response.status === 429) throw new Error("rate-limit");
       if (!response.ok) throw new Error(`Submission returned ${response.status}`);
-      const eventName = form.dataset.asyncForm === "feedback"
+      const eventName = form.dataset.asyncForm === "signup"
+        ? "launch_list_signup"
+        : form.dataset.asyncForm === "feedback"
         ? "feedback_submitted"
         : choice?.value === "notify" ? "update_request_submitted" : "borrow_request_submitted";
       EscapeAnalytics.track(eventName, {game: "hiking"});

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#542C3B">
+<title>Launch updates · The Cryptic Bureau</title>
+<meta name="description" content="Get one email when a Cryptic Bureau Kickstarter campaign launches.">
+<link rel="icon" type="image/png" href="/assets/bureau/favicon-64.png">
+<link rel="apple-touch-icon" href="/assets/bureau/apple-touch-icon.png">
+<link rel="preload" href="/assets/bureau/cormorant-garamond-600.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="/bureau.css?v=1">
+<script>try{var t=localStorage.getItem("ebp-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
+<script src="/theme.js?v=4" defer></script>
+<style>.check{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:.95rem}.field label.check span{font-weight:400;color:inherit}.check em{font-style:normal;color:var(--muted)}.check input{width:auto;min-height:0;margin-top:.3em;flex:none;accent-color:var(--copper)}</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="The Cryptic Bureau, home">
+      <img src="/assets/bureau/bureau-mark.png" alt="" width="240" height="164">
+      <span class="brand-text"><small>The</small><span>Cryptic Bureau</span></span>
+    </a>
+    <nav class="main-nav" aria-label="Main">
+      <a href="/#story">The Bureau</a>
+      <a href="/#adventures">Adventures</a>
+      <a href="/#how">How it works</a>
+      <a href="/help/">Hints &amp; help</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="page"><div class="wrap"><p class="crumb"><a href="/">Home</a> <span aria-hidden="true">/</span> Launch updates</p><div class="form-layout"><div><div class="form-intro"><p class="eyebrow">The launch list</p><h1>Hear first when the campaign launches.</h1><p>We’re making puzzle adventures in a box. If a Kickstarter campaign goes ahead, we’ll send you one email on the day it opens, so you can be among the first to back it.</p></div>
+    <form class="form-stack" id="signup-form" action="https://escapepack.ca/api/signup" method="POST" data-async-form="signup" data-success-target="signup-success">
+      <div class="field"><label for="signup-email">Email <span aria-hidden="true">*</span></label><input id="signup-email" name="email" type="email" autocomplete="email" required maxlength="254"></div>
+      <div class="field"><label for="signup-interest">Which adventure interests you? <span>(optional)</span></label><select id="signup-interest" name="interest"><option value="any">Either, or both</option><option value="norse">The Raven Inheritance (Norse)</option><option value="hiking">The Hiking Backpack</option></select></div>
+      <div class="field"><label class="check"><input type="checkbox" name="playtest" value="yes"><span>I’d also be happy to help playtest.</span></label></div>
+      <div class="field"><label class="check"><input type="checkbox" name="consent" value="yes" required><span>Email me once when the campaign launches. Nothing else without asking again. <em>You can ask us to delete your email any time.</em></span></label></div>
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="honeypot">
+      <p class="form-note">We store your email ourselves and never sell or share it. See the <a href="/privacy.html">privacy page</a>.</p>
+      <p class="form-error" data-form-error role="alert" tabindex="-1" hidden></p>
+      <button class="button button-primary" type="submit">Join the list ↗</button>
+    </form>
+    <div class="form-success" id="signup-success" role="status" tabindex="-1" hidden><h2>You’re on the list.</h2><p>Thank you. We’ll write once, when the campaign opens.</p></div>
+  </div></div><aside class="aside-card"><h2>While you wait</h2><ul><li><a href="/play/norse/v2/">Try the online playtest</a> of The Raven Inheritance.</li><li><a href="/feedback/norse/">Tell us how it went</a>: your notes decide what changes.</li></ul></aside></div></div></main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© The Cryptic Bureau · Formerly Escape Backpack · Ottawa</span>
+    <ul><li><a href="/">Home</a></li><li><a href="/adventures/hiking/">Hiking Backpack</a></li><li><a href="/help/">Hints &amp; help</a></li><li><a href="/borrow.html">Borrow</a></li><li><a href="/privacy.html">Privacy</a></li><li><a href="https://www.youtube.com/@thecrypticbureau" target="_blank" rel="noopener">YouTube</a></li><li><a href="https://www.instagram.com/thecrypticbureau/" target="_blank" rel="noopener">Instagram</a></li></ul>
+  </div>
+</footer>
+<script src="/analytics.js"></script><script src="/forms.js"></script>
+</body>
+</html>

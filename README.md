@@ -173,6 +173,15 @@ stats database through a second D1 binding (`STATS_DB` in `workers/studio/wrangl
 with `cd workers/studio && npx wrangler deploy`. Rows from local previews show under the Test tab.
 Formspree is no longer used. Privacy line under each email field uses hello@crypticbureau.com (must exist as an alias).
 
+## Launch list
+`/updates.html` ("hear first when the campaign launches") posts to `https://escapepack.ca/api/signup` (stats Worker,
+`workers/stats/src/signup.js`) and stores one row per email in the D1 table `signups` (`db/schema.sql`). The row keeps
+the consent wording it agreed to (`CONSENT` in `signup.js`; bump its version when the wording changes). Submitting the
+same email again just updates the row. Nothing is emailed from here (no confirmation email: Cloudflare Email Routing
+can only send to verified addresses). Look at the list, download it as CSV (active addresses) or delete one at
+`escapepack.ca/studio/signups/` (Studio Worker, behind Access). At launch, import the CSV into a mailing service that
+adds the unsubscribe link; the privacy page already says so. Local previews are stored with `status = 'test'`.
+
 ## Fonts
 No page loads Google Fonts. `fonts-local.css` holds the self-hosted latin subsets in `assets/bureau/`
 (Young Serif, Inter Tight, JetBrains Mono, Orbitron, Quantico, Share Tech Mono; the Bureau fonts are in

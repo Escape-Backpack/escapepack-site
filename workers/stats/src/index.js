@@ -7,8 +7,10 @@
 // Actions carry `ago` (ms since they happened on the phone), so a queue sent late, or from a
 // phone with a wrong clock, still lands at the right moment on the server's timer.
 //   POST /api/feedback           store a feedback / borrow form (JSON or form data), email an alert
+//   POST /api/signup             launch-list sign-up {email, consent, interest?, playtest?}
 import { parse, summarise } from "./rules.js";
 import { normalise, alertText, alertSubject, buildMime } from "./feedback.js";
+import { normaliseSignup } from "./signup.js";
 
 const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0/O, 1/I
 const MAX_BODY = 32_000;
@@ -30,6 +32,7 @@ export default {
       if (path === "/runs" && request.method === "POST") return json(await createRun(env, await readBody(request)), cors);
       if ((m = path.match(/^\/runs\/([A-Z2-9]{5})$/)) && request.method === "GET") return json(state(await load(env, m[1])), cors);
       if ((m = path.match(/^\/runs\/([A-Z2-9]{5})\/ops$/)) && request.method === "POST") return json(await applyOps(env, m[1], await readBody(request)), cors);
+      if (path === "/signup" && request.method === "POST") return json(await saveSignup(env, request), cors);
       if (path === "/feedback" && request.method === "POST") return json(await saveFeedback(env, ctx, request), cors);
       if (path === "/stats" && request.method === "GET") return json(await stats(env, url.searchParams), cors, 200, "public, max-age=60");
       fail(404, "not found");
@@ -96,6 +99,23 @@ async function saveFeedback(env, ctx, request) {
   const id = res.meta?.last_row_id ?? null;
 
   if (row.status === "new") ctx.waitUntil(sendAlert(env, row, id).catch(e => console.error("alert email failed", e)));
+  return { ok: true };
+}
+
+async function saveSignup(env, request) {
+  const result = normaliseSignup(await readSubmission(request), request.headers.get("Origin"));
+  if (result.ignore) return { ok: true };
+  if (result.error) fail(400, result.error);
+  const row = result.row;
+  const recent = await env.DB.prepare("SELECT COUNT(*) AS n FROM signups WHERE created_at > ?")
+    .bind(new Date(Date.now() - 3600_000).toISOString()).first();
+  if ((recent?.n ?? 0) >= FEEDBACK_PER_HOUR) fail(429, "too many submissions");
+  // Same answer whether or not the address was already there, so the form can't be used to look people up.
+  // Someone who was removed and signs up again is switched back on.
+  await env.DB.prepare(
+    "INSERT INTO signups (created_at, email, interest, playtest, consent, origin, status) VALUES (?,?,?,?,?,?,?) " +
+    "ON CONFLICT(email) DO UPDATE SET interest = excluded.interest, playtest = excluded.playtest, consent = excluded.consent, status = excluded.status"
+  ).bind(new Date().toISOString(), row.email, row.interest, row.playtest, row.consent, row.origin, row.status).run();
   return { ok: true };
 }
 
